@@ -5,7 +5,7 @@
   <body>
     <!-- does anyone know how to parse the edge_size var into the width and heigh values here? [FIXED] -->
     <canvas id="myCanvas" width = "500" height="500" style="border:1px solid #c3c3c3;"> </canvas>
-    
+
 
 
 
@@ -15,13 +15,14 @@
 
     <!--could not get this to work in an external folder, let me know if you guys can-->
     <script>
-      
+
       //testing edit -Isaac
-      
+      //testing git -Brandon
+
       var fail_region_percent = 0.2;  //user will change this
-      
+
       var edge_size = 500;  //change this to set the HxW of the canvas
-      
+
       var canvas = document.getElementById("myCanvas");	//grabs canvas element
       canvas.setAttribute("width", edge_size); //sets height and width based on edge_size
       canvas.setAttribute("height", edge_size);
@@ -30,13 +31,13 @@
 
       var border_limit_max = edge_size - fail_region_edge_size; //determines the maximum x and y coordinate for the fail region to prevent the fail region from being cut off by the border
 
-      var random_x = Math.random() * border_limit_max + 1;  //generates a random number inclusively between 0 and the border_limit_max 
+      var random_x = Math.random() * border_limit_max + 1;  //generates a random number inclusively between 0 and the border_limit_max
       var random_y = Math.random() * border_limit_max + 1;  //" "
 
-      var canvas = document.getElementById("myCanvas");     //setting up canvas stuff 
-      var ctx = canvas.getContext("2d");                    //setting up the fail region 
+      var canvas = document.getElementById("myCanvas");     //setting up canvas stuff
+      var ctx = canvas.getContext("2d");                    //setting up the fail region
       ctx.fillStyle = "#FF0000";                            //colour of fail region
-      
+
       ctx.fillRect(random_x, random_y, fail_region_edge_size, fail_region_edge_size);       //rendering the fail region
 
     </script>
