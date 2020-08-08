@@ -5,6 +5,7 @@
 ### Contributors:
 ### 1. Huy Anh Dinh
 ### 2. Daniel Parise
-### 3. Brandon Britton
-### 4. Isaac Sampson
-### 5. Zac O'reilly-Fullerton
+### 3. Ben Gunther
+### 4. Brandon Britton
+### 5. Isaac Sampson
+### 6. Zac O'reilly-Fullerton
