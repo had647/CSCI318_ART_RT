@@ -14,7 +14,7 @@
         console.log("Cunt's fucked m8.");
         return;
       } else {
-        console.log("OK");
+        console.log("INPUT VALID");
       }
 
       //this is probably slow - needs optimizing
@@ -37,14 +37,14 @@
       if ((random_x_test_case >= random_x && random_x_test_case <= (random_x + fail_region_edge_size)
         && random_y_test_case >= random_y && (random_y_test_case <= random_y + fail_region_edge_size))) {
         console.log("COLLISION");
-		document.getElementById("output_result").innerHTML = "HIT!";
+        document.getElementById("output_result").innerHTML = "HIT!";
         ctx.fillStyle = "red";                            //colour of fail region
         ctx.fillRect(random_x, random_y, fail_region_edge_size, fail_region_edge_size);
 
       } else { //no collision occurs
         ctx.fillStyle = "green";                            //colour of fail region
         ctx.fillRect(random_x, random_y, fail_region_edge_size, fail_region_edge_size);       //rendering the fail region
-		document.getElementById("output_result").innerHTML = "MISSED!";
+        document.getElementById("output_result").innerHTML = "MISSED!";
       }
 
       ctx.fillStyle = "black";
@@ -67,8 +67,8 @@
   <br />
   <button onclick="runTest()">YEEEEEEEEET!!!</button>
   <div id="canvasContainer"></div>
-  <div id ="output_result" />
- 
+  <div id="output_result"></div>
+
 </body>
 
 </html>
