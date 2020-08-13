@@ -34,6 +34,7 @@
       //this is probably slow - needs optimizing
       document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
 	  document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`;
+	  
       let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
       let border_limit_max = edge_size - fail_region_edge_size; //determines the maximum x and y coordinate for the fail region to prevent the fail region from being cut off by the border
@@ -80,11 +81,9 @@
   
   <span>Enter edge size as an integer:</span>
   <input type="text" id="edgeSize"></input>
-  <span>px   <i>(For display purposes, we recommend the range 250px to 800px.)</i></span>
-  
-  <br />
-  
-  <button onclick="runTest()">Go!</button>
+  <span>px   <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br />  <br />
+
+  <button onclick="runTest()">Go!</button> <br /><br />
   
   <div id= "wrapper">
 	<div id="canvasContainer"></div> 
