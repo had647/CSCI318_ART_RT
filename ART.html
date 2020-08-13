@@ -2,6 +2,20 @@
 
 <head>
   <title>ART</title>
+  <style>
+	/* This is used to have two Canvas Side by Side*/
+  	#wrapper {
+		display: flex;
+	}
+	
+	#canvasContainer {
+		flex: 0 0 35%; /* Change the 35% if you want to move the second Canvas to the right */
+	}
+	
+	#canvasContainer2 {
+		flex: 1;
+	}
+  </style>
   <script>
     function runTest() {
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
@@ -11,7 +25,7 @@
       console.log(`Using edge size: ${edge_size}px`);
 
       if (isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0 || isNaN(edge_size) || edge_size <= 0) {
-        console.log("Cunt's fucked m8.");
+        console.log("INVALID");
         return;
       } else {
         console.log("INPUT VALID");
@@ -19,7 +33,7 @@
 
       //this is probably slow - needs optimizing
       document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
-
+	  document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`;
       let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
       let border_limit_max = edge_size - fail_region_edge_size; //determines the maximum x and y coordinate for the fail region to prevent the fail region from being cut off by the border
@@ -53,6 +67,7 @@
       ctx.stroke();
       ctx.fill();
     }
+
   </script>
 </head>
 
@@ -60,13 +75,24 @@
   <span>Enter failure area percentage:</span>
   <input type="text" id="failPct"></input>
   <span>%</span>
+  
   <br />
+  
   <span>Enter edge size as an integer:</span>
   <input type="text" id="edgeSize"></input>
-  <span>px</span>
+  <span>px   <i>(For display purposes, we recommend the range 250px to 800px.)</i></span>
+  
   <br />
-  <button onclick="runTest()">YEEEEEEEEET!!!</button>
-  <div id="canvasContainer"></div>
+  
+  <button onclick="runTest()">Go!</button>
+  
+  <div id= "wrapper">
+	<div id="canvasContainer"></div> 
+	<div id="canvasContainer2"></div>
+  </div>
+  
+  <br />
+  
   <div id="output_result"></div>
 
 </body>
