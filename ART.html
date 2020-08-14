@@ -17,6 +17,69 @@
 	}
   </style>
   <script>
+
+    //calculates the smallest distance between a candidate case, and all current test cases
+    function calculate_min_distance(candiate_x, candiate_y){
+      
+      let min_distance = -1;  //smallest distance after measuring distance between candidate and all other test cases
+      let di = -1;            //distance between the candidate and all test cases
+      
+      let test_case_x = -1;   //test case coordinates 
+      let test_case_y = -1;
+    
+      let i;
+      for(i = 0; i < test_cases.length; i++){     //iterating through each test case
+      
+        test_case_x = test_cases[i];              //retrieving x coordinate of test case
+        i++;
+        test_case_y = test_cases[i];              //retrieving y coordinate of test case
+      
+        di = Math.sqrt( Math.pow((candiate_x - test_case_x), 2)   +   Math.pow((candiate_y - test_case_y), 2));   //equation for measuring distance
+        //console.log(di);  //uncomment this if you want to see the distance between the candidate and each test case
+        if(i == 1) min_distance = di;             //assume the first distance is the smallest
+        if(di < min_distance) min_distance  = di;   //if a smaller distance is found, update the min_distance
+      }
+      //console.log("----");          //un comment this if you want to see the final output
+      //console.log(min_distance);    //"                                                  "
+      return min_distance;    
+    }
+
+    /*
+    //This is a demonstration only. Remove comment block to see the function in action. Also remove the commented console.log() functions in the calculate_min_distance() function.
+    //Cheers- Isaac xoxo
+    
+    //This is an dynamic array of floating point values, so it will grow  much larger than this in the actual program
+    //Every value in the array belongs to a pair. Eg. test_case_0(x, y) x = 1.5, y = 2.333    test_case_1(x, y) x = 5, y = 20
+    let test_cases = [1.5, 2.333, 5, 20, 151, 251, 150, 250, 45, 499, 344, 99, 66, 77, 188, 219, 455, 401, 30, 14];
+
+    //just a dummy candidate case to test function
+    let candiate_x = 45.7;
+    let candiate_y = 70.9;
+
+    calculate_min_distance(candiate_x, candiate_y);
+    */
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function runTest() {
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
