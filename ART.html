@@ -3,65 +3,79 @@
 <head>
   <title>ART</title>
   <style>
-	/* This is used to have two Canvas Side by Side*/
-  	#wrapper {
-		display: flex;
-	}
-	
-	#canvasContainer {
-		flex: 0 0 35%; /* Change the 35% if you want to move the second Canvas to the right */
-	}
-	
-	#canvasContainer2 {
-		flex: 1;
-	}
+    /* This is used to have two Canvas Side by Side*/
+    #wrapper {
+      display: flex;
+    }
+
+    #canvasContainer {
+      flex: 0 0 35%;
+      /* Change the 35% if you want to move the second Canvas to the right */
+    }
+
+    #canvasContainer2 {
+      flex: 1;
+    }
   </style>
   <script>
 
     //calculates the smallest distance between a candidate case, and all current test cases
-    function calculate_min_distance(candiate_x, candiate_y){
-      
+    function calculate_min_distance(candidate) {
+
       let min_distance = -1;  //smallest distance after measuring distance between candidate and all other test cases
       let di = -1;            //distance between the candidate and all test cases
-      
-      let test_case_x = -1;   //test case coordinates 
-      let test_case_y = -1;
-    
-      let i;
-      for(i = 0; i < test_cases.length; i++){     //iterating through each test case
-      
-        test_case_x = test_cases[i];              //retrieving x coordinate of test case
-        i++;
-        test_case_y = test_cases[i];              //retrieving y coordinate of test case
-      
-        di = Math.sqrt( Math.pow((candiate_x - test_case_x), 2)   +   Math.pow((candiate_y - test_case_y), 2));   //equation for measuring distance
-        //console.log(di);  //uncomment this if you want to see the distance between the candidate and each test case
-        if(i == 1) min_distance = di;             //assume the first distance is the smallest
-        if(di < min_distance) min_distance  = di;   //if a smaller distance is found, update the min_distance
+
+      for (let i = 0; i < test_cases.length; i++) {     //iterating through each test case
+
+        di = Math.sqrt(Math.pow((candidate.x - test_cases[i].x), 2) + Math.pow((candidate.y - test_cases[i].y), 2));   //equation for measuring distance
+        console.log(di);  //uncomment this if you want to see the distance between the candidate and each test case
+        if (i === 0) { min_distance = di; }             //assume the first distance is the smallest
+        if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
       //console.log("----");          //un comment this if you want to see the final output
       //console.log(min_distance);    //"                                                  "
-      return min_distance;    
+      return min_distance;
     }
 
-    /*
+
     //This is a demonstration only. Remove comment block to see the function in action. Also remove the commented console.log() functions in the calculate_min_distance() function.
     //Cheers- Isaac xoxo
-    
+
     //This is an dynamic array of floating point values, so it will grow  much larger than this in the actual program
     //Every value in the array belongs to a pair. Eg. test_case_0(x, y) x = 1.5, y = 2.333    test_case_1(x, y) x = 5, y = 20
-    let test_cases = [1.5, 2.333, 5, 20, 151, 251, 150, 250, 45, 499, 344, 99, 66, 77, 188, 219, 455, 401, 30, 14];
+    let test_cases = [{ 'x': 1.5, 'y': 2.333 }/*, { 'x': 5, 'y': 20 }, { 'x': 151, 'y': 251 }, { 'x': 150, 'y': 250 }, { 'x': 45, 'y': 499 }, { 'x': 344, 'y': 99 }, { 'x': 66, 'y': 77 }, { 'x': 188, 'y': 219 }, { 'x': 455, 'y': 401 }, { 'x': 30, 'y': 14 }*/];
 
     //just a dummy candidate case to test function
-    let candiate_x = 45.7;
-    let candiate_y = 70.9;
+    //let candidate = { 'x': 45.7, 'y': 70.9 };
 
-    calculate_min_distance(candiate_x, candiate_y);
-    */
-    
+    //calculate_min_distance(candidate);
 
+    function getNewCandidates(k) {
+      //let k = 1; //should be input argument
+      let d = 0;
+      let candidates = getRndCandidates(k);
+      console.log(candidates);
+      let t;
+      let di;
+      for (let i = 0; i < candidates.length; i++) {
+        di = calculate_min_distance(candidates[i]);
+        console.log(di);
+        if (di > d) {
+          d = di;
+          t = candidates[i];
+        }
+      }
+      test_cases.push(t);
 
+    }
 
+    function getRndCandidates(k) {
+      let candidates = [];
+      for (let i = 0; i < k; i++) {     //randomly generate candidates
+        candidates.push({ 'x': Math.random() * 500, 'y': Math.random() * 500 });
+      }
+      return candidates;
+    }
 
 
 
@@ -96,8 +110,8 @@
 
       //this is probably slow - needs optimizing
       document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
-	  document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`;
-	  
+      document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`;
+
       let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
       let border_limit_max = edge_size - fail_region_edge_size; //determines the maximum x and y coordinate for the fail region to prevent the fail region from being cut off by the border
@@ -139,22 +153,22 @@
   <span>Enter failure area percentage:</span>
   <input type="text" id="failPct"></input>
   <span>%</span>
-  
+
   <br />
-  
+
   <span>Enter edge size as an integer:</span>
   <input type="text" id="edgeSize"></input>
-  <span>px   <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br />  <br />
+  <span>px <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br /> <br />
 
   <button onclick="runTest()">Go!</button> <br /><br />
-  
-  <div id= "wrapper">
-	<div id="canvasContainer"></div> 
-	<div id="canvasContainer2"></div>
+
+  <div id="wrapper">
+    <div id="canvasContainer"></div>
+    <div id="canvasContainer2"></div>
   </div>
-  
+
   <br />
-  
+
   <div id="output_result"></div>
 
 </body>
