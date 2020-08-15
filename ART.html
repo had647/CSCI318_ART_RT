@@ -33,7 +33,7 @@
         if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
       //console.log("----");          //un comment this if you want to see the final output
-      //console.log(min_distance);    //"                                                  "
+      console.log(min_distance);    //"                                                  "
       return min_distance;
     }
 
@@ -66,9 +66,14 @@
         }
       }
       test_cases.push(t);
-
     }
-
+	
+	// Just using to visualise how it works.
+	getNewCandidates(2);
+	//console.log(test_cases);
+	
+	
+	
     function getRndCandidates(k) {
       let candidates = [];
       for (let i = 0; i < k; i++) {     //randomly generate candidates
