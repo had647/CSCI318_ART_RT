@@ -33,87 +33,107 @@
 
   <script>
 
+    let state = {
+      testCases: [],
+      candidates: [],
+      failRegion: {
+        coords: { 'x': null, 'y': null },
+        edgeSize: null
+      },
+      canvasSize: null,
+      canvasRef: null
+    };
+
+
     //calculates the smallest distance between a candidate case, and all current test cases
     function calculate_min_distance(candidate) {
 
       let min_distance = -1;  //smallest distance after measuring distance between candidate and all other test cases
       let di = -1;            //distance between the candidate and all test cases
 
-      for (let i = 0; i < test_cases.length; i++) {     //iterating through each test case
+      for (let i = 0; i < state.testCases.length; i++) {     //iterating through each test case
 
-        di = Math.sqrt(Math.pow((candidate.x - test_cases[i].x), 2) + Math.pow((candidate.y - test_cases[i].y), 2));   //equation for measuring distance
+        di = Math.sqrt(Math.pow((candidate.x - state.testCases[i].x), 2) + Math.pow((candidate.y - state.testCases[i].y), 2));   //equation for measuring distance
 
         if (i === 0) { min_distance = di; }             //assume the first distance is the smallest
         if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
 
-      console.log(min_distance);  
+      console.log(min_distance);
       return min_distance;
     }
 
-    let globalState = {
-      test_cases: [],
-      candidates: []
-    };
+
 
     function getNewCandidates(k) {
       //let k = 1; //should be input argument
       let d = 0;
-      let candidates = getRndCandidates(edge_size);
-      console.log(candidates);
+      genNewCandidates();
+      console.log(state.candidates);
       let t;
       let di;
-      for (let i = 0; i < candidates.length; i++) {
-        di = calculate_min_distance(candidates[i]);
+      for (let i = 0; i < state.candidates.length; i++) {
+        di = calculate_min_distance(state.candidates[i]);
         console.log(di);
         if (di > d) {
           d = di;
-          t = candidates[i];
+          t = state.candidates[i];
         }
       }
-      test_cases.push(t);
-      
-    }
-	
-	// Just using to visualise how it works.
-	getNewCandidates(2);
-	//console.log(test_cases);
-	
-	
-	
-    function getRndCandidates(edge_size) {
-      for (let i = 0; i < 10; i++) {     //randomly generate candidates
-        globalState.candidates[i] = {'x': Math.random() * edge_size, 'y': Math.random() * edge_size};
-       // candidates.push({ 'x': Math.random() * edge_size, 'y': Math.random() * edge_size });
-      }
-      return candidates;
+      state.testCases.push(t);
+
     }
 
-    function checkCollision(random_x, random_y, i, fail_region_edge_size){
-      if ((globalState.test_cases[i].x >= random_x && globalState.test_cases[i].x <= (random_x + fail_region_edge_size) 
-      &&globalState.test_cases[i].y >= random_y && (globalState.test_cases[i].y <= random_y + fail_region_edge_size))) return true;
+    // Just using to visualise how it works.
+    //getNewCandidates(2);
+    //console.log(test_cases);
+
+
+
+    function genNewCandidates() {
+      for (let i = 0; i < 10; i++) {     //randomly generate candidates
+        state.candidates[i] = { 'x': Math.random() * state.failRegion.edgeSize, 'y': Math.random() * state.failRegion.edgeSize };
+        // candidates.push({ 'x': Math.random() * edge_size, 'y': Math.random() * edge_size });
+      }
+    }
+
+
+
+    function checkCollision(i) {
+      //'i' is the test case index to check for collisions with
+      if (state.test_cases[i].x >= state.failRegion.coords.x && state.test_cases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
+        && state.test_cases[i].y >= state.failRegion.coords.y && state.test_cases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) return true;
       return false;
     }
 
 
-    function resetGlobalState() {
-      globalState.candidates = [];
-      globalState.test_cases = [];
+    /*function resetstate() {
+      state.candidates = [];
+      state.test_cases = [];
+    }*/
+
+
+
+
+
+
+
+
+
+    function initBlankCanvas() {
+      if (state.canvasSize === null) {
+        console.error("Need to initialize state.canvasSize before trying to initialize the canvas!");
+        return;
+      }
+      //this is probably slow - needs optimizing
+      document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
+      document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`;
+
     }
-    
 
 
-
-
-
-
-
-
-
-
-
-    function runTest() {
-      resetGlobalState();
+    function initState() {
+      //resetstate();
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -121,15 +141,11 @@
       console.log(`Using edge size: ${edge_size}px`);
 
       if (isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0 || isNaN(edge_size) || edge_size <= 0) {
-        console.log("INVALID");
+        console.error("INVALID");
         return;
       } else {
         console.log("INPUT VALID");
       }
-
-      //this is probably slow - needs optimizing
-      document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
-      document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${edge_size}" height="${edge_size}" style="border:1px solid #c3c3c3;"></canvas>`;
 
       let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
@@ -138,18 +154,22 @@
       let random_x = Math.random() * border_limit_max;  //generates a random number inclusively between 0 and the border_limit_max
       let random_y = Math.random() * border_limit_max;  //" "
 
-      let canvas = document.getElementById("myCanvas");     //setting up canvas stuff
-      let ctx = canvas.getContext("2d");                    //setting up the fail region
-
       let random_x_test_case = Math.random() * edge_size; //these may need to change
       let random_y_test_case = Math.random() * edge_size;
 
+      //update app state
+      state.failRegion.edgeSize = fail_region_edge_size;
+      state.failRegion.coords.x = random_x;
+      state.failRegion.coords.y = random_y;
+      state.canvasSize = edge_size;
+      state.test_cases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
+      state.canvasRef = document.getElementById("myCanvas");     //setting up canvas stuff
 
 
-      /*
+      let ctx = state.canvasRef.getContext("2d");                    //setting up the fail region
+
       //collision demonstration
-      if ((random_x_test_case >= random_x && random_x_test_case <= (random_x + fail_region_edge_size)
-        && random_y_test_case >= random_y && (random_y_test_case <= random_y + fail_region_edge_size))) {
+      if (checkCollision(0)) {
         console.log("COLLISION");
         document.getElementById("output_result").innerHTML = "HIT!";
         ctx.fillStyle = "red";                            //colour of fail region
@@ -166,7 +186,7 @@
       ctx.arc(random_x_test_case, random_y_test_case, 5, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.fill();
-    }*/
+    }
 
   </script>
 </head>
