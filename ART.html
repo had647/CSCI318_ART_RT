@@ -101,8 +101,8 @@
 
     function checkCollision(i) {
       //'i' is the test case index to check for collisions with
-      if (state.test_cases[i].x >= state.failRegion.coords.x && state.test_cases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
-        && state.test_cases[i].y >= state.failRegion.coords.y && state.test_cases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) return true;
+      if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
+        && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) return true;
       return false;
     }
 
@@ -141,7 +141,7 @@
       console.log(`Using edge size: ${edge_size}px`);
 
       if (isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0 || isNaN(edge_size) || edge_size <= 0) {
-        console.error("INVALID");
+        console.error("Enter valid failure percentage: 1%-100% and canvas edge size: 250px-800px!");
         return;
       } else {
         console.log("INPUT VALID");
@@ -162,9 +162,9 @@
       state.failRegion.coords.x = random_x;
       state.failRegion.coords.y = random_y;
       state.canvasSize = edge_size;
-      state.test_cases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
+      state.testCases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
+      initBlankCanvas();
       state.canvasRef = document.getElementById("myCanvas");     //setting up canvas stuff
-
 
       let ctx = state.canvasRef.getContext("2d");                    //setting up the fail region
 
@@ -227,7 +227,7 @@
   <input type="text" id="edgeSize"></input>
   <span>px <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br /> <br />
 
-  <button onclick="runTest()">Go!</button> <br /><br />
+  <button onclick="initState()">Go!</button> <br /><br />
 
   <div id="wrapper">
     <div id="canvasContainer"></div>
