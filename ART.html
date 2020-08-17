@@ -17,6 +17,20 @@
       flex: 1;
     }
   </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script>
 
     //calculates the smallest distance between a candidate case, and all current test cases
@@ -28,32 +42,24 @@
       for (let i = 0; i < test_cases.length; i++) {     //iterating through each test case
 
         di = Math.sqrt(Math.pow((candidate.x - test_cases[i].x), 2) + Math.pow((candidate.y - test_cases[i].y), 2));   //equation for measuring distance
-        console.log(di);  //uncomment this if you want to see the distance between the candidate and each test case
+
         if (i === 0) { min_distance = di; }             //assume the first distance is the smallest
         if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
-      //console.log("----");          //un comment this if you want to see the final output
-      console.log(min_distance);    //"                                                  "
+
+      console.log(min_distance);  
       return min_distance;
     }
 
-
-    //This is a demonstration only. Remove comment block to see the function in action. Also remove the commented console.log() functions in the calculate_min_distance() function.
-    //Cheers- Isaac xoxo
-
-    //This is an dynamic array of floating point values, so it will grow  much larger than this in the actual program
-    //Every value in the array belongs to a pair. Eg. test_case_0(x, y) x = 1.5, y = 2.333    test_case_1(x, y) x = 5, y = 20
-    let test_cases = [{ 'x': 1.5, 'y': 2.333 }/*, { 'x': 5, 'y': 20 }, { 'x': 151, 'y': 251 }, { 'x': 150, 'y': 250 }, { 'x': 45, 'y': 499 }, { 'x': 344, 'y': 99 }, { 'x': 66, 'y': 77 }, { 'x': 188, 'y': 219 }, { 'x': 455, 'y': 401 }, { 'x': 30, 'y': 14 }*/];
-
-    //just a dummy candidate case to test function
-    //let candidate = { 'x': 45.7, 'y': 70.9 };
-
-    //calculate_min_distance(candidate);
+    let globalState = {
+      test_cases: [],
+      candidates: []
+    };
 
     function getNewCandidates(k) {
       //let k = 1; //should be input argument
       let d = 0;
-      let candidates = getRndCandidates(k);
+      let candidates = getRndCandidates(edge_size);
       console.log(candidates);
       let t;
       let di;
@@ -66,6 +72,7 @@
         }
       }
       test_cases.push(t);
+      
     }
 	
 	// Just using to visualise how it works.
@@ -74,20 +81,26 @@
 	
 	
 	
-    function getRndCandidates(k) {
-      let candidates = [];
-      for (let i = 0; i < k; i++) {     //randomly generate candidates
-        candidates.push({ 'x': Math.random() * 500, 'y': Math.random() * 500 });
+    function getRndCandidates(edge_size) {
+      for (let i = 0; i < 10; i++) {     //randomly generate candidates
+        globalState.candidates[i] = {'x': Math.random() * edge_size, 'y': Math.random() * edge_size};
+       // candidates.push({ 'x': Math.random() * edge_size, 'y': Math.random() * edge_size });
       }
       return candidates;
     }
 
+    function checkCollision(random_x, random_y, i, fail_region_edge_size){
+      if ((globalState.test_cases[i].x >= random_x && globalState.test_cases[i].x <= (random_x + fail_region_edge_size) 
+      &&globalState.test_cases[i].y >= random_y && (globalState.test_cases[i].y <= random_y + fail_region_edge_size))) return true;
+      return false;
+    }
 
 
-
-
-
-
+    function resetGlobalState() {
+      globalState.candidates = [];
+      globalState.test_cases = [];
+    }
+    
 
 
 
@@ -100,6 +113,7 @@
 
 
     function runTest() {
+      resetGlobalState();
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -130,6 +144,9 @@
       let random_x_test_case = Math.random() * edge_size; //these may need to change
       let random_y_test_case = Math.random() * edge_size;
 
+
+
+      /*
       //collision demonstration
       if ((random_x_test_case >= random_x && random_x_test_case <= (random_x + fail_region_edge_size)
         && random_y_test_case >= random_y && (random_y_test_case <= random_y + fail_region_edge_size))) {
@@ -149,10 +166,35 @@
       ctx.arc(random_x_test_case, random_y_test_case, 5, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.fill();
-    }
+    }*/
 
   </script>
 </head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <body>
   <span>Enter failure area percentage:</span>
