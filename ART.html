@@ -18,19 +18,6 @@
     }
   </style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   <script>
 
     let state = {
@@ -65,23 +52,23 @@
 
 
 
-    function getNewCandidates(k) {
+    function getNextTestCase(k) {
       //let k = 1; //should be input argument
       let d = 0;
       genNewCandidates();
-      console.log(state.candidates);
+      //console.log(state.candidates);
       let t;
       let di;
       for (let i = 0; i < state.candidates.length; i++) {
         di = calculate_min_distance(state.candidates[i]);
-        console.log(di);
+        //console.log(di);
         if (di > d) {
           d = di;
           t = state.candidates[i];
         }
       }
       state.testCases.push(t);
-
+      checkForCollision();
     }
 
     // Just using to visualise how it works.
@@ -92,28 +79,10 @@
 
     function genNewCandidates() {
       for (let i = 0; i < 10; i++) {     //randomly generate candidates
-        state.candidates[i] = { 'x': Math.random() * state.failRegion.edgeSize, 'y': Math.random() * state.failRegion.edgeSize };
+        state.candidates[i] = { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
         // candidates.push({ 'x': Math.random() * edge_size, 'y': Math.random() * edge_size });
       }
     }
-
-
-
-    function checkCollision(i) {
-      //'i' is the test case index to check for collisions with
-      if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
-        && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) return true;
-      return false;
-    }
-
-
-    /*function resetstate() {
-      state.candidates = [];
-      state.test_cases = [];
-    }*/
-
-
-
 
 
 
@@ -134,6 +103,7 @@
 
     function initState() {
       //resetstate();
+      state.testCases = [];
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -165,56 +135,48 @@
       state.testCases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
       initBlankCanvas();
       state.canvasRef = document.getElementById("myCanvas");     //setting up canvas stuff
+      drawErrorRegion("green");
+      document.getElementById("output_result").innerHTML = "MISSED!"; //default???
+      checkForCollision();
 
-      let ctx = state.canvasRef.getContext("2d");                    //setting up the fail region
 
+    }
+
+    function checkForCollision() {
       //collision demonstration
-      if (checkCollision(0)) {
+      let i = state.testCases.length - 1; //'i' is the test case index to check for collisions with
+      if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
+        && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
         console.log("COLLISION");
         document.getElementById("output_result").innerHTML = "HIT!";
-        ctx.fillStyle = "red";                            //colour of fail region
-        ctx.fillRect(random_x, random_y, fail_region_edge_size, fail_region_edge_size);
-
+        drawErrorRegion("red");
       } else { //no collision occurs
-        ctx.fillStyle = "green";                            //colour of fail region
-        ctx.fillRect(random_x, random_y, fail_region_edge_size, fail_region_edge_size);       //rendering the fail region
-        document.getElementById("output_result").innerHTML = "MISSED!";
+        //drawErrorRegion("green");
+        //document.getElementById("output_result").innerHTML = "MISSED!";
       }
+      drawLastTestCase(); //this gets drawn last over the top of whatever else is there
+    }
 
-      ctx.fillStyle = "black";
+    function drawErrorRegion(color) {
+      let ctx = state.canvasRef.getContext("2d");                    //setting up the fail region
+      ctx.fillStyle = color;                            //colour of fail region
+      ctx.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+    }
+
+    function drawLastTestCase() {
+      let ctx = state.canvasRef.getContext("2d");
+      //drawing a square is more performant than drawing a circle
+      ctx.fillStyle = "black";                            //colour of fail region
+      ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 5, 5); //rendering the test case
+      /*ctx.fillStyle = "black";
       ctx.beginPath();
-      ctx.arc(random_x_test_case, random_y_test_case, 5, 0, 2 * Math.PI);
+      ctx.arc(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 5, 0, 2 * Math.PI);
       ctx.stroke();
-      ctx.fill();
+      ctx.fill();*/
     }
 
   </script>
 </head>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <body>
   <span>Enter failure area percentage:</span>
@@ -227,7 +189,8 @@
   <input type="text" id="edgeSize"></input>
   <span>px <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br /> <br />
 
-  <button onclick="initState()">Go!</button> <br /><br />
+  <button onclick="initState()">RUN NEW TEST</button>
+  <button onclick="getNextTestCase()">NEXT</button> <br /><br /> <br /><br />
 
   <div id="wrapper">
     <div id="canvasContainer"></div>
