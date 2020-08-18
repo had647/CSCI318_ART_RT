@@ -180,9 +180,18 @@
     function driver() {
       initState();
 
-      while (state.collision === false) {
+      var loop = setInterval(function () {
+        if (state.collision === true) {
+          clearInterval(loop);
+        } else {
+          getNextTestCase();
+        }
+
+      }, 200);
+
+      /*while (state.collision === false) {
         getNextTestCase();
-      }
+      }*/
 
     }
 
