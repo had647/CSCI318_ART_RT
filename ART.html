@@ -172,7 +172,7 @@
       let ctx = state.canvasRef.getContext("2d");
       //drawing a square is more performant than drawing a circle
       ctx.fillStyle = "black";                            //colour of fail region
-      ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 5, 5); //rendering the test case
+      ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 2, 2); //rendering the test case
       /*ctx.fillStyle = "black";
       ctx.beginPath();
       ctx.arc(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 5, 0, 2 * Math.PI);
