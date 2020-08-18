@@ -28,7 +28,8 @@
         edgeSize: null
       },
       canvasSize: null,
-      canvasRef: null
+      canvasRef: null,
+      collision: false
     };
 
 
@@ -46,7 +47,7 @@
         if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
 
-      console.log(min_distance);
+      //console.log(min_distance);
       return min_distance;
     }
 
@@ -149,6 +150,7 @@
         && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
         console.log("COLLISION");
         document.getElementById("output_result").innerHTML = "HIT!";
+        state.collision = true;
         drawErrorRegion("red");
       } else { //no collision occurs
         //drawErrorRegion("green");
@@ -175,6 +177,15 @@
       ctx.fill();*/
     }
 
+    function driver() {
+      initState();
+
+      while (state.collision === false) {
+        getNextTestCase();
+      }
+
+    }
+
   </script>
 </head>
 
@@ -189,7 +200,7 @@
   <input type="text" id="edgeSize"></input>
   <span>px <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br /> <br />
 
-  <button onclick="initState()">RUN NEW TEST</button>
+  <button onclick="driver()">RUN NEW TEST</button>
   <button onclick="getNextTestCase()">NEXT</button> <br /><br /> <br /><br />
 
   <div id="wrapper">
