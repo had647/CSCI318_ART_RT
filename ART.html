@@ -105,6 +105,7 @@
     function initState() {
       //resetstate();
       state.testCases = [];
+      state.collision = false;
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -187,7 +188,7 @@
           getNextTestCase();
         }
 
-      }, 200);
+      }, 50);
 
       /*while (state.collision === false) {
         getNextTestCase();
