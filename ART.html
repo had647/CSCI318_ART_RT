@@ -30,7 +30,8 @@
       },
       canvasSize: null,
       canvasRef: null,
-      collision: false
+      collision: false,
+      loopCount: 0
     };
 
 
@@ -55,6 +56,7 @@
 
 
     function getNextTestCase(k) {
+      state.loopCount++;
       //let k = 1; //should be input argument
       let d = 0;
       genNewCandidates();
@@ -107,6 +109,7 @@
       //resetstate();
       state.testCases = [];
       state.collision = false;
+      state.loopCount = 0;
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
