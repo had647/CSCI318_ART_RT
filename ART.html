@@ -25,7 +25,8 @@
       candidates: [],
       failRegion: {
         coords: { 'x': null, 'y': null },
-        edgeSize: null
+        edgeSize: null,
+        area: null
       },
       canvasSize: null,
       canvasRef: null,
@@ -133,6 +134,7 @@
       state.failRegion.edgeSize = fail_region_edge_size;
       state.failRegion.coords.x = random_x;
       state.failRegion.coords.y = random_y;
+      state.failRegion.area = fail_region_percent;
       state.canvasSize = edge_size;
       state.testCases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
       initBlankCanvas();
@@ -181,19 +183,20 @@
     function driver() {
       initState();
 
-      var loop = setInterval(function () {
-        if (state.collision === true) {
-          clearInterval(loop);
-        } else {
+      if (state.failRegion.area < 0.001) {
+        while (state.collision === false) {
           getNextTestCase();
         }
+      } else {
+        var loop = setInterval(function () {
+          if (state.collision === true) {
+            clearInterval(loop);
+          } else {
+            getNextTestCase();
+          }
 
-      }, 10);
-
-      /*while (state.collision === false) {
-        getNextTestCase();
-      }*/
-
+        }, 10);
+      }
     }
 
   </script>
