@@ -95,8 +95,8 @@
         return;
       }
       //this is probably slow - needs optimizing
-      document.getElementById("canvasContainer").innerHTML = `<canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
-      document.getElementById("canvasContainer2").innerHTML = `<canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`;
+      document.getElementById("canvasContainer").innerHTML = `<h2>ART</h2><canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
+      document.getElementById("canvasContainer2").innerHTML = `<h2>RT</h2><canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`;
 
     }
 
@@ -191,8 +191,7 @@
 
   <button onclick="initState()">RUN NEW TEST</button>
   <button onclick="getNextTestCase()">NEXT</button> <br /><br /> <br /><br />
-  <h2>ART</h2>
-	
+
   <div id="wrapper">
     <div id="canvasContainer"></div>
     <div id="canvasContainer2"></div>
