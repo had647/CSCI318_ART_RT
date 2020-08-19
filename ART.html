@@ -1,55 +1,176 @@
-<html lang="en">
+<!DOCTYPE html>
+<html>
+
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <title>ART</title>
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
+  <title>Algorithm Visualization Tool</title>
 
   <style>
-
     body {
-      font-family-sans-serif:
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      "Roboto",
-      "Helvetica Neue", Arial, sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      margin: 0px;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+      background-color: #fff;
+      display: block;
     }
 
-    #navRow {
-      height: 35px;
-      background-color: #292e33;
+    h2 {
+      margin-top: 0;
+      margin-bottom: .5rem;
+      font-weight: 500;
+      line-height: 1.2;
+      font-size: 2rem;
     }
 
-    #paramBar {
-      position: relative;
-      margin-left: -1px;
-      padding-top: 0;
+    button {
+      margin: 0;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
-    #footer {
-      position: fixed;
-      bottom: 0;
-      margin-left: -10;
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
     }
 
-    /* This is used to have two Canvas Side by Side - bootstrap covers this*/
-    /*#wrapper {
+    .header {
+      background-color: #3399FF;
+      padding-right: 15px;
+      padding-left: 15px;
+      min-width: 310px;
+    }
+
+    .headerLabel {
+      color: #f8f9fa;
+      padding-top: 15px;
+      padding-bottom: 13px;
+    }
+
+    .content {
+      padding: 0px;
+      background-color: #f8f9fa;
       display: flex;
     }
 
-    #canvasContainer {
-      flex: 0 0 35%;
-      /* Change the 35% if you want to move the second Canvas to the right */
+    .navRow {
+      height: 35px;
+      background-color: #292e33;
+      color: #f8f9fa;
+      font-size: 1.25rem;
+      font-weight: 300;
+      width: 100%;
     }
-    /*
-    #canvasContainer2 {
-      flex: 1;
+
+    .inputGroup {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
     }
-    */
+
+    .inputGroupText {
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      color: #495057;
+      text-align: center;
+      white-space: nowrap;
+      background-color: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+    }
+
+    .inputGroupName {
+      width: 150px;
+    }
+
+    .inputGroupUnits {
+      width: 40px;
+    }
+
+    .formControl {
+      display: block;
+      width: 110px;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      color: #495057;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+    }
+
+    .navLabel {
+      width: 100%;
+      text-align: center;
+      margin: 0px;
+    }
+
+    .paramBar {
+      position: relative;
+      margin: 0px;
+      padding: 5px;
+      color: #f8f9fa;
+      background-color: #343a40;
+      width: 310px;
+      min-width: 310px;
+    }
+
+    .canvasWrapper {
+      padding: 10px;
+    }
+
+    /*buttons*/
+    .button {
+      cursor: pointer;
+      color: #fff;
+      text-align: center;
+      border: 1px solid;
+      padding: .375rem .75rem;
+      border-radius: .25rem;
+      transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+    }
+
+    .buttonGo {
+      width: 40px;
+      padding-left: 7px;
+      background-color: #007bff;
+      border-color: #006fe6;
+    }
+
+    .buttonGo:hover {
+      background-color: #006fe6;
+      border-color: #0063cc;
+    }
+
+    .buttonSuccess {
+      width: 100%;
+      background-color: #2db94d;
+      border-color: #28a445;
+    }
+
+    .buttonSuccess:hover {
+      background-color: #28a445;
+      border-color: #23903c;
+    }
+
+    .buttonNext {
+      width: 100%;
+      background-color: #d92638;
+      border-color: #c32232;
+    }
+
+    .buttonNext:hover {
+      background-color: #c32232;
+      border-color: #ad1f2d;
+    }
   </style>
 
   <script>
@@ -85,7 +206,7 @@
       return min_distance;
     }
 
-    function getNextTestCase(k) {
+    function getNextTestCase() {
       state.loopCount++;
       //let k = 1; //should be input argument
       let d = 0;
@@ -106,9 +227,8 @@
     }
 
     function genNewCandidates() {
-      for (let i = 0; i < 10; i++) {     //randomly generate candidates
+      for (let i = 0; i < 10; i++) {     //randomly generate new set of candidates
         state.candidates[i] = { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
-        // candidates.push({ 'x': Math.random() * edge_size, 'y': Math.random() * edge_size });
       }
     }
 
@@ -120,12 +240,14 @@
 
       //this is probably slow - needs optimizing - altered for readability
       //sets height and width based on edge_size
-      document.getElementById("artContainer").innerHTML = `<h2 class="p-2">ART</h2>
-                                                           <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
-                                                           <h6 class="p-2" id="art_output_result"></h6>`;
-      document.getElementById("rtContainer").innerHTML = `<h2 class="p-2">RT</h2>
-                                                          <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
-                                                          <h6 class="p-2" id="rt_output_result"></h6>`;
+      document.getElementById("artContainer").innerHTML = `
+        <h2 class="p-2">ART</h2>
+        <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
+        <h6 class="p-2" id="art_output_result"></h6>`;
+      document.getElementById("rtContainer").innerHTML = `
+        <h2 class="p-2">RT</h2>
+        <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
+        <h6 class="p-2" id="rt_output_result"></h6>`;
     }
 
     function initState() {
@@ -199,11 +321,6 @@
       //drawing a square is more performant than drawing a circle
       ctx.fillStyle = "black";                            //colour of fail region
       ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 2, 2); //rendering the test case
-      /*ctx.fillStyle = "black";
-      ctx.beginPath();
-      ctx.arc(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 5, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.fill();*/
     }
 
     function driver() {
@@ -230,75 +347,64 @@
 
 <body>
 
-  <div class="container-fluid" style="background-color:3399FF;">
-    <div class="page-header text-light">
-    	<br><h2 class="text-left">🤖 Algorithm Visualization Tool</h2><br>
-  	</div>
+  <div class="header">
+    <div class="headerLabel">
+      <h2>🤖 Algorithm Visualization Tool</h2>
+    </div>
   </div>
 
-  <div class="container-fluid h-100 bg-light d-flex flex-column">
-
-    <div class ="row h-100">
-
-      <div class="d-flex flex-column col-sm-2 bg-dark text-light" id="paramBar">
-        <div class="row" id="navRow">
-          <p class="col text-center text-light lead">Test Parameters</p>
-        </div>
-
-        <br><div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Enter Failure Rate:</span>
-          </div>
-          <input type="text" class="form-control" id="failPct">
-          <div class="input-group-append">
-            <span class="input-group-text">%</span>
-          </div>
-        </div>
-
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Enter Display Size:</span>
-          </div>
-          <input type="text" class="form-control rounded-right" id="edgeSize">
-          <span><i>(For display purposes, we recommend the range 300px to 730px.)</i></span><br>
-        </div>
-
-        <button type="button" class="btn btn-success btn-block" onclick="driver()">Begin Test</button>
-        <button type="button" class="btn btn-danger btn-block" onclick="getNextTestCase()">Next Test Case</button><br>
-
-        <div class="row" id="navRow">
-          <p class="col-sm text-center text-light lead">Compare Algorithm Speeds</p>
-        </div>
-
-        <br><div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Number of tests:</span>
-          </div>
-          <input type="text" class="form-control"></input>
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button" onclick="">Go!</button>
-          </div>
-        </div>
-
-        <br><div class="text-center" style='font-size:45px;'>🛠️</div>
+  <div class="content">
+    <div class="paramBar">
+      <div class="navRow">
+        <p class="navLabel">Test Parameters</p>
       </div>
 
-      <div id="artContainer" class="d-flex flex-column col-sm-auto"></div>
-      <div id="rtContainer" class="d-flex flex-column col-sm-auto"></div>
-
-    </div>
-    <!-- just some random footer test
-    <div class ="row">
-      <div class="container-fluid" id="footer">
-        <div class="col-sm-2 text-center" style='font-size:45px;'>🛠️</div>
+      <br>
+      <div class="inputGroup">
+        <span class="inputGroupText inputGroupName">Enter Failure Rate:</span>
+        <input type="text" class="formControl" id="failPct">
+        <span class="inputGroupText inputGroupUnits">%</span>
       </div>
+
+      <div class="inputGroup">
+        <span class="inputGroupText inputGroupName">Enter Display Size:</span>
+        <input type="text" class="formControl" id="edgeSize">
+        <span class="inputGroupText inputGroupUnits">px</span>
+        <span><i>(For display purposes, we recommend the range 300px to
+            730px.)</i></span><br /><br /><br /><br /><br /><br />
+      </div>
+
+      <button class="button buttonSuccess" onclick="driver()">Begin Test</button>
+      <button class="button buttonNext" onclick="getNextTestCase()">Next Test
+        Case</button><br /><br /><br />
+
+      <div class="navRow">
+        <p class="navLabel">Compare Algorithm Speeds</p>
+      </div>
+
+      <br>
+      <div class="inputGroup">
+        <span class="inputGroupText inputGroupName">Number of tests:</span>
+        <input type="text" class="formControl"></input>
+
+        <button class="button buttonGo" onclick="">Go!</button>
+      </div>
+
+      <br>
+      <div class="navLabel" style='font-size:50px;'>🛠️</div>
     </div>
-    -->
+
+    <div id="artContainer" class="canvasWrapper"></div>
+    <div id="rtContainer" class="canvasWrapper"></div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>-->
+  <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>-->
 </body>
 
 
