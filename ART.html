@@ -299,13 +299,13 @@
       if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
         && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
         console.log("COLLISION");
-        document.getElementById("art_output_result").innerHTML = "HIT!✔️";
+        document.getElementById("art_output_result").innerHTML = '<span style="font-weight: bold; font-size: 25px"> HIT!✔️ </font>';
         state.collision = true;
         drawErrorRegion("red");
         //stop checking for collisions
       } else { //no collision occurs
         //drawErrorRegion("green");
-        document.getElementById("art_output_result").innerHTML = "MISSED!❌";
+        document.getElementById("art_output_result").innerHTML =  '<span style="font-weight: bold; font-size: 25px"> MISSED!❌ </font>';
       }
       drawLastTestCase(); //this gets drawn last over the top of whatever else is there
     }
