@@ -1,10 +1,43 @@
-<html>
-
+<html lang="en">
 <head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <title>ART</title>
+
   <style>
-    /* This is used to have two Canvas Side by Side*/
-    #wrapper {
+
+    body {
+      font-family-sans-serif:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Roboto",
+      "Helvetica Neue", Arial, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    #navRow {
+      height: 35px;
+      background-color: #292e33;
+    }
+
+    #paramBar {
+      position: relative;
+      margin-left: -1px;
+      padding-top: 0;
+    }
+
+    #footer {
+      position: fixed;
+      bottom: 0;
+      margin-left: -10;
+    }
+
+    /* This is used to have two Canvas Side by Side - bootstrap covers this*/
+    /*#wrapper {
       display: flex;
     }
 
@@ -12,10 +45,11 @@
       flex: 0 0 35%;
       /* Change the 35% if you want to move the second Canvas to the right */
     }
-
+    /*
     #canvasContainer2 {
       flex: 1;
     }
+    */
   </style>
 
   <script>
@@ -34,7 +68,6 @@
       loopCount: 0
     };
 
-
     //calculates the smallest distance between a candidate case, and all current test cases
     function calculate_min_distance(candidate) {
 
@@ -48,12 +81,9 @@
         if (i === 0) { min_distance = di; }             //assume the first distance is the smallest
         if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
       }
-
       //console.log(min_distance);
       return min_distance;
     }
-
-
 
     function getNextTestCase(k) {
       state.loopCount++;
@@ -75,12 +105,6 @@
       checkForCollision();
     }
 
-    // Just using to visualise how it works.
-    //getNewCandidates(2);
-    //console.log(test_cases);
-
-
-
     function genNewCandidates() {
       for (let i = 0; i < 10; i++) {     //randomly generate candidates
         state.candidates[i] = { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
@@ -88,28 +112,28 @@
       }
     }
 
-
-
-
-
-
     function initBlankCanvas() {
       if (state.canvasSize === null) {
         console.error("Need to initialize state.canvasSize before trying to initialize the canvas!");
         return;
       }
-      //this is probably slow - needs optimizing
-      document.getElementById("canvasContainer").innerHTML = `<h2>ART</h2><canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`; //sets height and width based on edge_size
-      document.getElementById("canvasContainer2").innerHTML = `<h2>RT</h2><canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>`;
 
+      //this is probably slow - needs optimizing - altered for readability
+      //sets height and width based on edge_size
+      document.getElementById("artContainer").innerHTML = `<h2 class="p-2">ART</h2>
+                                                           <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
+                                                           <h6 class="p-2" id="art_output_result"></h6>`;
+      document.getElementById("rtContainer").innerHTML = `<h2 class="p-2">RT</h2>
+                                                          <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
+                                                          <h6 class="p-2" id="rt_output_result"></h6>`;
     }
-
 
     function initState() {
       //resetstate();
       state.testCases = [];
       state.collision = false;
       state.loopCount = 0;
+
       let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
       console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -143,10 +167,8 @@
       initBlankCanvas();
       state.canvasRef = document.getElementById("myCanvas");     //setting up canvas stuff
       drawErrorRegion("green");
-      document.getElementById("output_result").innerHTML = "MISSED!"; //default???
+      //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collision
       checkForCollision();
-
-
     }
 
     function checkForCollision() {
@@ -155,12 +177,13 @@
       if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
         && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
         console.log("COLLISION");
-        document.getElementById("output_result").innerHTML = "HIT!";
+        document.getElementById("art_output_result").innerHTML = "HIT!✔️";
         state.collision = true;
         drawErrorRegion("red");
+        //stop checking for collisions
       } else { //no collision occurs
         //drawErrorRegion("green");
-        //document.getElementById("output_result").innerHTML = "MISSED!";
+        document.getElementById("art_output_result").innerHTML = "MISSED!❌";
       }
       drawLastTestCase(); //this gets drawn last over the top of whatever else is there
     }
@@ -206,28 +229,77 @@
 </head>
 
 <body>
-  <span>Enter failure area percentage:</span>
-  <input type="text" id="failPct"></input>
-  <span>%</span>
 
-  <br />
-
-  <span>Enter edge size as an integer:</span>
-  <input type="text" id="edgeSize"></input>
-  <span>px <i>(For display purposes, we recommend the range 250px to 800px.)</i></span> <br /> <br />
-
-  <button onclick="driver()">RUN NEW TEST</button>
-  <button onclick="getNextTestCase()">NEXT</button> <br /><br /> <br /><br />
-
-  <div id="wrapper">
-    <div id="canvasContainer"></div>
-    <div id="canvasContainer2"></div>
+  <div class="container-fluid" style="background-color:3399FF;">
+    <div class="page-header text-light">
+    	<br><h2 class="text-left">🤖 Algorithm Visualization Tool</h2><br>
+  	</div>
   </div>
 
-  <br />
+  <div class="container-fluid h-100 bg-light d-flex flex-column">
 
-  <div id="output_result"></div>
+    <div class ="row h-100">
 
+      <div class="d-flex flex-column col-sm-2 bg-dark text-light" id="paramBar">
+        <div class="row" id="navRow">
+          <p class="col text-center text-light lead">Test Parameters</p>
+        </div>
+
+        <br><div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Enter Failure Rate:</span>
+          </div>
+          <input type="text" class="form-control" id="failPct">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Enter Display Size:</span>
+          </div>
+          <input type="text" class="form-control" id="edgeSize">
+          <span><i>(For display purposes, we recommend the range 300px to 730px.)</i></span><br>
+        </div>
+
+        <button type="button" class="btn btn-success btn-block" onclick="initState()">Begin Test</button>
+        <button type="button" class="btn btn-danger btn-block" onclick="getNextTestCase()">Next Test Case</button><br>
+
+        <div class="row" id="navRow">
+          <p class="col-sm text-center text-light lead">Compare Algorithm Speeds</p>
+        </div>
+
+        <br><div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Number of tests:</span>
+          </div>
+          <input type="text" class="form-control"></input>
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" onclick="">Go!</button>
+          </div>
+        </div>
+
+        <br><div class="text-center" style='font-size:45px;'>🛠️</div>
+      </div>
+
+      <div id="artContainer" class="d-flex flex-column col-sm-auto"></div>
+      <div id="rtContainer" class="d-flex flex-column col-sm-auto"></div>
+
+    </div>
+    <!-- just some random footer test
+    <div class ="row">
+      <div class="container-fluid" id="footer">
+        <div class="col-sm-2 text-center" style='font-size:45px;'>🛠️</div>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
+
 
 </html>
