@@ -25,6 +25,15 @@ button {
   line-height: inherit;
 }
 
+canvas {
+  border: 1px solid #c3c3c3;
+}
+
+.output {
+  font-weight: bold;
+  font-size: 25px;
+}
+
 *,
 ::after,
 ::before {

@@ -64,13 +64,13 @@ function initBlankCanvas() {
   //this is probably slow - needs optimizing - altered for readability
   //sets height and width based on edge_size
   document.getElementById("artContainer").innerHTML = `
-    <h2 class="p-2">ART</h2>
-    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
-    <h6 class="p-2" id="art_output_result"></h6>`;
+    <h2>ART</h2>
+    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
+    <h3 id="artOutput" class="output"></h3>`;
   document.getElementById("rtContainer").innerHTML = `
-    <h2 class="p-2">RT</h2>
-    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}" style="border:1px solid #c3c3c3;"></canvas>
-    <h6 class="p-2" id="rt_output_result"></h6>`;
+    <h2>RT</h2>
+    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
+    <h3 id="rtOutput" class="output"></h3>`;
 }
 
 function initState() {
@@ -122,13 +122,13 @@ function checkForCollision() {
   if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
     && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
     console.log("COLLISION");
-    document.getElementById("art_output_result").innerHTML = '<span style="font-weight: bold; font-size: 25px"> HIT!✔️ </font>';
+    document.getElementById("artOutput").innerHTML = `HIT!✔️`;
     state.collision = true;
     drawErrorRegion("red");
     //stop checking for collisions
   } else { //no collision occurs
     //drawErrorRegion("green");
-    document.getElementById("art_output_result").innerHTML = '<span style="font-weight: bold; font-size: 25px"> MISSED!❌ </font>';
+    document.getElementById("artOutput").innerHTML = `MISSED!❌`;
   }
   drawLastTestCase(); //this gets drawn last over the top of whatever else is there
 }
