@@ -37,13 +37,17 @@
         <span class="inputGroupText inputGroupName">Enter Display Size:</span>
         <input type="text" class="formControl" id="edgeSize">
         <span class="inputGroupText inputGroupUnits">px</span>
-        <span><i>(For display purposes, we recommend the range 300px to
-            730px.)</i></span><br /><br /><br /><br /><br /><br />
+        <span><i><b>NOTE:</b> Please enter a Display Size between <b>300px</b> and <b>800px</b> for best results.
+            Values outside this range may be difficult to observe on some displays. The real-time algorithm
+            visualisation is disabled for failure rates below <b>0.1%</b> for performance reasons. In these cases, the
+            results will only be displayed at the end. Failure rates lower than <b>0.001%</b> will take a very long time
+            to compute on most machines.</i></span>
+        <br /><br /><br /><br /><br /><br />
       </div>
 
       <button class="button buttonSuccess" onclick="driver()">Begin Test</button>
-      <button class="button buttonNext" onclick="getNextTestCase()">Next Test
-        Case</button><br /><br /><br />
+      <button class="button buttonNext" onclick="">Next Test Case</button>
+      <br /><br /><br />
 
       <div class="navRow">
         <p class="navLabel">Compare Algorithm Speeds</p>
