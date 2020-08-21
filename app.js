@@ -47,6 +47,8 @@ function getNextTestCase() {
   }
   state.testCases.push(t);
   checkForCollision();
+  
+  document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
 }
 
 function genNewCandidates() {
@@ -66,11 +68,13 @@ function initBlankCanvas() {
   document.getElementById("artContainer").innerHTML = `
     <h2>ART</h2>
     <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
-    <h3 id="artOutput" class="output"></h3>`;
+    <h3 id="artOutput" class="output"></h3>
+	<h5 id="artCounter" class="output"></h5>`;
   document.getElementById("rtContainer").innerHTML = `
     <h2>RT</h2>
     <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
-    <h3 id="rtOutput" class="output"></h3>`;
+    <h3 id="rtOutput" class="output"></h3>
+	<h5 id="rtCounter" class="output"></h5>`;
 }
 
 function initState() {
@@ -148,7 +152,6 @@ function drawLastTestCase() {
 
 function driver() {
   initState();
-
   if (state.failRegion.area < 0.001) {
     while (state.collision === false) {
       getNextTestCase();
@@ -160,7 +163,7 @@ function driver() {
       } else {
         getNextTestCase();
       }
-
     }, 1);
   }
+  
 }
