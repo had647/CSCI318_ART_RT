@@ -108,7 +108,7 @@ function initState() {
   state.testCases = [];
   state.collisionART = false;
   state.collisionRT = false;
-  state.loopCount = 0;
+  state.loopCount = 1;
   state.lastRT = null;
 
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
