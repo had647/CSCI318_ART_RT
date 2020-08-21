@@ -1,5 +1,6 @@
 let state = {
   testCases: [],
+  lastRT: null,
   candidates: [],
   failRegion: {
     coords: { 'x': null, 'y': null },
@@ -7,8 +8,10 @@ let state = {
     area: null
   },
   canvasSize: null,
-  canvasRef: null,
-  collision: false,
+  canvasRefART: null,
+  canvasRefRT: null,
+  collisionART: false,
+  collisionRT: false,
   loopCount: 0
 };
 
@@ -29,8 +32,8 @@ function calculate_min_distance(candidate) {
   return min_distance;
 }
 
-function getNextTestCase() {
-  state.loopCount++;
+function getNextARTTestCase() {
+  //state.loopCount++;
   //let k = 1; //should be input argument
   let d = 0;
   genNewCandidates();
@@ -46,15 +49,38 @@ function getNextTestCase() {
     }
   }
   state.testCases.push(t);
-  checkForCollision();
-  
-  document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
+  checkForCollisionART();
+
 }
 
 function genNewCandidates() {
   for (let i = 0; i < 10; i++) {     //randomly generate new set of candidates
-    state.candidates[i] = { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
+    state.candidates[i] = genRandomPoint();
   }
+}
+
+function genRandomPoint() {
+	return { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
+}
+
+function checkForCollisionRT() {
+
+  let point = genRandomPoint();
+  state.lastRT = point;
+  if (point.x >= state.failRegion.coords.x && point.x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
+    && point.y >= state.failRegion.coords.y && point.y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
+    console.log("collisionRT");
+    document.getElementById("rtOutput").innerHTML = `HIT!✔️`;
+    state.collisionRT = true;
+    drawErrorRegion("red");
+    
+    //stop checking for collisions
+    // implement when checkbox is ticked..
+  } //else { //no collisionART occurs
+    //drawErrorRegion("green");
+    //document.getElementById("rtOutput").innerHTML = `MISSED!❌`;
+  //}
+  drawLastTestCase(2);
 }
 
 function initBlankCanvas() {
@@ -67,12 +93,12 @@ function initBlankCanvas() {
   //sets height and width based on edge_size
   document.getElementById("artContainer").innerHTML = `
     <h2>ART</h2>
-    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
+    <canvas id="myCanvasART" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
     <h3 id="artOutput" class="output"></h3>
 	<h5 id="artCounter" class="output"></h5>`;
   document.getElementById("rtContainer").innerHTML = `
     <h2>RT</h2>
-    <canvas id="myCanvas" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
+    <canvas id="myCanvasRT" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
     <h3 id="rtOutput" class="output"></h3>
 	<h5 id="rtCounter" class="output"></h5>`;
 }
@@ -80,8 +106,10 @@ function initBlankCanvas() {
 function initState() {
   //resetstate();
   state.testCases = [];
-  state.collision = false;
+  state.collisionART = false;
+  state.collisionRT = false;
   state.loopCount = 0;
+  state.lastRT = null;
 
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
   console.log(`Using failure pct: ${fail_region_percent}`);
@@ -114,54 +142,92 @@ function initState() {
   state.canvasSize = edge_size;
   state.testCases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
   initBlankCanvas();
-  state.canvasRef = document.getElementById("myCanvas");     //setting up canvas stuff
+  state.canvasRefART = document.getElementById("myCanvasART");     //setting up canvas stuff
+  state.canvasRefRT = document.getElementById("myCanvasRT");
   drawErrorRegion("green");
-  //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collision
-  checkForCollision();
+  //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collisionART
+  checkForCollisionART();
+  state.lastRT = genRandomPoint();
+  drawLastTestCase(2);
 }
 
-function checkForCollision() {
-  //collision demonstration
+function checkForCollisionART() {
+  //collisionART demonstration
   let i = state.testCases.length - 1; //'i' is the test case index to check for collisions with
   if (state.testCases[i].x >= state.failRegion.coords.x && state.testCases[i].x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
     && state.testCases[i].y >= state.failRegion.coords.y && state.testCases[i].y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
-    console.log("COLLISION");
+    console.log("collisionART");
     document.getElementById("artOutput").innerHTML = `HIT!✔️`;
-    state.collision = true;
+    state.collisionART = true;
     drawErrorRegion("red");
     //stop checking for collisions
-  } else { //no collision occurs
+  } //else { //no collisionART occurs
     //drawErrorRegion("green");
-    document.getElementById("artOutput").innerHTML = `MISSED!❌`;
-  }
-  drawLastTestCase(); //this gets drawn last over the top of whatever else is there
+    //document.getElementById("artOutput").innerHTML = `MISSED!❌`;
+  //}
+  drawLastTestCase(1); //this gets drawn last over the top of whatever else is there
+  
 }
-
+// Needs to be BADLY refactored coz now it is aids
 function drawErrorRegion(color) {
-  let ctx = state.canvasRef.getContext("2d");                    //setting up the fail region
-  ctx.fillStyle = color;                            //colour of fail region
-  ctx.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+  if (color === 'green') { 
+    let ctxART = state.canvasRefART.getContext("2d");                    //setting up the fail region
+    let ctxRT = state.canvasRefRT.getContext("2d");      
+    
+    ctxART.fillStyle = color;                            //colour of fail region
+    ctxART.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+    
+    ctxRT.fillStyle = color;                            //colour of fail region
+    ctxRT.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+  } else {
+    if (state.collisionART === true) {
+      let ctxART = state.canvasRefART.getContext("2d");
+      ctxART.fillStyle = color;                            //colour of fail region
+      ctxART.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+    }
+    if (state.collisionRT === true) {
+      let ctxRT = state.canvasRefRT.getContext("2d");
+      ctxRT.fillStyle = color;                            //colour of fail region
+      ctxRT.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+    }
+  }
 }
 
-function drawLastTestCase() {
-  let ctx = state.canvasRef.getContext("2d");
-  //drawing a square is more performant than drawing a circle
-  ctx.fillStyle = "black";                            //colour of fail region
-  ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 2, 2); //rendering the test case
+function drawLastTestCase(canvas) {
+  let ctx;
+  if (canvas === 1) {
+    ctx = state.canvasRefART.getContext("2d");
+    //drawing a square is more performant than drawing a circle
+    ctx.fillStyle = "black";                            //colour of fail region
+    ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 2, 2); //rendering the test case
+  } else if (canvas === 2) {
+    ctx = state.canvasRefRT.getContext("2d");
+    //drawing a square is more performant than drawing a circle
+    ctx.fillStyle = "black";                            //colour of fail region
+    ctx.fillRect(state.lastRT.x, state.lastRT.y, 2, 2); //rendering the test case
+  } else {return;}
+  
+  
 }
 
 function driver() {
   initState();
   if (state.failRegion.area < 0.001) {
-    while (state.collision === false) {
-      getNextTestCase();
+    while (state.collisionART === false && state.collisionRT === false) {
+      state.loopCount++;
+      getNextARTTestCase();
+      checkForCollisionRT();
     }
+    document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
     var loop = setInterval(function () {
-      if (state.collision === true) {
+      if (state.collisionART === true || state.collisionRT === true) {
         clearInterval(loop);
       } else {
-        getNextTestCase();
+        state.loopCount++;
+        document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
+        getNextARTTestCase();
+        checkForCollisionRT();
       }
     }, 1);
   }
