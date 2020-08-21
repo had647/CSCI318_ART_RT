@@ -1,0 +1,161 @@
+body {
+  margin: 0px;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+  display: block;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 2rem;
+}
+
+button {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+.header {
+  background-color: #3399FF;
+  padding-right: 15px;
+  padding-left: 15px;
+  min-width: 310px;
+}
+
+.headerLabel {
+  color: #f8f9fa;
+  padding-top: 15px;
+  padding-bottom: 13px;
+}
+
+.content {
+  padding: 0px;
+  background-color: #f8f9fa;
+  display: flex;
+}
+
+.navRow {
+  height: 35px;
+  background-color: #292e33;
+  color: #f8f9fa;
+  font-size: 1.25rem;
+  font-weight: 300;
+  width: 100%;
+}
+
+.inputGroup {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.inputGroupText {
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.inputGroupName {
+  width: 150px;
+}
+
+.inputGroupUnits {
+  width: 40px;
+}
+
+.formControl {
+  display: block;
+  width: 110px;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+}
+
+.navLabel {
+  width: 100%;
+  text-align: center;
+  margin: 0px;
+}
+
+.paramBar {
+  position: relative;
+  margin: 0px;
+  padding: 5px;
+  color: #f8f9fa;
+  background-color: #343a40;
+  width: 310px;
+  min-width: 310px;
+}
+
+.canvasWrapper {
+  padding: 10px;
+}
+
+/*buttons*/
+.button {
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  border: 1px solid;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.buttonGo {
+  width: 40px;
+  padding-left: 7px;
+  background-color: #007bff;
+  border-color: #006fe6;
+}
+
+.buttonGo:hover {
+  background-color: #006fe6;
+  border-color: #0063cc;
+}
+
+.buttonSuccess {
+  width: 100%;
+  background-color: #2db94d;
+  border-color: #28a445;
+}
+
+.buttonSuccess:hover {
+  background-color: #28a445;
+  border-color: #23903c;
+}
+
+.buttonNext {
+  width: 100%;
+  background-color: #d92638;
+  border-color: #c32232;
+}
+
+.buttonNext:hover {
+  background-color: #c32232;
+  border-color: #ad1f2d;
+}
