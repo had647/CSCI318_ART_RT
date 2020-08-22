@@ -12,7 +12,8 @@ let state = {
   canvasRefRT: null,
   collisionART: false,
   collisionRT: false,
-  loopCount: 0
+  loopCount: 0,
+  numberOfTests: 1
 };
 
 //calculates the smallest distance between a candidate case, and all current test cases
@@ -95,7 +96,8 @@ function initBlankCanvas() {
     <h2>ART</h2>
     <canvas id="myCanvasART" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
     <h3 id="artOutput" class="output"></h3>
-	<h5 id="artCounter" class="output"></h5>`;
+	<h5 id="artCounter" class="output"></h5>
+	<h5 id="numberOfTestsOutput" class="output"></h5>`;
   document.getElementById("rtContainer").innerHTML = `
     <h2>RT</h2>
     <canvas id="myCanvasRT" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
@@ -217,6 +219,11 @@ function driver() {
       state.loopCount++;
       getNextARTTestCase();
       checkForCollisionRT();
+	  if (state.collisionART === true && state.collisionRT === true) {
+		 document.getElementById("artOutput").innerHTML = `TIE!`;
+		 document.getElementById("rtOutput").innerHTML = ``;
+	  }
+	  
     }
     document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
@@ -228,8 +235,26 @@ function driver() {
         document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
         getNextARTTestCase();
         checkForCollisionRT();
+		if (state.collisionART === true && state.collisionRT === true) {
+		 document.getElementById("artOutput").innerHTML = `TIE!`;
+		 document.getElementById("rtOutput").innerHTML = ``;
+	  }
       }
     }, 1);
   }
   
+}
+
+function startTest() {
+	if(document.getElementById("testInput").value > 1){
+		state.numberOfTests = document.getElementById("testInput").value
+		console.log(state.numberOfTests);
+	}
+	
+	for(let i = 0; i <= state.numberOfTests;i++) {
+		driver()
+	}
+	
+	document.getElementById("numberOfTestsOutput").innerHTML = "Number of tests: " + state.numberOfTests;
+	
 }
