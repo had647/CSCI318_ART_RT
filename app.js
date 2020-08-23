@@ -13,7 +13,10 @@ let state = {
   collisionART: false,
   collisionRT: false,
   loopCount: 0,
-  numberOfTests: 1
+  numberOfTests: 1,
+  numberOfWinsART: 0,
+  numberOfWinsRT: 0,
+  numberOfTies: 0
 };
 
 //calculates the smallest distance between a candidate case, and all current test cases
@@ -73,6 +76,7 @@ function checkForCollisionRT() {
     console.log("collisionRT");
     document.getElementById("rtOutput").innerHTML = `HIT!✔️`;
     state.collisionRT = true;
+	state.numberOfWinsRT++;
     drawErrorRegion("red");
     
     //stop checking for collisions
@@ -97,7 +101,8 @@ function initBlankCanvas() {
     <canvas id="myCanvasART" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
     <h3 id="artOutput" class="output"></h3>
 	<h5 id="artCounter" class="output"></h5>
-	<h5 id="numberOfTestsOutput" class="output"></h5>`;
+	<h5 id="numberOfTestsOutput" class="output"></h5>
+	<h6 id="automatedTestOutput" class="output"></h6>`;
   document.getElementById("rtContainer").innerHTML = `
     <h2>RT</h2>
     <canvas id="myCanvasRT" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
@@ -112,7 +117,7 @@ function initState() {
   state.collisionRT = false;
   state.loopCount = 1;
   state.lastRT = null;
-
+ 
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
   console.log(`Using failure pct: ${fail_region_percent}`);
 
@@ -161,6 +166,7 @@ function checkForCollisionART() {
     console.log("collisionART");
     document.getElementById("artOutput").innerHTML = `HIT!✔️`;
     state.collisionART = true;
+	state.numberOfWinsART++;
     drawErrorRegion("red");
     //stop checking for collisions
   } //else { //no collisionART occurs
@@ -214,14 +220,21 @@ function drawLastTestCase(canvas) {
 
 function driver() {
   initState();
-  if (state.failRegion.area < 0.001) {
+  
+  // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
+  if (state.failRegion.area < 0.001 || document.getElementById("testInput").value !== '') {
     while (state.collisionART === false && state.collisionRT === false) {
       state.loopCount++;
       getNextARTTestCase();
       checkForCollisionRT();
+	  
 	  if (state.collisionART === true && state.collisionRT === true) {
 		 document.getElementById("artOutput").innerHTML = `TIE!`;
 		 document.getElementById("rtOutput").innerHTML = ``;
+		 state.numberOfTies++;
+		 // Currently, when there is a tie, both RT and ART are incremented as win each too. So here's the band-aid fix.
+		 state.numberOfWinsART--;
+		 state.numberOfWinsRT--;
 	  }
 	  
     }
@@ -235,26 +248,47 @@ function driver() {
         document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
         getNextARTTestCase();
         checkForCollisionRT();
+		
 		if (state.collisionART === true && state.collisionRT === true) {
 		 document.getElementById("artOutput").innerHTML = `TIE!`;
 		 document.getElementById("rtOutput").innerHTML = ``;
-	  }
+		 state.numberOfTies++;
+		 // Currently, when there is a tie, both RT and ART are incremented as win each too. So here's the band-aid fix
+		 state.numberOfWinsART--;
+		 state.numberOfWinsRT--;
+		}
       }
     }, 1);
   }
-  
+  console.log(state.numberOfWinsART);
+  console.log(state.numberOfWinsRT);
+  console.log(state.numberOfTies);
 }
 
+
 function startTest() {
+	// Reset values to 0.
+    state.numberOfTies = 0;
+	state.numberOfWinsART = 0;
+	state.numberOfWinsRT = 0;
+	
 	if(document.getElementById("testInput").value > 1){
 		state.numberOfTests = document.getElementById("testInput").value
 		console.log(state.numberOfTests);
 	}
 	
-	for(let i = 0; i <= state.numberOfTests;i++) {
+	for(let i = 0; i < state.numberOfTests;i++) {
 		driver()
 	}
 	
-	document.getElementById("numberOfTestsOutput").innerHTML = "Number of tests: " + state.numberOfTests;
+	// Declutter output when automated test is run.
+	document.getElementById("artOutput").innerHTML = "";
+	document.getElementById("rtOutput").innerHTML = "";
+	document.getElementById("artCounter").innerHTML = "";
 	
+	// Final Output
+	document.getElementById("numberOfTestsOutput").innerHTML = "Number of Test: " + state.numberOfTests;
+	document.getElementById("automatedTestOutput").innerHTML = "ART Wins: " + state.numberOfWinsART + "<br />" + "RT Wins: " + state.numberOfWinsRT + "<br />" + "Ties: " + state.numberOfTies;
+
+
 }
