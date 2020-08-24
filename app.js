@@ -119,17 +119,27 @@ function initState() {
   state.lastRT = null;
  
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
+  
+  //sets percentage to 1 if no value is assigned, or if value is out of range
+  if(isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0){
+    fail_region_percent = 0.01;
+    document.getElementById("failPct").value = "1";
+    console.log("Default fail_region_percent value used");
+  }
+
   console.log(`Using failure pct: ${fail_region_percent}`);
 
   let edge_size = parseInt(document.getElementById("edgeSize").value);  //change this to set the HxW of the canvas
+
+  //sets edge size to 500px if no value is given or value is out of range
+  if(isNaN(edge_size) || edge_size <= 0){
+    edge_size = 500;
+    document.getElementById("edgeSize").value = "500";
+    console.log("Default edge_size value used");
+  }
+
   console.log(`Using edge size: ${edge_size}px`);
 
-  if (isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0 || isNaN(edge_size) || edge_size <= 0) {
-    console.error("Enter valid failure percentage: 1%-100% and canvas edge size: 250px-800px!");
-    return;
-  } else {
-    console.log("INPUT VALID");
-  }
 
   let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
@@ -240,6 +250,7 @@ function driver() {
     }
     document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
+
     var loop = setInterval(function () {
       if (state.collisionART === true || state.collisionRT === true) {
         clearInterval(loop);
@@ -268,14 +279,27 @@ function driver() {
 
 function startTest() {
 	// Reset values to 0.
-    state.numberOfTies = 0;
+  state.numberOfTies = 0;
 	state.numberOfWinsART = 0;
 	state.numberOfWinsRT = 0;
-	
-	if(document.getElementById("testInput").value > 1){
-		state.numberOfTests = document.getElementById("testInput").value
-		console.log(state.numberOfTests);
-	}
+  
+
+  //sets the number of tests to 1000 if a value is not assigned, or value is below 1
+  let tempNumberOfTests = parseInt(document.getElementById("testInput").value);
+
+  if(tempNumberOfTests < 1 || isNaN(tempNumberOfTests)){
+    state.numberOfTests = 1000;
+    document.getElementById("testInput").value = "1000";
+    console.log(`Using default numberOfTests: ${state.numberOfTests}`);
+  }
+  else{
+    state.numberOfTests = tempNumberOfTests;
+    console.log(`Value of numberOfTests: ${state.numberOfTests}`);
+  }
+  
+
+  
+
 	
 	for(let i = 0; i < state.numberOfTests;i++) {
 		driver()
