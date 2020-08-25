@@ -26,7 +26,7 @@
         <p class="navLabel">Test Parameters</p>
       </div>
 
-      <br>
+
       <div class="inputGroup">
         <span class="inputGroupText inputGroupName">Enter Failure Rate:</span>
         <input type="text" class="formControl" id="failPct">
@@ -37,23 +37,24 @@
         <span class="inputGroupText inputGroupName">Enter Display Size:</span>
         <input type="text" class="formControl" id="edgeSize">
         <span class="inputGroupText inputGroupUnits">px</span>
-        <span><i><b>NOTE:</b> Please enter a Display Size between <b>300px</b> and <b>800px</b> for best results.
-            Values outside this range may be difficult to observe on some displays. The real-time algorithm
-            visualisation is disabled for failure rates below <b>0.1%</b> for performance reasons. In these cases, the
-            results will only be displayed at the end. Failure rates lower than <b>0.001%</b> will take a very long time
+        <span style="margin-right: 2px; padding-top: 5px; font-size: small;"><i>
+            <b>NOTE:</b> Display Sizes below <b>300px</b> and above <b>800px</b> may be difficult to observe on some displays.
+            <br><br>For any failure rates below <b>0.1%</b>, real-time algorithm visualisation will be disabled to maintain performance
+            (Results will be displayed at the end).
+            <br><br><b>WARNING:</b> Failure rates lower than <b>0.001%</b> will take a very long time
             to compute on most machines.</i></span>
-        <br /><br /><br /><br /><br /><br />
+        <br />
       </div>
 
       <button class="button buttonSuccess" onclick="driver()">Begin Test</button>
       <button class="button buttonNext" onclick="">Next Test Case</button>
-      <br /><br /><br />
+      <br /><br />
 
       <div class="navRow">
         <p class="navLabel">Compare Algorithm Speeds</p>
       </div>
 
-      <br>
+
       <div class="inputGroup">
         <span class="inputGroupText inputGroupName">Number of tests:</span>
         <input type="text" class="formControl" id="testInput"></input>

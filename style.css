@@ -8,6 +8,7 @@ body {
   text-align: left;
   background-color: #fff;
   display: block;
+  height: 100vh;
 }
 
 h2 {
@@ -66,6 +67,8 @@ canvas {
   font-size: 1.25rem;
   font-weight: 300;
   width: 100%;
+  padding-top: 4px;
+  margin-bottom: 15px;
 }
 
 .inputGroup {
@@ -73,6 +76,8 @@ canvas {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  padding-bottom: 8px;
+  padding-left: 5px;
 }
 
 .inputGroupText {
@@ -88,10 +93,14 @@ canvas {
 
 .inputGroupName {
   width: 150px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .inputGroupUnits {
   width: 40px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .formControl {
@@ -106,22 +115,28 @@ canvas {
 
 .navLabel {
   width: 100%;
+  font-size: large;
   text-align: center;
   margin: 0px;
 }
 
 .paramBar {
   position: relative;
+  display: flex;
+  flex-flow: column;
   margin: 0px;
-  padding: 5px;
+  padding: 0px;
   color: #f8f9fa;
   background-color: #343a40;
   width: 310px;
   min-width: 310px;
+  height: 100vh;
+
 }
 
 .canvasWrapper {
-  padding: 10px;
+  padding: 15px;
+  padding-left: 25px;
 }
 
 /*buttons*/
@@ -133,6 +148,7 @@ canvas {
   padding: .375rem .75rem;
   border-radius: .25rem;
   transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+  outline: none;
 }
 
 .buttonGo {
@@ -140,6 +156,8 @@ canvas {
   padding-left: 7px;
   background-color: #007bff;
   border-color: #006fe6;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .buttonGo:hover {
@@ -148,9 +166,11 @@ canvas {
 }
 
 .buttonSuccess {
-  width: 100%;
+  width: 96.5%;
   background-color: #2db94d;
   border-color: #28a445;
+  margin-bottom: 5px;
+  margin-left: 5px;
 }
 
 .buttonSuccess:hover {
@@ -159,9 +179,10 @@ canvas {
 }
 
 .buttonNext {
-  width: 100%;
+  width: 96.5%;
   background-color: #d92638;
   border-color: #c32232;
+  margin-left: 5px;
 }
 
 .buttonNext:hover {
