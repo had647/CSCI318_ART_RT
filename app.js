@@ -104,6 +104,7 @@ function initState() {
   state.collisionRT = false;
   state.loopCount = 1;
   state.lastRT = null;
+  state.manualAdvance = document.getElementById("manual").checked;
 
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
 
@@ -240,8 +241,25 @@ function checkForTie() {
   }
 }
 
+function advance() {
+  if (state.collisionART === false && state.collisionRT === false) {
+    state.loopCount++;
+    getNextARTTestCase();
+    getNextRTTestCase();
+    checkForTie();
+    document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
+  } else {
+    console.log("Ended");
+    return;
+  }
+}
+
 function driver() {
   initState();
+
+  if (state.manualAdvance === true) {
+    return;
+  }
 
   // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
   if (state.failRegion.area < 0.001 || document.getElementById("testInput").value !== "") {
@@ -249,7 +267,7 @@ function driver() {
       state.loopCount++;
       getNextARTTestCase();
       getNextRTTestCase();
-	  checkForTie();
+      checkForTie();
     }
     document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
