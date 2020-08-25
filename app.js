@@ -8,8 +8,8 @@ let state = {
     area: null
   },
   canvasSize: null,
-  canvasRefART: null,
-  canvasRefRT: null,
+  canvasCtxART: null,
+  canvasCtxRT: null,
   collisionART: false,
   collisionRT: false,
   loopCount: 0,
@@ -54,7 +54,11 @@ function getNextARTTestCase() {
   }
   state.testCases.push(t);
   checkForCollisionART();
+}
 
+function getNextRTTestCase() {
+  state.lastRT = genRandomPoint();
+  checkForCollisionRT();
 }
 
 function genNewCandidates() {
@@ -64,33 +68,14 @@ function genNewCandidates() {
 }
 
 function genRandomPoint() {
-	return { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
+  return { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
 }
 
-function checkForCollisionRT() {
 
-  let point = genRandomPoint();
-  state.lastRT = point;
-  if (point.x >= state.failRegion.coords.x && point.x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
-    && point.y >= state.failRegion.coords.y && point.y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
-    console.log("collisionRT");
-    document.getElementById("rtOutput").innerHTML = `HIT!✔️`;
-    state.collisionRT = true;
-	state.numberOfWinsRT++;
-    drawErrorRegion("red");
-    
-    //stop checking for collisions
-    // implement when checkbox is ticked..
-  } //else { //no collisionART occurs
-    //drawErrorRegion("green");
-    //document.getElementById("rtOutput").innerHTML = `MISSED!❌`;
-  //}
-  drawLastTestCase(2);
-}
 
 function initBlankCanvas() {
   if (state.canvasSize === null) {
-    console.error("Need to initialize state.canvasSize before trying to initialize the canvas!");
+    console.error(`Need to initialize state.canvasSize before trying to initialize the canvas.`);
     return;
   }
 
@@ -107,7 +92,9 @@ function initBlankCanvas() {
     <h2>RT</h2>
     <canvas id="myCanvasRT" width="${state.canvasSize}" height="${state.canvasSize}"></canvas>
     <h3 id="rtOutput" class="output"></h3>
-	<h5 id="rtCounter" class="output"></h5>`;
+  <h5 id="rtCounter" class="output"></h5>`;
+  state.canvasCtxART = document.getElementById("myCanvasART").getContext("2d");     //setting up canvas stuff
+  state.canvasCtxRT = document.getElementById("myCanvasRT").getContext("2d");
 }
 
 function initState() {
@@ -117,14 +104,14 @@ function initState() {
   state.collisionRT = false;
   state.loopCount = 1;
   state.lastRT = null;
- 
+
   let fail_region_percent = parseFloat(document.getElementById("failPct").value) / 100;  //user will change this
-  
+
   //sets percentage to 1 if no value is assigned, or if value is out of range
-  if(isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0){
+  if (isNaN(fail_region_percent) || fail_region_percent > 1 || fail_region_percent <= 0) {
     fail_region_percent = 0.01;
     document.getElementById("failPct").value = "1";
-    console.log("Default fail_region_percent value used");
+    console.log(`Using default fail_region_percent value of (1)`);
   }
 
   console.log(`Using failure pct: ${fail_region_percent}`);
@@ -132,10 +119,10 @@ function initState() {
   let edge_size = parseInt(document.getElementById("edgeSize").value);  //change this to set the HxW of the canvas
 
   //sets edge size to 500px if no value is given or value is out of range
-  if(isNaN(edge_size) || edge_size <= 0){
+  if (isNaN(edge_size) || edge_size < 300 || edge_size > 800) {
     edge_size = 500;
     document.getElementById("edgeSize").value = "500";
-    console.log("Default edge_size value used");
+    console.warn(`edge_size is out of bounds (300px-800px). Using default edge_size value of 500px.`);
   }
 
   console.log(`Using edge size: ${edge_size}px`);
@@ -148,8 +135,8 @@ function initState() {
   let random_x = Math.random() * border_limit_max;  //generates a random number inclusively between 0 and the border_limit_max
   let random_y = Math.random() * border_limit_max;  //" "
 
-  let random_x_test_case = Math.random() * edge_size; //these may need to change
-  let random_y_test_case = Math.random() * edge_size;
+  //let random_x_test_case = Math.random() * edge_size; //these may need to change
+  //let random_y_test_case = Math.random() * edge_size;
 
   //update app state
   state.failRegion.edgeSize = fail_region_edge_size;
@@ -157,14 +144,34 @@ function initState() {
   state.failRegion.coords.y = random_y;
   state.failRegion.area = fail_region_percent;
   state.canvasSize = edge_size;
-  state.testCases.push({ 'x': random_x_test_case, 'y': random_y_test_case });
+  state.testCases.push(genRandomPoint());
+  state.lastRT = state.testCases[0];
   initBlankCanvas();
-  state.canvasRefART = document.getElementById("myCanvasART");     //setting up canvas stuff
-  state.canvasRefRT = document.getElementById("myCanvasRT");
-  drawErrorRegion("green");
+  drawErrorRegion(1, "green");
+  drawErrorRegion(2, "green");
   //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collisionART
   checkForCollisionART();
-  state.lastRT = genRandomPoint();
+  checkForCollisionRT();
+  checkForTie();
+}
+
+function checkForCollisionRT() {
+  //let point = genRandomPoint();
+  //state.lastRT = point;
+  if (state.lastRT.x >= state.failRegion.coords.x && state.lastRT.x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
+    && state.lastRT.y >= state.failRegion.coords.y && state.lastRT.y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
+    console.log("collisionRT");
+    document.getElementById("rtOutput").innerHTML = `HIT!✔️`;
+    state.collisionRT = true;
+    state.numberOfWinsRT++;
+    drawErrorRegion(2, "red");
+
+    //stop checking for collisions
+    // implement when checkbox is ticked..
+  } //else { //no collisionART occurs
+  //drawErrorRegion("green");
+  //document.getElementById("rtOutput").innerHTML = `MISSED!❌`;
+  //}
   drawLastTestCase(2);
 }
 
@@ -176,143 +183,126 @@ function checkForCollisionART() {
     console.log("collisionART");
     document.getElementById("artOutput").innerHTML = `HIT!✔️`;
     state.collisionART = true;
-	state.numberOfWinsART++;
-    drawErrorRegion("red");
+    state.numberOfWinsART++;
+    drawErrorRegion(1, "red");
     //stop checking for collisions
   } //else { //no collisionART occurs
-    //drawErrorRegion("green");
-    //document.getElementById("artOutput").innerHTML = `MISSED!❌`;
+  //drawErrorRegion("green");
+  //document.getElementById("artOutput").innerHTML = `MISSED!❌`;
   //}
   drawLastTestCase(1); //this gets drawn last over the top of whatever else is there
-  
 }
+
 // Needs to be BADLY refactored coz now it is aids
-function drawErrorRegion(color) {
-  if (color === 'green') { 
-    let ctxART = state.canvasRefART.getContext("2d");                    //setting up the fail region
-    let ctxRT = state.canvasRefRT.getContext("2d");      
-    
-    ctxART.fillStyle = color;                            //colour of fail region
-    ctxART.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
-    
-    ctxRT.fillStyle = color;                            //colour of fail region
-    ctxRT.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
+function drawErrorRegion(canvas, color) {
+  let ctx;
+  if (canvas === 1) {
+    ctx = state.canvasCtxART;
+  } else if (canvas === 2) {
+    ctx = state.canvasCtxRT;
   } else {
-    if (state.collisionART === true) {
-      let ctxART = state.canvasRefART.getContext("2d");
-      ctxART.fillStyle = color;                            //colour of fail region
-      ctxART.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
-    }
-    if (state.collisionRT === true) {
-      let ctxRT = state.canvasRefRT.getContext("2d");
-      ctxRT.fillStyle = color;                            //colour of fail region
-      ctxRT.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
-    }
+    console.error(`drawErrorRegion(canvas: number, color: string) must be called with canvas = 1 or 2. canvas = ${canvas} is not a valid argument.`);
+    return;
   }
+  if (color !== "green" && color !== "red") {
+    console.error(`drawErrorRegion(canvas: number, color: string) must be called with color = "green" or "red". color = ${color} is not a valid argument.`);
+    return;
+  }
+  ctx.fillStyle = color;                            //colour of fail region
+  ctx.fillRect(state.failRegion.coords.x, state.failRegion.coords.y, state.failRegion.edgeSize, state.failRegion.edgeSize);//rendering the fail region
 }
 
 function drawLastTestCase(canvas) {
   let ctx;
   if (canvas === 1) {
-    ctx = state.canvasRefART.getContext("2d");
+    ctx = state.canvasCtxART;
     //drawing a square is more performant than drawing a circle
     ctx.fillStyle = "black";                            //colour of fail region
     ctx.fillRect(state.testCases[state.testCases.length - 1].x, state.testCases[state.testCases.length - 1].y, 2, 2); //rendering the test case
   } else if (canvas === 2) {
-    ctx = state.canvasRefRT.getContext("2d");
+    ctx = state.canvasCtxRT;
     //drawing a square is more performant than drawing a circle
     ctx.fillStyle = "black";                            //colour of fail region
     ctx.fillRect(state.lastRT.x, state.lastRT.y, 2, 2); //rendering the test case
-  } else {return;}
-  
-  
+  } else {
+    console.error(`drawLastTestCase(canvas: number) must be called with canvas = 1 or 2. drawLastTestCase(${canvas}) is not a valid argument.`);
+  }
+}
+
+function checkForTie() {
+  if (state.collisionART === true && state.collisionRT === true) {
+    document.getElementById("artOutput").innerHTML = `TIE!`;
+    document.getElementById("rtOutput").innerHTML = ``;
+    state.numberOfTies++;
+    // Currently, when there is a tie, both RT and ART are incremented as win each too. So here's the band-aid fix.
+    state.numberOfWinsART--;
+    state.numberOfWinsRT--;
+  }
 }
 
 function driver() {
   initState();
-  
+
   // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
-  if (state.failRegion.area < 0.001 || document.getElementById("testInput").value !== '') {
+  if (state.failRegion.area < 0.001) {
     while (state.collisionART === false && state.collisionRT === false) {
       state.loopCount++;
       getNextARTTestCase();
-      checkForCollisionRT();
-	  
-	  if (state.collisionART === true && state.collisionRT === true) {
-		 document.getElementById("artOutput").innerHTML = `TIE!`;
-		 document.getElementById("rtOutput").innerHTML = ``;
-		 state.numberOfTies++;
-		 // Currently, when there is a tie, both RT and ART are incremented as win each too. So here's the band-aid fix.
-		 state.numberOfWinsART--;
-		 state.numberOfWinsRT--;
-	  }
-	  
+      getNextRTTestCase();
     }
+    checkForTie();
     document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
 
-    var loop = setInterval(function () {
+    let loop = setInterval(function () {
       if (state.collisionART === true || state.collisionRT === true) {
         clearInterval(loop);
       } else {
         state.loopCount++;
         document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
         getNextARTTestCase();
-        checkForCollisionRT();
-		
-		if (state.collisionART === true && state.collisionRT === true) {
-		 document.getElementById("artOutput").innerHTML = `TIE!`;
-		 document.getElementById("rtOutput").innerHTML = ``;
-		 state.numberOfTies++;
-		 // Currently, when there is a tie, both RT and ART are incremented as win each too. So here's the band-aid fix
-		 state.numberOfWinsART--;
-		 state.numberOfWinsRT--;
-		}
+        getNextRTTestCase();
+        checkForTie();
       }
     }, 1);
   }
-  console.log(state.numberOfWinsART);
-  console.log(state.numberOfWinsRT);
-  console.log(state.numberOfTies);
+  //console.log(state.numberOfWinsART);
+  //console.log(state.numberOfWinsRT);
+  //console.log(state.numberOfTies);
 }
 
 
 function startTest() {
-	// Reset values to 0.
+  // Reset values to 0.
   state.numberOfTies = 0;
-	state.numberOfWinsART = 0;
-	state.numberOfWinsRT = 0;
-  
+  state.numberOfWinsART = 0;
+  state.numberOfWinsRT = 0;
+
 
   //sets the number of tests to 1000 if a value is not assigned, or value is below 1
   let tempNumberOfTests = parseInt(document.getElementById("testInput").value);
 
-  if(tempNumberOfTests < 1 || isNaN(tempNumberOfTests)){
-    state.numberOfTests = 1000;
-    document.getElementById("testInput").value = "1000";
+  if (tempNumberOfTests < 1 || isNaN(tempNumberOfTests)) {
+    state.numberOfTests = 10;
+    document.getElementById("testInput").value = "10";
     console.log(`Using default numberOfTests: ${state.numberOfTests}`);
   }
-  else{
+  else {
     state.numberOfTests = tempNumberOfTests;
     console.log(`Value of numberOfTests: ${state.numberOfTests}`);
   }
-  
 
-  
+  //this causes problems with interval in driver
+  /*for (let i = 0; i < state.numberOfTests; i++) {
+    driver();
+  }*/
 
-	
-	for(let i = 0; i < state.numberOfTests;i++) {
-		driver()
-	}
-	
-	// Declutter output when automated test is run.
-	document.getElementById("artOutput").innerHTML = "";
-	document.getElementById("rtOutput").innerHTML = "";
-	document.getElementById("artCounter").innerHTML = "";
-	
-	// Final Output
-	document.getElementById("numberOfTestsOutput").innerHTML = "Number of Test: " + state.numberOfTests;
-	document.getElementById("automatedTestOutput").innerHTML = "ART Wins: " + state.numberOfWinsART + "<br />" + "RT Wins: " + state.numberOfWinsRT + "<br />" + "Ties: " + state.numberOfTies;
+  // Declutter output when automated test is run.
+  document.getElementById("artOutput").innerHTML = "";
+  document.getElementById("rtOutput").innerHTML = "";
+  document.getElementById("artCounter").innerHTML = "";
 
-
+  // Final Output
+  document.getElementById("numberOfTestsOutput").innerHTML = "Number of Tests: " + state.numberOfTests;
+  document.getElementById("automatedTestOutput").innerHTML = "ART Wins: " + state.numberOfWinsART + "<br />" + "RT Wins: " + state.numberOfWinsRT + "<br />" + "Ties: " + state.numberOfTies;
 }

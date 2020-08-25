@@ -5,8 +5,6 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap CSS -->
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
   <link rel="stylesheet" href="style.css">
   <script src="app.js"></script>
   <title>Algorithm Visualization Tool</title>
@@ -38,9 +36,13 @@
         <input type="text" class="formControl" id="edgeSize">
         <span class="inputGroupText inputGroupUnits">px</span>
         <span style="margin-right: 2px; padding-top: 5px; font-size: small;"><i>
-            <b>NOTE:</b> Display Sizes below <b>300px</b> and above <b>800px</b> may be difficult to observe on some displays.
-            <br><br>For any failure rates below <b>0.1%</b>, real-time algorithm visualisation will be disabled to maintain performance
-            (Results will be displayed at the end).
+            <b>NOTE:</b> Valid Display Sizes are above <b>300px</b> and below <b>800px</b>. If a value is provided
+            outside the valid range, or if the field is left blank, then a default value of <b>500px</b> will be used.
+            <br>Valid Failure Rates are greater than <b>0%</b> and less than or equal to <b>100%</b>. If a value is
+            provided outside the valid range, or if the field is left blank, then a default value of <b>1%</b> will be
+            used.
+            <br><br>For any failure rates below <b>0.1%</b>, real-time algorithm visualisation will be disabled to
+            improve performance and the results will be displayed at the end.
             <br><br><b>WARNING:</b> Failure rates lower than <b>0.001%</b> will take a very long time
             to compute on most machines.</i></span>
         <br />
@@ -69,14 +71,6 @@
     <div id="artContainer" class="canvasWrapper"></div>
     <div id="rtContainer" class="canvasWrapper"></div>
   </div>
-
-  <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>-->
-  <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>-->
 </body>
 
 
