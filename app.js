@@ -20,33 +20,30 @@ let state = {
 };
 
 //calculates the smallest distance between a candidate case, and all current test cases
-function calculate_min_distance(candidate) {
-
+function calcMinDistance(candidate) {
   let min_distance = -1;  //smallest distance after measuring distance between candidate and all other test cases
   let di = -1;            //distance between the candidate and all test cases
 
   for (let i = 0; i < state.testCases.length; i++) {     //iterating through each test case
-
     di = Math.sqrt(Math.pow((candidate.x - state.testCases[i].x), 2) + Math.pow((candidate.y - state.testCases[i].y), 2));   //equation for measuring distance
-
-    if (i === 0) { min_distance = di; }             //assume the first distance is the smallest
-    if (di < min_distance) { min_distance = di; }   //if a smaller distance is found, update the min_distance
+    if (i === 0) {
+      min_distance = di;//assume the first distance is the smallest
+    }
+    if (di < min_distance) {
+      min_distance = di;
+    }
   }
-  //console.log(min_distance);
   return min_distance;
 }
 
 function getNextARTTestCase() {
-  //state.loopCount++;
-  //let k = 1; //should be input argument
+  /*implementation of the ART algorithm*/
   let d = 0;
   genNewCandidates();
-  //console.log(state.candidates);
   let t;
   let di;
   for (let i = 0; i < state.candidates.length; i++) {
-    di = calculate_min_distance(state.candidates[i]);
-    //console.log(di);
+    di = calcMinDistance(state.candidates[i]);
     if (di > d) {
       d = di;
       t = state.candidates[i];
@@ -57,23 +54,25 @@ function getNextARTTestCase() {
 }
 
 function getNextRTTestCase() {
-  state.lastRT = genRandomPoint();
+  /*implementaion of RT*/
+  state.lastRT = generateRandomPoint();
   checkForCollisionRT();
 }
 
 function genNewCandidates() {
+  /*generates a fresh set of candidates*/
   for (let i = 0; i < 10; i++) {     //randomly generate new set of candidates
-    state.candidates[i] = genRandomPoint();
+    state.candidates[i] = generateRandomPoint();
   }
 }
 
-function genRandomPoint() {
+/*generates a random point on the canvas*/
+function generateRandomPoint() {
   return { 'x': Math.random() * state.canvasSize, 'y': Math.random() * state.canvasSize };
 }
 
-
-
 function initBlankCanvas() {
+  /*initializes both blank canvas elements*/
   if (state.canvasSize === null) {
     console.error(`Need to initialize state.canvasSize before trying to initialize the canvas.`);
     return;
@@ -98,7 +97,7 @@ function initBlankCanvas() {
 }
 
 function initState() {
-  //resetstate();
+  /*performs the app state initialization*/
   state.testCases = [];
   state.collisionART = false;
   state.collisionRT = false;
@@ -128,7 +127,6 @@ function initState() {
 
   console.log(`Using edge size: ${edge_size}px`);
 
-
   let fail_region_edge_size = Math.sqrt(edge_size * edge_size * fail_region_percent);  //width and height of fail region
 
   let border_limit_max = edge_size - fail_region_edge_size; //determines the maximum x and y coordinate for the fail region to prevent the fail region from being cut off by the border
@@ -145,7 +143,7 @@ function initState() {
   state.failRegion.coords.y = random_y;
   state.failRegion.area = fail_region_percent;
   state.canvasSize = edge_size;
-  state.testCases.push(genRandomPoint());
+  state.testCases.push(generateRandomPoint());
   state.lastRT = state.testCases[0];
   initBlankCanvas();
   drawErrorRegion(1, "green");
@@ -157,7 +155,7 @@ function initState() {
 }
 
 function checkForCollisionRT() {
-  //let point = genRandomPoint();
+  //let point = generateRandomPoint();
   //state.lastRT = point;
   if (state.lastRT.x >= state.failRegion.coords.x && state.lastRT.x <= (state.failRegion.coords.x + state.failRegion.edgeSize)
     && state.lastRT.y >= state.failRegion.coords.y && state.lastRT.y <= (state.failRegion.coords.y + state.failRegion.edgeSize)) {
@@ -166,13 +164,7 @@ function checkForCollisionRT() {
     state.collisionRT = true;
     state.numberOfWinsRT++;
     drawErrorRegion(2, "red");
-
-    //stop checking for collisions
-    // implement when checkbox is ticked..
-  } //else { //no collisionART occurs
-  //drawErrorRegion("green");
-  //document.getElementById("rtOutput").innerHTML = `MISSED!❌`;
-  //}
+  }
   drawLastTestCase(2);
 }
 
@@ -186,11 +178,7 @@ function checkForCollisionART() {
     state.collisionART = true;
     state.numberOfWinsART++;
     drawErrorRegion(1, "red");
-    //stop checking for collisions
-  } //else { //no collisionART occurs
-  //drawErrorRegion("green");
-  //document.getElementById("artOutput").innerHTML = `MISSED!❌`;
-  //}
+  }
   drawLastTestCase(1); //this gets drawn last over the top of whatever else is there
 }
 
@@ -284,18 +272,13 @@ function driver() {
       }
     }, 1);
   }
-  //console.log(state.numberOfWinsART);
-  //console.log(state.numberOfWinsRT);
-  //console.log(state.numberOfTies);
 }
-
 
 function startTest() {
   // Reset values to 0.
   state.numberOfTies = 0;
   state.numberOfWinsART = 0;
   state.numberOfWinsRT = 0;
-
 
   //sets the number of tests to 1000 if a value is not assigned, or value is below 1
   let tempNumberOfTests = parseInt(document.getElementById("testInput").value);

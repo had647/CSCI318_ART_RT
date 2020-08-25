@@ -30,6 +30,12 @@ canvas {
   border: 1px solid #c3c3c3;
 }
 
+.noteText {
+  margin-right: 2px;
+  padding-top: 5px;
+  font-size: 12px;
+}
+
 .output {
   font-weight: bold;
   font-size: 25px;
@@ -58,6 +64,7 @@ canvas {
   padding: 0px;
   background-color: #f8f9fa;
   display: flex;
+  height: calc(100% - 75px);
 }
 
 .navRow {
@@ -130,8 +137,7 @@ canvas {
   background-color: #343a40;
   width: 310px;
   min-width: 310px;
-  height: 100vh;
-
+  height: 100%;
 }
 
 .canvasWrapper {

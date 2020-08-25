@@ -11,7 +11,6 @@
 </head>
 
 <body>
-
   <div class="header">
     <div class="headerLabel">
       <h2>🤖 Algorithm Visualization Tool</h2>
@@ -24,7 +23,6 @@
         <p class="navLabel">Test Parameters</p>
       </div>
 
-
       <div class="inputGroup">
         <span class="inputGroupText inputGroupName">Enter Failure Rate:</span>
         <input type="text" class="formControl" id="failPct">
@@ -35,40 +33,42 @@
         <span class="inputGroupText inputGroupName">Enter Display Size:</span>
         <input type="text" class="formControl" id="edgeSize">
         <span class="inputGroupText inputGroupUnits">px</span>
-        <span style="margin-right: 2px; padding-top: 5px; font-size: small;"><i>
+        <span class="noteText"><i>
             <b>NOTE:</b> Valid Display Sizes are above <b>300px</b> and below <b>800px</b>. If a value is provided
             outside the valid range, or if the field is left blank, then a default value of <b>500px</b> will be used.
             <br>Valid Failure Rates are greater than <b>0%</b> and less than or equal to <b>100%</b>. If a value is
             provided outside the valid range, or if the field is left blank, then a default value of <b>1%</b> will be
             used.
-            <br><br>For any failure rates below <b>0.1%</b>, real-time algorithm visualisation will be disabled to
+            <br>For any failure rates below <b>0.1%</b>, real-time algorithm visualisation will be disabled to
             improve performance and the results will be displayed at the end.
             <br><br><b>WARNING:</b> Failure rates lower than <b>0.001%</b> will take a very long time
             to compute on most machines.</i></span>
-        <br />
       </div>
 
-      <button class="button buttonSuccess" onclick="driver()">Begin Test</button>
+      <button class="button buttonSuccess" onclick="driver()">Start New Test</button><br />
       <div style="width: 200px; margin: 10px;">
         <input type="checkbox" id="manual" />
         <span>Manually advance steps</span><br>
       </div>
-      <button class="button buttonNext" onclick="advance()">Next Test Case</button>
-      <br /><br />
+      <button class="button buttonNext" onclick="advance()">> > > Next Test Case > > ></button>
+      <br />
 
       <div class="navRow">
         <p class="navLabel">Compare Algorithm Speeds</p>
       </div>
-
-
       <div class="inputGroup">
+
         <span class="inputGroupText inputGroupName">Number of tests:</span>
         <input type="text" class="formControl" id="testInput"></input>
 
         <button class="button buttonGo" onclick="startTest()">Go!</button>
+        <span class="noteText">
+          <i><b>NOTE:</b> If the 'Number of tests' field is left blank or not a valid number, then a default value of
+            <b>10</b> will be used. The 'Manually advance steps' feature is not available when comparing algorithm
+            speeds.</i>
+        </span>
       </div>
-
-      <br>
+      <br />
       <div class="navLabel" style='font-size:50px;'>🛠️</div>
     </div>
 
@@ -76,6 +76,5 @@
     <div id="rtContainer" class="canvasWrapper"></div>
   </div>
 </body>
-
 
 </html>
