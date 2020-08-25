@@ -244,7 +244,7 @@ function driver() {
   initState();
 
   // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
-  if (state.failRegion.area < 0.001) {
+  if (state.failRegion.area < 0.001 || document.getElementById("testInput").value !== "") {
     while (state.collisionART === false && state.collisionRT === false) {
       state.loopCount++;
       getNextARTTestCase();
@@ -292,10 +292,9 @@ function startTest() {
     console.log(`Value of numberOfTests: ${state.numberOfTests}`);
   }
 
-  //this causes problems with interval in driver
-  /*for (let i = 0; i < state.numberOfTests; i++) {
+  for (let i = 0; i < state.numberOfTests; i++) {
     driver();
-  }*/
+  }
 
   // Declutter output when automated test is run.
   document.getElementById("artOutput").innerHTML = "";
