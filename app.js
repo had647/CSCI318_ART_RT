@@ -249,8 +249,8 @@ function driver() {
       state.loopCount++;
       getNextARTTestCase();
       getNextRTTestCase();
+	  checkForTie();
     }
-    checkForTie();
     document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
   } else {
 
