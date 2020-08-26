@@ -134,9 +134,6 @@ function initState() {
   let random_x = Math.random() * border_limit_max;  //generates a random number inclusively between 0 and the border_limit_max
   let random_y = Math.random() * border_limit_max;  //" "
 
-  //let random_x_test_case = Math.random() * edge_size; //these may need to change
-  //let random_y_test_case = Math.random() * edge_size;
-
   //update app state
   state.failRegion.edgeSize = fail_region_edge_size;
   state.failRegion.coords.x = random_x;
@@ -148,7 +145,6 @@ function initState() {
   initBlankCanvas();
   drawErrorRegion(1, "green");
   drawErrorRegion(2, "green");
-  //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collisionART
   checkForCollisionART();
   checkForCollisionRT();
   checkForTie();
