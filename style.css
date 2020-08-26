@@ -203,6 +203,7 @@ canvas {
   pointer-events: none;
 }
 
+/*styling for slider*/
 .switchBox {
   display: flex;
   margin-left: 5px;
@@ -232,7 +233,6 @@ canvas {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
   transition: .4s;
 }
 
@@ -244,7 +244,6 @@ canvas {
   left: 2px;
   bottom: 2px;
   background-color: white;
-  -webkit-transition: .4s;
   transition: .4s;
 }
 
@@ -257,8 +256,6 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(13px);
-  -ms-transform: translateX(13px);
   transform: translateX(13px);
 }
 
