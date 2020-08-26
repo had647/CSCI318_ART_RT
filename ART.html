@@ -45,12 +45,18 @@
             to compute on most machines.</i></span>
       </div>
 
-      <button class="button buttonSuccess" onclick="driver()">Start New Test</button><br />
-      <div style="width: 200px; margin: 10px;">
-        <input type="checkbox" id="manual" />
-        <span>Manually advance steps</span><br>
+      <br>
+      <div class="switchBox">
+        <span style="font-size: medium;"><b>Manually advance steps:</b></span>
+        <div>
+          <label class="switch">
+            <input type="checkbox" id="manual"/>
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
-      <button class="button buttonNext" onclick="advance()">> > > Next Test Case > > ></button>
+      <button class="button buttonSuccess" onclick="driver()">Start New Test</button>
+      <button class="button buttonNext" onclick="advance()" id="manualButton" disabled>> > > Next Test Case > > ></button>
       <br />
 
       <div class="navRow">
@@ -61,7 +67,7 @@
         <span class="inputGroupText inputGroupName">Number of tests:</span>
         <input type="text" class="formControl" id="testInput"></input>
 
-        <button class="button buttonGo" onclick="startTest()">Go!</button>
+        <button class="button buttonGo" onclick="resetInterfaceState()">Go!</button>
         <span class="noteText">
           <i><b>NOTE:</b> If the 'Number of tests' field is left blank or not a valid number, then a default value of
             <b>10</b> will be used. The 'Manually advance steps' feature is not available when comparing algorithm

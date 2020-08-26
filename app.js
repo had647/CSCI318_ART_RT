@@ -246,7 +246,10 @@ function driver() {
   initState();
 
   if (state.manualAdvance === true) {
+    document.getElementById("manualButton").disabled = false;
     return;
+  } else {
+    document.getElementById("manualButton").disabled = true;
   }
 
   // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
@@ -272,6 +275,16 @@ function driver() {
       }
     }, 1);
   }
+}
+
+// Resets UI when the checkbox is selected for the races
+function resetInterfaceState() {
+  let checkBox = document.getElementById("manual");
+  if (checkBox.checked == true) {
+    checkBox.checked = false;
+    document.getElementById("manualButton").disabled = true;
+  }
+  startTest();
 }
 
 function startTest() {
