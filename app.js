@@ -297,8 +297,8 @@ function startTest() {
   let tempNumberOfTests = parseInt(document.getElementById("testInput").value);
 
   if (tempNumberOfTests < 1 || isNaN(tempNumberOfTests)) {
-    state.numberOfTests = 10;
-    document.getElementById("testInput").value = "10";
+    state.numberOfTests = 1000;
+    document.getElementById("testInput").value = "1000";
     console.log(`Using default numberOfTests: ${state.numberOfTests}`);
   }
   else {

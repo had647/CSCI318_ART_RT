@@ -50,7 +50,7 @@ canvas {
   background-color: #3399FF;
   padding-right: 15px;
   padding-left: 15px;
-  min-width: 310px;
+  width: auto;
 }
 
 .headerLabel {
@@ -64,7 +64,7 @@ canvas {
   background-color: #f8f9fa;
   display: flex;
   height: auto;
-  width: 100%;
+  width: auto;
 }
 
 .navRow {
