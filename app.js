@@ -244,9 +244,9 @@ function advance() {
 
 function driver() {
   initState();
-
   if (state.manualAdvance === true) {
     document.getElementById("manualButton").disabled = false;
+    document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
     return;
   } else {
     document.getElementById("manualButton").disabled = true;
