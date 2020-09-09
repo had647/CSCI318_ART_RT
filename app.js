@@ -134,9 +134,6 @@ function initState() {
   let random_x = Math.random() * border_limit_max;  //generates a random number inclusively between 0 and the border_limit_max
   let random_y = Math.random() * border_limit_max;  //" "
 
-  //let random_x_test_case = Math.random() * edge_size; //these may need to change
-  //let random_y_test_case = Math.random() * edge_size;
-
   //update app state
   state.failRegion.edgeSize = fail_region_edge_size;
   state.failRegion.coords.x = random_x;
@@ -148,7 +145,6 @@ function initState() {
   initBlankCanvas();
   drawErrorRegion(1, "green");
   drawErrorRegion(2, "green");
-  //document.getElementById("output_result").innerHTML = "MISSED!"; //default??? - removed: set by collisionART
   checkForCollisionART();
   checkForCollisionRT();
   checkForTie();
@@ -244,9 +240,12 @@ function advance() {
 
 function driver() {
   initState();
-
   if (state.manualAdvance === true) {
+    document.getElementById("manualButton").disabled = false;
+    document.getElementById("artCounter").innerHTML = "Test case: " + state.loopCount;
     return;
+  } else {
+    document.getElementById("manualButton").disabled = true;
   }
 
   // Added this extra condition so that when race is intitiated, it will go as fast as possible regardless of failure rate percentage
@@ -274,6 +273,16 @@ function driver() {
   }
 }
 
+// Resets UI when the checkbox is selected for the races
+function resetInterfaceState() {
+  let checkBox = document.getElementById("manual");
+  if (checkBox.checked == true) {
+    checkBox.checked = false;
+    document.getElementById("manualButton").disabled = true;
+  }
+  startTest();
+}
+
 function startTest() {
   // Reset values to 0.
   state.numberOfTies = 0;
@@ -284,8 +293,8 @@ function startTest() {
   let tempNumberOfTests = parseInt(document.getElementById("testInput").value);
 
   if (tempNumberOfTests < 1 || isNaN(tempNumberOfTests)) {
-    state.numberOfTests = 10;
-    document.getElementById("testInput").value = "10";
+    state.numberOfTests = 1000;
+    document.getElementById("testInput").value = "1000";
     console.log(`Using default numberOfTests: ${state.numberOfTests}`);
   }
   else {
