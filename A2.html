@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>ART</title>
+  </head>
+  <body>
+   
+
+
+
+
+    <script>
+
+        
+
+        var Pet_0 = {
+          Colour: "Blue",         /*Blue, Red, Green*/  
+          Type: "Cat",          /*Cat, Dog, Bird*/
+          Name: "James",        /*James, Tim, Bob*/
+          Diet: "BirdSeed",     /*Rats, BirdSeed, Apples*/
+          OwnerName: "Jim",          /*Jim, Jane, Bryce*/
+          NumberOfLegs: 1,              /* <4, 4, >4 */               /*making all these ints for simplicity*/
+          Age: 10,              /*<10, 10, >10*/
+          NumberOfEyes: 1,              /* <2, 2, >2 */
+          Height: 28,                    /* <40, 40, >40*/
+          Weight: 900,              /* <1000, 1000, >1000 */
+        };
+
+        var Pet_1 = {
+          Colour: "Red",       
+          Type: "Cat",          
+          Name: "Tim",        
+          Diet: "BirdSeed",     
+          OwnerName: "Bryce",        
+          NumberOfLegs: 4,      
+          Age: 11,         
+          NumberOfEyes: 2,           
+          Height: 30,            
+          Weight: 999,             
+        };
+
+        /*This is how the distance is calculated between the two objects*/
+        /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
+        /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
+
+        let max_distance = 10;
+        let distance = max_distance;
+
+        if(Pet_0.Colour == Pet_1.Colour) distance--;
+        if(Pet_0.Type == Pet_1.Type) distance--;
+        if(Pet_0.Name == Pet_1.Name) distance--;
+        if(Pet_0.Diet == Pet_1.Diet) distance--;
+        if(Pet_0.OwnerName == Pet_1.OwnerName) distance--;
+
+        if((Pet_0.NumberOfLegs < 4 && Pet_1.NumberOfLegs < 4)   ||    (Pet_0.NumberOfLegs == 4 && Pet_1.NumberOfLegs == 4)    ||    (Pet_0.NumberOfLegs > 4 && Pet_1.NumberOfLegs > 4)) distance--;
+        if((Pet_0.Age < 10 && Pet_1.Age < 10)   ||    (Pet_0.Age == 10 && Pet_1.Age == 10)    ||    (Pet_0.Age > 10 && Pet_1.Age > 10)) distance--;
+        if((Pet_0.NumberOfEyes < 2 && Pet_1.NumberOfEyes < 2)   ||    (Pet_0.NumberOfEyes == 2 && Pet_1.NumberOfEyes == 2)    ||    (Pet_0.NumberOfEyes > 2 && Pet_1.NumberOfEyes > 2)) distance--;
+        if((Pet_0.Height < 40 && Pet_1.Height < 40)   ||    (Pet_0.Height == 40 && Pet_1.Height == 40)    ||    (Pet_0.Height > 40 && Pet_1.Height > 40)) distance--;
+        if((Pet_0.Weight < 1000 && Pet_1.Weight < 1000)   ||    (Pet_0.Weight == 1000 && Pet_1.Weight == 1000)    ||    (Pet_0.Weight > 1000 && Pet_1.Weight > 1000)) distance--;
+
+        /*This is the distance between the two objects*/
+        console.log(distance);        
+
+ 
+
+    </script>
+  </body>
+</html>
