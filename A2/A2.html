@@ -246,9 +246,37 @@
 
 
         console.log("done");
+		
+		
+		
+		/*  size is the amount of letters you want there to be in each PET.
+			letters is the type of characters that we want to use.
+			
+			eg.
+			petGenerator(3, "abc");
+			
+			This should return an array of size 27 with all possible permutations.  
+		*/
+		function petGenerator(size, letters) {
+			var results = [];
+  
+		  function recurse(cache) {
+			for (var i = 0; i < letters.length; i++) {
+			  cache += letters[i];
+			  if (cache.length === size) {
+				  results.push(cache);
+			  } else {
+				recurse(cache);
+			  }
+			  cache = cache.slice(0, -1);
+			}
+		  }
+		  recurse("");	// Call recursive function with empty string.
+		  return results;
+		};
+		
+		console.log(petGenerator(3, "abc"));
         
-
-
 
   
     </script>
