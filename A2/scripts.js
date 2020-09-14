@@ -1,6 +1,8 @@
 var logger = {
   write: function(input){
-    document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
+    //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
+	document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
+
   },
   clear: function(){
     document.getElementById("console-output").value = "";
@@ -258,17 +260,22 @@ for (g = 0; g < 60000; g++) {
 
 }
 
-
-
 logger.write("done");
-/*  size is the amount of letters you want there to be in each PET.
+
+
+/*  
+	This function was just testing how to generate many combinations of given strings.
+	Uncomment to see how it works. If no use for it, it can be deleted.
+	
+	  size is the amount of letters you want there to be in each PET.
       letters is the type of characters that we want to use.
       
       eg.
       petGenerator(3, "abc");
       
-      This should return an array of size 27 with all possible permutations.  
-    */
+      This should return an array of size 27 with all possible combinations.  
+   
+	
 function petGenerator(size, letters) {
     var results = [];
 
@@ -288,3 +295,48 @@ function petGenerator(size, letters) {
 };
 
 logger.write(petGenerator(3, "abc"));
+*/
+
+
+  
+// Just using the same values made at the top of the page.
+let petGeneratorPool = [ 
+    { key: 'Types', vals: [ 'Cat', 'Dog', "Bird" ] },
+    { key: 'Colors', vals: [ 'Blue', 'Red', 'Green' ] },
+    { key: 'Names', vals: [ 'James', 'Tim', "Bob" ] },
+	{ key: 'Diets', vals: [ 'Rats', 'Birdseed', "Apples" ] },
+	{ key: 'NumberOfLegs', vals: [ '<4', '4', ">4" ] } ,
+	{ key: 'Age', vals: [ '<10', '10', ">10" ] } ,
+	{ key: 'NumberOfEyes', vals: [ '<2', '2', ">2" ] } ,
+	{ key: 'Height', vals: [ '<40', '40', ">40" ] } ,	// in centimeters?
+	{ key: 'Weight', vals: [ '<1000', '1000', ">1000" ] }  // in grams?
+  ]
+
+function generateAllPetCombinations(petGeneratorPool) {
+    if (petGeneratorPool.length === 0) return [[]]
+    let [current, ...restOfArgs] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
+    let combinations = generateAllPetCombinations(restOfArgs)
+	
+    return current.vals.reduce((a, string) => 
+        [ ...a, ...combinations.map(c => [string, ...c])], []) // This is some trippy syntax I got on stack overflow. Essentially just iterates through all the cases in a concise way.
+
+}
+
+function displayPETsGenerated() {
+	
+	let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
+
+	logger.write("Amount of PETs Generated: " + everyPetCombination.length);
+
+	for(var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
+	{
+		logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
+	}
+
+}
+
+displayPETsGenerated();
+
+
+
+
