@@ -5,7 +5,9 @@ const attribute = {
     name: ["James", "Tim", "Bob"],
     diet: ["Rats", "Birdseed", "Apples"],
     owner: ["Jim", "Jane", "Bryce"]
-}
+};
+//Generated 10 random candiates. 
+let candidates = [];
 
 var logger = {
     write: function (input) {
@@ -16,34 +18,57 @@ var logger = {
     clear: function () {
         document.getElementById("console-output").value = "";
     }
-}
+};
 
-
-/*
-var Colours = ["Blue", "Red", "Green"];
-var Types = ["Cat", "Dog", "Bird"];
-var Names = ["James", "Tim", "Bob"];
-var Diets = ["Rats", "Birdseed", "Apples"];
-var OwnerNames = ["Jim", "Jane", "Bryce"];*/
+// Just using the same values made at the top of the page.
+let petGeneratorPool = [
+    { key: 'Types', vals: ['Cat', 'Dog', "Bird"] },
+    { key: 'Colors', vals: ['Blue', 'Red', 'Green'] },
+    { key: 'Names', vals: ['James', 'Tim', "Bob"] },
+    { key: 'Diets', vals: ['Rats', 'Birdseed', "Apples"] },
+    { key: 'OwnerNames', vals: ['Jim', 'Jane', "Bryce"] },
+    { key: 'NumberOfLegs', vals: ['<4', '4', ">4"] },
+    { key: 'Age', vals: ['<10', '10', ">10"] },
+    { key: 'NumberOfEyes', vals: ['<2', '2', ">2"] },
+    { key: 'Height', vals: ['<40', '40', ">40"] },	// in centimeters?
+    { key: 'Weight', vals: ['<1000', '1000', ">1000"] }  // in grams?
+];
 
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
-    let max_distance = 10;
-    let distance = max_distance;
-
-    if (object_x.Colour == object_y.Colour) distance--;
-    if (object_x.Type == object_y.Type) distance--;
-    if (object_x.Name == object_y.Name) distance--;
-    if (object_x.Diet == object_y.Diet) distance--;
-    if (object_x.OwnerName == object_y.OwnerName) distance--;
-
-    if ((object_x.NumberOfLegs < 4 && object_y.NumberOfLegs < 4) || (object_x.NumberOfLegs == 4 && object_y.NumberOfLegs == 4) || (object_x.NumberOfLegs > 4 && object_y.NumberOfLegs > 4)) distance--;
-    if ((object_x.Age < 10 && object_y.Age < 10) || (object_x.Age == 10 && object_y.Age == 10) || (object_x.Age > 10 && object_y.Age > 10)) distance--;
-    if ((object_x.NumberOfEyes < 2 && object_y.NumberOfEyes < 2) || (object_x.NumberOfEyes == 2 && object_y.NumberOfEyes == 2) || (object_x.NumberOfEyes > 2 && object_y.NumberOfEyes > 2)) distance--;
-    if ((object_x.Height < 40 && object_y.Height < 40) || (object_x.Height == 40 && object_y.Height == 40) || (object_x.Height > 40 && object_y.Height > 40)) distance--;
-    if ((object_x.Weight < 1000 && object_y.Weight < 1000) || (object_x.Weight == 1000 && object_y.Weight == 1000) || (object_x.Weight > 1000 && object_y.Weight > 1000)) distance--;
-
-    return distance
+    //let max_distance = 10;
+    let distance = 10;
+    if (object_x.Colour == object_y.Colour) {
+        distance--;
+    }
+    if (object_x.Type == object_y.Type) {
+        distance--;
+    }
+    if (object_x.Name == object_y.Name) {
+        distance--;
+    }
+    if (object_x.Diet == object_y.Diet) {
+        distance--;
+    }
+    if (object_x.OwnerName == object_y.OwnerName) {
+        distance--;
+    }
+    if ((object_x.NumberOfLegs < 4 && object_y.NumberOfLegs < 4) || (object_x.NumberOfLegs == 4 && object_y.NumberOfLegs == 4) || (object_x.NumberOfLegs > 4 && object_y.NumberOfLegs > 4)) {
+        distance--;
+    }
+    if ((object_x.Age < 10 && object_y.Age < 10) || (object_x.Age == 10 && object_y.Age == 10) || (object_x.Age > 10 && object_y.Age > 10)) {
+        distance--;
+    }
+    if ((object_x.NumberOfEyes < 2 && object_y.NumberOfEyes < 2) || (object_x.NumberOfEyes == 2 && object_y.NumberOfEyes == 2) || (object_x.NumberOfEyes > 2 && object_y.NumberOfEyes > 2)) {
+        distance--;
+    }
+    if ((object_x.Height < 40 && object_y.Height < 40) || (object_x.Height == 40 && object_y.Height == 40) || (object_x.Height > 40 && object_y.Height > 40)) {
+        distance--;
+    }
+    if ((object_x.Weight < 1000 && object_y.Weight < 1000) || (object_x.Weight == 1000 && object_y.Weight == 1000) || (object_x.Weight > 1000 && object_y.Weight > 1000)) {
+        distance--;
+    }
+    return distance;
 }
 
 //The maximum and the minimum are inclusive
@@ -57,7 +82,7 @@ function getRandomInt(min, max) {
 
 //Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
 function getRandomPet() {
-    var Pet_0 = {
+    return {
         Colour: attribute.color[getRandomInt(0, 2)],
         Type: attribute.type[getRandomInt(0, 2)],
         Name: attribute.name[getRandomInt(0, 2)],
@@ -67,10 +92,8 @@ function getRandomPet() {
         Age: getRandomInt(0, 20), //<10, 10, >10        range(0-20)
         NumberOfEyes: getRandomInt(0, 4), //<2, 2, >2       range(0-4)
         Height: getRandomInt(0, 80), //<40, 40, >40                   range(0-80)
-        Weight: getRandomInt(0, 2000), //<1000, 1000, >1000                range(0-2000)
+        Weight: getRandomInt(0, 2000) //<1000, 1000, >1000                range(0-2000)
     };
-
-    return Pet_0;
 }
 
 //This is used for testing
@@ -87,8 +110,7 @@ function displayPetConsole(Pet) {
     logger.write(Pet.Weight);
 }
 
-//Generated 10 random candiates. 
-var candidates = [];
+
 
 function generateCandiates() {
     var i;
@@ -190,6 +212,34 @@ function calculate_sum_distance(n, S, S_temp) {
     return sum_distance;
 }
 
+
+function generateAllPetCombinations(petGeneratorPool) {
+    if (petGeneratorPool.length === 0) {
+        return [[]]
+    }
+    let [currentPet, ...restOfPets] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
+    let petCombinations = generateAllPetCombinations(restOfPets)
+
+
+    /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
+    based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
+    return currentPet.vals.reduce((a, string) =>
+        [...a, ...petCombinations.map(c => [string, ...c])], [])
+
+}
+
+function displayPETsGenerated() {
+
+    let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
+
+    logger.write("Amount of PETs Generated: " + everyPetCombination.length);
+
+    for (var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
+    {
+        logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
+    }
+
+}
 
 //Example objects used for testing
 /*
@@ -308,51 +358,4 @@ function petGenerator(size, letters) {
 logger.write(petGenerator(3, "abc"));
 */
 
-
-// Just using the same values made at the top of the page.
-let petGeneratorPool = [
-    { key: 'Types', vals: ['Cat', 'Dog', "Bird"] },
-    { key: 'Colors', vals: ['Blue', 'Red', 'Green'] },
-    { key: 'Names', vals: ['James', 'Tim', "Bob"] },
-    { key: 'Diets', vals: ['Rats', 'Birdseed', "Apples"] },
-    { key: 'OwnerNames', vals: ['Jim', 'Jane', "Bryce"] },
-    { key: 'NumberOfLegs', vals: ['<4', '4', ">4"] },
-    { key: 'Age', vals: ['<10', '10', ">10"] },
-    { key: 'NumberOfEyes', vals: ['<2', '2', ">2"] },
-    { key: 'Height', vals: ['<40', '40', ">40"] },	// in centimeters?
-    { key: 'Weight', vals: ['<1000', '1000', ">1000"] }  // in grams?
-]
-
-function generateAllPetCombinations(petGeneratorPool) {
-    if (petGeneratorPool.length === 0) {
-        return [[]]
-    }
-    let [currentPet, ...restOfPets] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
-    let petCombinations = generateAllPetCombinations(restOfPets)
-
-
-    /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
-    based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
-    return currentPet.vals.reduce((a, string) =>
-        [...a, ...petCombinations.map(c => [string, ...c])], [])
-
-}
-
-function displayPETsGenerated() {
-
-    let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
-
-    logger.write("Amount of PETs Generated: " + everyPetCombination.length);
-
-    for (var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
-    {
-        logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
-    }
-
-}
-
 displayPETsGenerated();
-
-
-
-
