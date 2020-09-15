@@ -313,12 +313,17 @@ let petGeneratorPool = [
   ]
 
 function generateAllPetCombinations(petGeneratorPool) {
-    if (petGeneratorPool.length === 0) return [[]]
-    let [current, ...restOfArgs] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
-    let combinations = generateAllPetCombinations(restOfArgs)
+    if (petGeneratorPool.length === 0) {
+      return [[]]
+    }
+    let [currentPet, ...restOfPets] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
+    let petCombinations = generateAllPetCombinations(restOfPets)
 	
-    return current.vals.reduce((a, string) => 
-        [ ...a, ...combinations.map(c => [string, ...c])], []) // This is some trippy syntax I got on stack overflow. Essentially just iterates through all the cases in a concise way.
+
+    /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
+    based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
+    return currentPet.vals.reduce((a, string) => 
+        [ ...a, ...combinations.map(c => [string, ...c])], [])
 
 }
 
