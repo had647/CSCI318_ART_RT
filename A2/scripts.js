@@ -297,7 +297,6 @@ function petGenerator(size, letters) {
 logger.write(petGenerator(3, "abc"));
 */
 
-
   
 // Just using the same values made at the top of the page.
 let petGeneratorPool = [ 
@@ -305,6 +304,7 @@ let petGeneratorPool = [
     { key: 'Colors', vals: [ 'Blue', 'Red', 'Green' ] },
     { key: 'Names', vals: [ 'James', 'Tim', "Bob" ] },
 	{ key: 'Diets', vals: [ 'Rats', 'Birdseed', "Apples" ] },
+	{ key: 'OwnerNames', vals: [ 'Jim', 'Jane', "Bryce" ] },
 	{ key: 'NumberOfLegs', vals: [ '<4', '4', ">4" ] } ,
 	{ key: 'Age', vals: [ '<10', '10', ">10" ] } ,
 	{ key: 'NumberOfEyes', vals: [ '<2', '2', ">2" ] } ,
