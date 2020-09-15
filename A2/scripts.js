@@ -1,22 +1,30 @@
-var logger = {
-  write: function(input){
-    //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
-	document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
+//For generating random objects
+const attribute = {
+    color: ["Blue", "Red", "Green"],
+    type: ["Cat", "Dog", "Bird"],
+    name: ["James", "Tim", "Bob"],
+    diet: ["Rats", "Birdseed", "Apples"],
+    owner: ["Jim", "Jane", "Bryce"]
+}
 
-  },
-  clear: function(){
-    document.getElementById("console-output").value = "";
-  }
+var logger = {
+    write: function (input) {
+        //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
+        document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
+
+    },
+    clear: function () {
+        document.getElementById("console-output").value = "";
+    }
 }
 
 
-
-//For generating random objects
+/*
 var Colours = ["Blue", "Red", "Green"];
 var Types = ["Cat", "Dog", "Bird"];
 var Names = ["James", "Tim", "Bob"];
 var Diets = ["Rats", "Birdseed", "Apples"];
-var OwnerNames = ["Jim", "Jane", "Bryce"];
+var OwnerNames = ["Jim", "Jane", "Bryce"];*/
 
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
@@ -38,28 +46,31 @@ function getDistance(object_x, object_y) {
     return distance
 }
 
+//The maximum and the minimum are inclusive
 function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    if (!Number.isInteger(min) || !Number.isInteger(max) || min < 0 || max < 0) {
+        console.error(`getRandomInt(number: min, number: max) requires two positive integers. min=${min} and max=${max} are not valid arguments.`);
+        return null;
+    }
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
 function getRandomPet() {
     var Pet_0 = {
-        Colour: Colours[getRandomInt(0, 3)],
-        Type: Types[getRandomInt(0, 3)],
-        Name: Names[getRandomInt(0, 3)],
-        Diet: Diets[getRandomInt(0, 3)],
-        OwnerName: OwnerNames[getRandomInt(0, 3)],
-        NumberOfLegs: getRandomInt(0, 9), // <4, 4, >4          range(0-8) inclusive          
-        Age: getRandomInt(0, 21), //<10, 10, >10        range(0-20)
-        NumberOfEyes: getRandomInt(0, 5), //<2, 2, >2       range(0-4)
-        Height: getRandomInt(0, 81), //<40, 40, >40                   range(0-80)
-        Weight: getRandomInt(0, 2001), //<1000, 1000, >1000                range(0-2000)
+        Colour: attribute.color[getRandomInt(0, 2)],
+        Type: attribute.type[getRandomInt(0, 2)],
+        Name: attribute.name[getRandomInt(0, 2)],
+        Diet: attribute.diet[getRandomInt(0, 2)],
+        OwnerName: attribute.owner[getRandomInt(0, 2)],
+        NumberOfLegs: getRandomInt(0, 8), // <4, 4, >4          range(0-8) inclusive          
+        Age: getRandomInt(0, 20), //<10, 10, >10        range(0-20)
+        NumberOfEyes: getRandomInt(0, 4), //<2, 2, >2       range(0-4)
+        Height: getRandomInt(0, 80), //<40, 40, >40                   range(0-80)
+        Weight: getRandomInt(0, 2000), //<1000, 1000, >1000                range(0-2000)
     };
 
-    return Pet_0
+    return Pet_0;
 }
 
 //This is used for testing
@@ -90,19 +101,19 @@ function returnObjectChoicePosition(pet) {
 
     var i;
     for (i = 0; i < 40; i++) categoriesAndChoices[i] = 0;
-    var colour_index = Colours.indexOf(pet.Colour);
+    var colour_index = attribute.color.indexOf(pet.Colour);
     categoriesAndChoices[0 + (colour_index + 1)] = 1;
 
-    var type_index = Types.indexOf(pet.Type);
+    var type_index = attribute.type.indexOf(pet.Type);
     categoriesAndChoices[4 + (type_index + 1)] = 1;
 
-    var name_index = Names.indexOf(pet.Name);
+    var name_index = attribute.name.indexOf(pet.Name);
     categoriesAndChoices[8 + (name_index + 1)] = 1;
 
-    var diet_index = Diets.indexOf(pet.Diet);
+    var diet_index = attribute.diet.indexOf(pet.Diet);
     categoriesAndChoices[12 + (diet_index + 1)] = 1;
 
-    var owner_name_index = OwnerNames.indexOf(pet.OwnerName);
+    var owner_name_index = attribute.owner.indexOf(pet.OwnerName);
     categoriesAndChoices[16 + (owner_name_index + 1)] = 1;
 
     var number_of_legs_index;
@@ -297,46 +308,46 @@ function petGenerator(size, letters) {
 logger.write(petGenerator(3, "abc"));
 */
 
-  
+
 // Just using the same values made at the top of the page.
-let petGeneratorPool = [ 
-    { key: 'Types', vals: [ 'Cat', 'Dog', "Bird" ] },
-    { key: 'Colors', vals: [ 'Blue', 'Red', 'Green' ] },
-    { key: 'Names', vals: [ 'James', 'Tim', "Bob" ] },
-	{ key: 'Diets', vals: [ 'Rats', 'Birdseed', "Apples" ] },
-	{ key: 'OwnerNames', vals: [ 'Jim', 'Jane', "Bryce" ] },
-	{ key: 'NumberOfLegs', vals: [ '<4', '4', ">4" ] } ,
-	{ key: 'Age', vals: [ '<10', '10', ">10" ] } ,
-	{ key: 'NumberOfEyes', vals: [ '<2', '2', ">2" ] } ,
-	{ key: 'Height', vals: [ '<40', '40', ">40" ] } ,	// in centimeters?
-	{ key: 'Weight', vals: [ '<1000', '1000', ">1000" ] }  // in grams?
-  ]
+let petGeneratorPool = [
+    { key: 'Types', vals: ['Cat', 'Dog', "Bird"] },
+    { key: 'Colors', vals: ['Blue', 'Red', 'Green'] },
+    { key: 'Names', vals: ['James', 'Tim', "Bob"] },
+    { key: 'Diets', vals: ['Rats', 'Birdseed', "Apples"] },
+    { key: 'OwnerNames', vals: ['Jim', 'Jane', "Bryce"] },
+    { key: 'NumberOfLegs', vals: ['<4', '4', ">4"] },
+    { key: 'Age', vals: ['<10', '10', ">10"] },
+    { key: 'NumberOfEyes', vals: ['<2', '2', ">2"] },
+    { key: 'Height', vals: ['<40', '40', ">40"] },	// in centimeters?
+    { key: 'Weight', vals: ['<1000', '1000', ">1000"] }  // in grams?
+]
 
 function generateAllPetCombinations(petGeneratorPool) {
     if (petGeneratorPool.length === 0) {
-      return [[]]
+        return [[]]
     }
     let [currentPet, ...restOfPets] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
     let petCombinations = generateAllPetCombinations(restOfPets)
-	
+
 
     /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
     based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
-    return currentPet.vals.reduce((a, string) => 
-        [ ...a, ...petCombinations.map(c => [string, ...c])], [])
+    return currentPet.vals.reduce((a, string) =>
+        [...a, ...petCombinations.map(c => [string, ...c])], [])
 
 }
 
 function displayPETsGenerated() {
-	
-	let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
 
-	logger.write("Amount of PETs Generated: " + everyPetCombination.length);
+    let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
 
-	for(var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
-	{
-		logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
-	}
+    logger.write("Amount of PETs Generated: " + everyPetCombination.length);
+
+    for (var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
+    {
+        logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
+    }
 
 }
 
