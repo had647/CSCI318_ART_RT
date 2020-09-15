@@ -323,7 +323,7 @@ function generateAllPetCombinations(petGeneratorPool) {
     /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
     based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
     return currentPet.vals.reduce((a, string) => 
-        [ ...a, ...combinations.map(c => [string, ...c])], [])
+        [ ...a, ...petCombinations.map(c => [string, ...c])], [])
 
 }
 
