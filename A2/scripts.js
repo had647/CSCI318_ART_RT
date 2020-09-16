@@ -283,57 +283,56 @@ var Pet_1 = {
 /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
 
+function stuff() {
+    var S = [];
+    var k;
+    for (k = 0; k < 40; k++) S[k] = 0; //init S set
 
+    var E = []; //past test cases
+    var test_case; //is initialized by either the first test case or the candidate with the largest distance
 
-var S = [];
-var k;
-for (k = 0; k < 40; k++) S[k] = 0; //init S set
+    var n = 0;
 
-var E = []; //past test cases
-var test_case; //is initialized by either the first test case or the candidate with the largest distance
+    var g; //for loop needs to be replaced with while(condition- failed test case)
+    for (g = 0; g < 60000; g++) {
+        n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it. 
 
-var n = 0;
+        if (n == 1) test_case = getRandomPet();
+        else {
+            generateCandiates(); //generate candidates
 
-var g; //for loop needs to be replaced with while(condition- failed test case)
-for (g = 0; g < 60000; g++) {
-    n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it. 
+            var max_sum = -1;
+            var current_sum;
+            var candidate;
+            var candidate_S;
+            var max_candidate_index = -1;
 
-    if (n == 1) test_case = getRandomPet();
-    else {
-        generateCandiates(); //generate candidates
+            var j;
+            for (j = 0; j < candidates.length; j++) { //calculating the candidate with teh max distance between it and the S set
+                candidate = candidates[j];
+                candidate_S = returnObjectChoicePosition(candidate);
+                current_sum = calculate_sum_distance(n - 1, S, candidate_S);
 
-        var max_sum = -1;
-        var current_sum;
-        var candidate;
-        var candidate_S;
-        var max_candidate_index = -1;
-
-        var j;
-        for (j = 0; j < candidates.length; j++) { //calculating the candidate with teh max distance between it and the S set
-            candidate = candidates[j];
-            candidate_S = returnObjectChoicePosition(candidate);
-            current_sum = calculate_sum_distance(n - 1, S, candidate_S);
-
-            if (current_sum > max_sum) {
-                max_sum = current_sum;
-                max_candidate_index = j;
+                if (current_sum > max_sum) {
+                    max_sum = current_sum;
+                    max_candidate_index = j;
+                }
             }
+            test_case = candidates[max_candidate_index];
         }
-        test_case = candidates[max_candidate_index];
+
+        E[n - 1] = test_case;
+
+        var i; //incrementing S set accordingly
+        var S_test_case = returnObjectChoicePosition(test_case);
+        for (i = 0; i < S.length; i++)
+            if (S_test_case[i] == 1) S[i]++;
     }
-
-    E[n - 1] = test_case;
-
-    var i; //incrementing S set accordingly
-    var S_test_case = returnObjectChoicePosition(test_case);
-    for (i = 0; i < S.length; i++)
-        if (S_test_case[i] == 1) S[i]++;
-
 }
 
 logger.write("done");
 
-//generateAllPetCombinations();
+generateAllPetCombinations();
 displayPETsGenerated();
 
 
