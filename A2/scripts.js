@@ -15,6 +15,9 @@ var logger = {
         document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
 
     },
+    writeError: function (input) {
+        document.getElementById("console-output").value += "ERROR: " + input + "\n\n";
+    },
     clear: function () {
         document.getElementById("console-output").value = "";
     }
@@ -212,20 +215,35 @@ function calculate_sum_distance(n, S, S_temp) {
     return sum_distance;
 }
 
-
 function generateAllPetCombinations(petGeneratorPool) {
     if (petGeneratorPool.length === 0) {
+        logger.writeError("Sorry but the pool of possible values for generation of pets is empty");
         return [[]]
     }
-    let [currentPet, ...restOfPets] = petGeneratorPool // The "..." is rest parameters. Just means it can take as many arguments as we want, so it gets all the values.
-    let petCombinations = generateAllPetCombinations(restOfPets)
-
-
-    /* This function will go through each of the attributes inside of the vals part of any current pet that we are looking at 
-    based on the pool, this will then reduce and map each value in each attribute into an array then return that as a Pet*/
-    return currentPet.vals.reduce((a, string) =>
-        [...a, ...petCombinations.map(c => [string, ...c])], [])
-
+    let petsCombinations = [];
+    for (let typesIndex = 0; typesIndex < petGeneratorPool[0].vals.length; typesIndex++) {
+        for (let colorsIndex = 0; colorsIndex < petGeneratorPool[1].vals.length; colorsIndex++) {
+            for (let namesIndex = 0; namesIndex < petGeneratorPool[2].vals.length; namesIndex++) {
+                for (let dietsIndex = 0; dietsIndex < petGeneratorPool[3].vals.length; dietsIndex++) {
+                    for (let ownersNameIndex = 0; ownersNameIndex < petGeneratorPool[4].vals.length; ownersNameIndex++) {
+                        for (let numOfLegsIndex = 0; numOfLegsIndex < petGeneratorPool[5].vals.length; numOfLegsIndex++) {
+                            for (let ageIndex = 0; ageIndex < petGeneratorPool[6].vals.length; ageIndex++) {
+                                for (let numOfEyesIndex = 0; numOfEyesIndex < petGeneratorPool[7].vals.length; numOfEyesIndex++) {
+                                    for (let heightIndex = 0; heightIndex < petGeneratorPool[8].vals.length; heightIndex++) {
+                                        for (let weightIndex = 0; weightIndex < petGeneratorPool[9].vals.length; weightIndex++) {
+                                            petsCombinations.push([petGeneratorPool[0].vals[typesIndex], petGeneratorPool[1].vals[colorsIndex], petGeneratorPool[2].vals[namesIndex], petGeneratorPool[3].vals[dietsIndex], petGeneratorPool[4].vals[ownersNameIndex],
+petGeneratorPool[5].vals[numOfLegsIndex], petGeneratorPool[6].vals[ageIndex], petGeneratorPool[7].vals[numOfEyesIndex], petGeneratorPool[8].vals[heightIndex], petGeneratorPool[9].vals[weightIndex]]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return petsCombinations;
 }
 
 function displayPETsGenerated() {
