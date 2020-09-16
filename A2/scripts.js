@@ -23,19 +23,7 @@ var logger = {
     }
 };
 
-// Just using the same values made at the top of the page.
-let petGeneratorPool = [
-    { key: 'Types', vals: ['Cat', 'Dog', "Bird"] },
-    { key: 'Colors', vals: ['Blue', 'Red', 'Green'] },
-    { key: 'Names', vals: ['James', 'Tim', "Bob"] },
-    { key: 'Diets', vals: ['Rats', 'Birdseed', "Apples"] },
-    { key: 'OwnerNames', vals: ['Jim', 'Jane', "Bryce"] },
-    { key: 'NumberOfLegs', vals: ['<4', '4', ">4"] },
-    { key: 'Age', vals: ['<10', '10', ">10"] },
-    { key: 'NumberOfEyes', vals: ['<2', '2', ">2"] },
-    { key: 'Height', vals: ['<40', '40', ">40"] },	// in centimeters?
-    { key: 'Weight', vals: ['<1000', '1000', ">1000"] }  // in grams?
-];
+
 
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
@@ -215,24 +203,38 @@ function calculate_sum_distance(n, S, S_temp) {
     return sum_distance;
 }
 
+// Just using the same values made at the top of the page.
+const petGeneratorPool = {
+    types: ['Cat', 'Dog', "Bird"],
+    colors: ['Blue', 'Red', 'Green'],
+    names: ['James', 'Tim', "Bob"],
+    diets: ['Rats', 'Birdseed', "Apples"],
+    owner: ['Jim', 'Jane', "Bryce"],
+    numLegs: ['<4', '4', ">4"],
+    age: ['<10', '10', ">10"],
+    numEyes: ['<2', '2', ">2"],
+    height: ['<40', '40', ">40"],	// in centimeters?
+    weight: ['<1000', '1000', ">1000"]  // in grams?
+};
+
 function generateAllPetCombinations(petGeneratorPool) {
     if (petGeneratorPool.length === 0) {
         logger.writeError("Sorry but the pool of possible values for generation of pets is empty");
-        return [[]]
+        return [[]];
     }
     let petsCombinations = [];
-    for (let typesIndex = 0; typesIndex < petGeneratorPool[0].vals.length; typesIndex++) {
-        for (let colorsIndex = 0; colorsIndex < petGeneratorPool[1].vals.length; colorsIndex++) {
-            for (let namesIndex = 0; namesIndex < petGeneratorPool[2].vals.length; namesIndex++) {
-                for (let dietsIndex = 0; dietsIndex < petGeneratorPool[3].vals.length; dietsIndex++) {
-                    for (let ownersNameIndex = 0; ownersNameIndex < petGeneratorPool[4].vals.length; ownersNameIndex++) {
-                        for (let numOfLegsIndex = 0; numOfLegsIndex < petGeneratorPool[5].vals.length; numOfLegsIndex++) {
-                            for (let ageIndex = 0; ageIndex < petGeneratorPool[6].vals.length; ageIndex++) {
-                                for (let numOfEyesIndex = 0; numOfEyesIndex < petGeneratorPool[7].vals.length; numOfEyesIndex++) {
-                                    for (let heightIndex = 0; heightIndex < petGeneratorPool[8].vals.length; heightIndex++) {
-                                        for (let weightIndex = 0; weightIndex < petGeneratorPool[9].vals.length; weightIndex++) {
-                                            petsCombinations.push([petGeneratorPool[0].vals[typesIndex], petGeneratorPool[1].vals[colorsIndex], petGeneratorPool[2].vals[namesIndex], petGeneratorPool[3].vals[dietsIndex], petGeneratorPool[4].vals[ownersNameIndex],
-petGeneratorPool[5].vals[numOfLegsIndex], petGeneratorPool[6].vals[ageIndex], petGeneratorPool[7].vals[numOfEyesIndex], petGeneratorPool[8].vals[heightIndex], petGeneratorPool[9].vals[weightIndex]]);
+    for (let typesIndex = 0; typesIndex < petGeneratorPool.types.length; typesIndex++) {
+        for (let colorsIndex = 0; colorsIndex < petGeneratorPool.colors.length; colorsIndex++) {
+            for (let namesIndex = 0; namesIndex < petGeneratorPool.names.length; namesIndex++) {
+                for (let dietsIndex = 0; dietsIndex < petGeneratorPool.diets.length; dietsIndex++) {
+                    for (let ownersNameIndex = 0; ownersNameIndex < petGeneratorPool.owner.length; ownersNameIndex++) {
+                        for (let numOfLegsIndex = 0; numOfLegsIndex < petGeneratorPool.numLegs.length; numOfLegsIndex++) {
+                            for (let ageIndex = 0; ageIndex < petGeneratorPool.age.length; ageIndex++) {
+                                for (let numOfEyesIndex = 0; numOfEyesIndex < petGeneratorPool.numEyes.length; numOfEyesIndex++) {
+                                    for (let heightIndex = 0; heightIndex < petGeneratorPool.height.length; heightIndex++) {
+                                        for (let weightIndex = 0; weightIndex < petGeneratorPool.weight.length; weightIndex++) {
+                                            petsCombinations.push([petGeneratorPool.types[typesIndex], petGeneratorPool.colors[colorsIndex], petGeneratorPool.names[namesIndex], petGeneratorPool.diets[dietsIndex], petGeneratorPool.owner[ownersNameIndex],
+                                            petGeneratorPool.numLegs[numOfLegsIndex], petGeneratorPool.age[ageIndex], petGeneratorPool.numEyes[numOfEyesIndex], petGeneratorPool.height[heightIndex], petGeneratorPool.weight[weightIndex]]);
                                         }
                                     }
                                 }
