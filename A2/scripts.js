@@ -1,13 +1,20 @@
-//For generating random objects
-const attribute = {
-    color: ["Blue", "Red", "Green"],
-    type: ["Cat", "Dog", "Bird"],
-    name: ["James", "Tim", "Bob"],
-    diet: ["Rats", "Birdseed", "Apples"],
-    owner: ["Jim", "Jane", "Bryce"]
+// Just using the same values made at the top of the page.
+const attributePool = {
+    type: ['Cat', 'Dog', "Bird"],
+    color: ['Blue', 'Red', 'Green'],
+    name: ['James', 'Tim', "Bob"],
+    diet: ['Rats', 'Birdseed', "Apples"],
+    owner: ['Jim', 'Jane', "Bryce"],
+    numLegs: ['<4', '4', ">4"],
+    age: ['<10', '10', ">10"],
+    numEyes: ['<2', '2', ">2"],
+    height: ['<40', '40', ">40"],	// in centimeters?
+    weight: ['<1000', '1000', ">1000"]  // in grams?
 };
+
 //Generated 10 random candiates. 
 let candidates = [];
+let petCombinations = [];
 
 var logger = {
     write: function (input) {
@@ -22,8 +29,6 @@ var logger = {
         document.getElementById("console-output").value = "";
     }
 };
-
-
 
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
@@ -74,11 +79,11 @@ function getRandomInt(min, max) {
 //Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
 function getRandomPet() {
     return {
-        Colour: attribute.color[getRandomInt(0, 2)],
-        Type: attribute.type[getRandomInt(0, 2)],
-        Name: attribute.name[getRandomInt(0, 2)],
-        Diet: attribute.diet[getRandomInt(0, 2)],
-        OwnerName: attribute.owner[getRandomInt(0, 2)],
+        Colour: attributePool.color[getRandomInt(0, 2)],
+        Type: attributePool.type[getRandomInt(0, 2)],
+        Name: attributePool.name[getRandomInt(0, 2)],
+        Diet: attributePool.diet[getRandomInt(0, 2)],
+        OwnerName: attributePool.owner[getRandomInt(0, 2)],
         NumberOfLegs: getRandomInt(0, 8), // <4, 4, >4          range(0-8) inclusive          
         Age: getRandomInt(0, 20), //<10, 10, >10        range(0-20)
         NumberOfEyes: getRandomInt(0, 4), //<2, 2, >2       range(0-4)
@@ -101,8 +106,6 @@ function displayPetConsole(Pet) {
     logger.write(Pet.Weight);
 }
 
-
-
 function generateCandiates() {
     var i;
     for (i = 0; i < 10; i++) candidates[i] = getRandomPet();
@@ -114,19 +117,19 @@ function returnObjectChoicePosition(pet) {
 
     var i;
     for (i = 0; i < 40; i++) categoriesAndChoices[i] = 0;
-    var colour_index = attribute.color.indexOf(pet.Colour);
+    var colour_index = attributePool.color.indexOf(pet.Colour);
     categoriesAndChoices[0 + (colour_index + 1)] = 1;
 
-    var type_index = attribute.type.indexOf(pet.Type);
+    var type_index = attributePool.type.indexOf(pet.Type);
     categoriesAndChoices[4 + (type_index + 1)] = 1;
 
-    var name_index = attribute.name.indexOf(pet.Name);
+    var name_index = attributePool.name.indexOf(pet.Name);
     categoriesAndChoices[8 + (name_index + 1)] = 1;
 
-    var diet_index = attribute.diet.indexOf(pet.Diet);
+    var diet_index = attributePool.diet.indexOf(pet.Diet);
     categoriesAndChoices[12 + (diet_index + 1)] = 1;
 
-    var owner_name_index = attribute.owner.indexOf(pet.OwnerName);
+    var owner_name_index = attributePool.owner.indexOf(pet.OwnerName);
     categoriesAndChoices[16 + (owner_name_index + 1)] = 1;
 
     var number_of_legs_index;
@@ -203,38 +206,20 @@ function calculate_sum_distance(n, S, S_temp) {
     return sum_distance;
 }
 
-// Just using the same values made at the top of the page.
-const petGeneratorPool = {
-    types: ['Cat', 'Dog', "Bird"],
-    colors: ['Blue', 'Red', 'Green'],
-    names: ['James', 'Tim', "Bob"],
-    diets: ['Rats', 'Birdseed', "Apples"],
-    owner: ['Jim', 'Jane', "Bryce"],
-    numLegs: ['<4', '4', ">4"],
-    age: ['<10', '10', ">10"],
-    numEyes: ['<2', '2', ">2"],
-    height: ['<40', '40', ">40"],	// in centimeters?
-    weight: ['<1000', '1000', ">1000"]  // in grams?
-};
 
-function generateAllPetCombinations(petGeneratorPool) {
-    if (petGeneratorPool.length === 0) {
-        logger.writeError("Sorry but the pool of possible values for generation of pets is empty");
-        return [[]];
-    }
-    let petsCombinations = [];
-    for (let typesIndex = 0; typesIndex < petGeneratorPool.types.length; typesIndex++) {
-        for (let colorsIndex = 0; colorsIndex < petGeneratorPool.colors.length; colorsIndex++) {
-            for (let namesIndex = 0; namesIndex < petGeneratorPool.names.length; namesIndex++) {
-                for (let dietsIndex = 0; dietsIndex < petGeneratorPool.diets.length; dietsIndex++) {
-                    for (let ownersNameIndex = 0; ownersNameIndex < petGeneratorPool.owner.length; ownersNameIndex++) {
-                        for (let numOfLegsIndex = 0; numOfLegsIndex < petGeneratorPool.numLegs.length; numOfLegsIndex++) {
-                            for (let ageIndex = 0; ageIndex < petGeneratorPool.age.length; ageIndex++) {
-                                for (let numOfEyesIndex = 0; numOfEyesIndex < petGeneratorPool.numEyes.length; numOfEyesIndex++) {
-                                    for (let heightIndex = 0; heightIndex < petGeneratorPool.height.length; heightIndex++) {
-                                        for (let weightIndex = 0; weightIndex < petGeneratorPool.weight.length; weightIndex++) {
-                                            petsCombinations.push([petGeneratorPool.types[typesIndex], petGeneratorPool.colors[colorsIndex], petGeneratorPool.names[namesIndex], petGeneratorPool.diets[dietsIndex], petGeneratorPool.owner[ownersNameIndex],
-                                            petGeneratorPool.numLegs[numOfLegsIndex], petGeneratorPool.age[ageIndex], petGeneratorPool.numEyes[numOfEyesIndex], petGeneratorPool.height[heightIndex], petGeneratorPool.weight[weightIndex]]);
+function generateAllPetCombinations() {
+    for (let typesIndex = 0; typesIndex < attributePool.type.length; typesIndex++) {
+        for (let colorsIndex = 0; colorsIndex < attributePool.color.length; colorsIndex++) {
+            for (let namesIndex = 0; namesIndex < attributePool.name.length; namesIndex++) {
+                for (let dietsIndex = 0; dietsIndex < attributePool.diet.length; dietsIndex++) {
+                    for (let ownersNameIndex = 0; ownersNameIndex < attributePool.owner.length; ownersNameIndex++) {
+                        for (let numOfLegsIndex = 0; numOfLegsIndex < attributePool.numLegs.length; numOfLegsIndex++) {
+                            for (let ageIndex = 0; ageIndex < attributePool.age.length; ageIndex++) {
+                                for (let numOfEyesIndex = 0; numOfEyesIndex < attributePool.numEyes.length; numOfEyesIndex++) {
+                                    for (let heightIndex = 0; heightIndex < attributePool.height.length; heightIndex++) {
+                                        for (let weightIndex = 0; weightIndex < attributePool.weight.length; weightIndex++) {
+                                            petCombinations.push([attributePool.type[typesIndex], attributePool.color[colorsIndex], attributePool.name[namesIndex], attributePool.diet[dietsIndex], attributePool.owner[ownersNameIndex],
+                                            attributePool.numLegs[numOfLegsIndex], attributePool.age[ageIndex], attributePool.numEyes[numOfEyesIndex], attributePool.height[heightIndex], attributePool.weight[weightIndex]]);
                                         }
                                     }
                                 }
@@ -245,20 +230,25 @@ function generateAllPetCombinations(petGeneratorPool) {
             }
         }
     }
-    return petsCombinations;
 }
 
 function displayPETsGenerated() {
-
-    let everyPetCombination = generateAllPetCombinations(petGeneratorPool)
-
-    logger.write("Amount of PETs Generated: " + everyPetCombination.length);
-
-    for (var i = 0; i < 1000; i++) // You can try everyPetCombination.length but it will take a while to load all so I put 1000 just for display purposes. 
-    {
-        logger.write("PET" + i + "(" + everyPetCombination[i] + ")");
+    if (petCombinations.length === 0) {
+        console.warn(`There is currently no data in the petCombinations array. Run generateAllPetCombinations() first to fix this.`);
     }
 
+    logger.write("Amount of PETs Generated: " + petCombinations.length);
+
+    if (petCombinations.length <= 1000) {
+        for (var i = 0; i < petCombinations.length; i++) {
+            logger.write("PET" + i + "(" + petCombinations[i] + ")");
+        }
+    } else {
+        // You can try petCombinations.length but it will take a while to load all so I put 1000 just for display purposes.
+        for (var i = 0; i < 1000; i++) {
+            logger.write("PET" + i + "(" + petCombinations[i] + ")");
+        }
+    }
 }
 
 //Example objects used for testing
@@ -343,20 +333,23 @@ for (g = 0; g < 60000; g++) {
 
 logger.write("done");
 
+//generateAllPetCombinations();
+displayPETsGenerated();
 
-/*  
+
+/*
 	This function was just testing how to generate many combinations of given strings.
 	Uncomment to see how it works. If no use for it, it can be deleted.
-	
+
 	  size is the amount of letters you want there to be in each PET.
       letters is the type of characters that we want to use.
-      
+
       eg.
       petGenerator(3, "abc");
-      
-      This should return an array of size 27 with all possible combinations.  
-   
-	
+
+      This should return an array of size 27 with all possible combinations.
+
+
 function petGenerator(size, letters) {
     var results = [];
 
@@ -377,5 +370,3 @@ function petGenerator(size, letters) {
 
 logger.write(petGenerator(3, "abc"));
 */
-
-displayPETsGenerated();
