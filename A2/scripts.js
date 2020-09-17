@@ -13,10 +13,12 @@ const attributePool = {
 };
 
 //Generated 10 random candiates. 
-let candidates = [];
-let petCombinations = [];
+let state = {
+    candidates: [],
+    petList: []
+};
 
-var logger = {
+let logger = {
     write: function (input) {
         //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
         document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
@@ -76,7 +78,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-//Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
+/*//Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
 function getRandomPet() {
     return {
         Colour: attributePool.color[getRandomInt(0, 2)],
@@ -90,7 +92,7 @@ function getRandomPet() {
         Height: getRandomInt(0, 80), //<40, 40, >40                   range(0-80)
         Weight: getRandomInt(0, 2000) //<1000, 1000, >1000                range(0-2000)
     };
-}
+}*/
 
 //This is used for testing
 function displayPetConsole(Pet) {
@@ -107,8 +109,9 @@ function displayPetConsole(Pet) {
 }
 
 function generateCandiates() {
-    var i;
-    for (i = 0; i < 10; i++) candidates[i] = getRandomPet();
+    for (let i = 0; i < 10; i++) {
+        state.candidates[i] = state.petList[getRandomInt(0, state.petList.length - 1)];
+    }
 }
 
 //This creates S set for a candidate (see Article 2 for knowledge on S set)
@@ -218,7 +221,7 @@ function generateAllPetCombinations() {
                                 for (let numOfEyesIndex = 0; numOfEyesIndex < attributePool.numEyes.length; numOfEyesIndex++) {
                                     for (let heightIndex = 0; heightIndex < attributePool.height.length; heightIndex++) {
                                         for (let weightIndex = 0; weightIndex < attributePool.weight.length; weightIndex++) {
-                                            petCombinations.push([attributePool.type[typesIndex], attributePool.color[colorsIndex], attributePool.name[namesIndex], attributePool.diet[dietsIndex], attributePool.owner[ownersNameIndex],
+                                            state.petList.push([attributePool.type[typesIndex], attributePool.color[colorsIndex], attributePool.name[namesIndex], attributePool.diet[dietsIndex], attributePool.owner[ownersNameIndex],
                                             attributePool.numLegs[numOfLegsIndex], attributePool.age[ageIndex], attributePool.numEyes[numOfEyesIndex], attributePool.height[heightIndex], attributePool.weight[weightIndex]]);
                                         }
                                     }
@@ -233,20 +236,20 @@ function generateAllPetCombinations() {
 }
 
 function displayPETsGenerated() {
-    if (petCombinations.length === 0) {
-        console.warn(`There is currently no data in the petCombinations array. Run generateAllPetCombinations() first to fix this.`);
+    if (state.petList.length === 0) {
+        console.warn(`There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
     }
 
-    logger.write("Amount of PETs Generated: " + petCombinations.length);
+    logger.write("Amount of PETs Generated: " + state.petList.length);
 
-    if (petCombinations.length <= 1000) {
-        for (var i = 0; i < petCombinations.length; i++) {
-            logger.write("PET" + i + "(" + petCombinations[i] + ")");
+    if (state.petList.length <= 1000) {
+        for (var i = 0; i < state.petList.length; i++) {
+            logger.write("PET" + i + "(" + state.petList[i] + ")");
         }
     } else {
-        // You can try petCombinations.length but it will take a while to load all so I put 1000 just for display purposes.
+        // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
         for (var i = 0; i < 1000; i++) {
-            logger.write("PET" + i + "(" + petCombinations[i] + ")");
+            logger.write("PET" + i + "(" + state.petList[i] + ")");
         }
     }
 }
@@ -297,9 +300,10 @@ function stuff() {
     for (g = 0; g < 60000; g++) {
         n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it. 
 
-        if (n == 1) test_case = getRandomPet();
-        else {
-            generateCandiates(); //generate candidates
+        if (n === 1) {
+            test_case = state.petList[getRandomInt(0, state.petList.length - 1)];
+        } else {
+            generateCandiates(); //generate state.candidates
 
             var max_sum = -1;
             var current_sum;
@@ -308,8 +312,8 @@ function stuff() {
             var max_candidate_index = -1;
 
             var j;
-            for (j = 0; j < candidates.length; j++) { //calculating the candidate with teh max distance between it and the S set
-                candidate = candidates[j];
+            for (j = 0; j < state.candidates.length; j++) { //calculating the candidate with teh max distance between it and the S set
+                candidate = state.candidates[j];
                 candidate_S = returnObjectChoicePosition(candidate);
                 current_sum = calculate_sum_distance(n - 1, S, candidate_S);
 
@@ -318,7 +322,7 @@ function stuff() {
                     max_candidate_index = j;
                 }
             }
-            test_case = candidates[max_candidate_index];
+            test_case = state.candidates[max_candidate_index];
         }
 
         E[n - 1] = test_case;
