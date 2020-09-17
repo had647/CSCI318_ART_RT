@@ -41,12 +41,12 @@ function displayPETsGenerated() {
 
     if (state.petList.length <= 1000) {
         for (var i = 0; i < state.petList.length; i++) {
-            logger.write("PET" + i + "(" + state.petList[i] + ")");
+            logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
         }
     } else {
         // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
         for (var i = 0; i < 1000; i++) {
-            logger.write("PET" + i + "(" + state.petList[i] + ")");
+            logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
         }
     }
 }
@@ -268,36 +268,6 @@ function generateAllPetCombinations() {
     }
 }
 
-
-
-//Example objects used for testing
-/*
- var Pet_0 = {
-  Colour: "Red",        
-  Type: "Cat",         
-  Name: "Tim",        
-  Diet: "Birdseed",     
-  OwnerName: "Bryce",          
-  NumberOfLegs: 4,               //<4, 4, >4            
-  Age: 11,                       //<10, 10, >10
-  NumberOfEyes: 2,               //<2, 2, >2 
-  Height: 28,                    //<40, 40, >40
-  Weight: 900,                   //<1000, 1000, >1000 
-};
-
-var Pet_1 = {
-  Colour: "Red",       
-  Type: "Cat",          
-  Name: "Tim",        
-  Diet: "Birdseed",     
-  OwnerName: "Bryce",        
-  NumberOfLegs: 4,      
-  Age: 11,         
-  NumberOfEyes: 2,           
-  Height: 30,            
-  Weight: 1000,             
-};*/
-
 /*This is how the distance is calculated between the two objects*/
 /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
@@ -352,7 +322,7 @@ function ART() {
 
 logger.write("done");
 
-//generateAllPetCombinations();
+generateAllPetCombinations();
 displayPETsGenerated();
 
 
