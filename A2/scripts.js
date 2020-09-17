@@ -32,6 +32,25 @@ let logger = {
     }
 };
 
+function displayPETsGenerated() {
+    if (state.petList.length === 0) {
+        console.warn(`There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
+    }
+
+    logger.write("Amount of PETs Generated: " + state.petList.length);
+
+    if (state.petList.length <= 1000) {
+        for (var i = 0; i < state.petList.length; i++) {
+            logger.write("PET" + i + "(" + state.petList[i] + ")");
+        }
+    } else {
+        // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
+        for (var i = 0; i < 1000; i++) {
+            logger.write("PET" + i + "(" + state.petList[i] + ")");
+        }
+    }
+}
+
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
     //let max_distance = 10;
@@ -109,6 +128,10 @@ function displayPetConsole(Pet) {
 }
 
 function generateCandiates() {
+    if (state.petList.length === 0) {
+        console.error(`Cannot generate candidates. There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
+        return null;
+    }
     for (let i = 0; i < 10; i++) {
         state.candidates[i] = state.petList[getRandomInt(0, state.petList.length - 1)];
     }
@@ -221,8 +244,18 @@ function generateAllPetCombinations() {
                                 for (let numOfEyesIndex = 0; numOfEyesIndex < attributePool.numEyes.length; numOfEyesIndex++) {
                                     for (let heightIndex = 0; heightIndex < attributePool.height.length; heightIndex++) {
                                         for (let weightIndex = 0; weightIndex < attributePool.weight.length; weightIndex++) {
-                                            state.petList.push([attributePool.type[typesIndex], attributePool.color[colorsIndex], attributePool.name[namesIndex], attributePool.diet[dietsIndex], attributePool.owner[ownersNameIndex],
-                                            attributePool.numLegs[numOfLegsIndex], attributePool.age[ageIndex], attributePool.numEyes[numOfEyesIndex], attributePool.height[heightIndex], attributePool.weight[weightIndex]]);
+                                            state.petList.push({
+                                                type: attributePool.type[typesIndex],
+                                                color: attributePool.color[colorsIndex],
+                                                name: attributePool.name[namesIndex],
+                                                diet: attributePool.diet[dietsIndex],
+                                                owner: attributePool.owner[ownersNameIndex],
+                                                numLegs: attributePool.numLegs[numOfLegsIndex],
+                                                age: attributePool.age[ageIndex],
+                                                numEyes: attributePool.numEyes[numOfEyesIndex],
+                                                height: attributePool.height[heightIndex],
+                                                weight: attributePool.weight[weightIndex]
+                                            });
                                         }
                                     }
                                 }
@@ -235,24 +268,7 @@ function generateAllPetCombinations() {
     }
 }
 
-function displayPETsGenerated() {
-    if (state.petList.length === 0) {
-        console.warn(`There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
-    }
 
-    logger.write("Amount of PETs Generated: " + state.petList.length);
-
-    if (state.petList.length <= 1000) {
-        for (var i = 0; i < state.petList.length; i++) {
-            logger.write("PET" + i + "(" + state.petList[i] + ")");
-        }
-    } else {
-        // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
-        for (var i = 0; i < 1000; i++) {
-            logger.write("PET" + i + "(" + state.petList[i] + ")");
-        }
-    }
-}
 
 //Example objects used for testing
 /*
@@ -286,7 +302,7 @@ var Pet_1 = {
 /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
 
-function stuff() {
+function ART() {
     var S = [];
     var k;
     for (k = 0; k < 40; k++) S[k] = 0; //init S set
@@ -336,7 +352,7 @@ function stuff() {
 
 logger.write("done");
 
-generateAllPetCombinations();
+//generateAllPetCombinations();
 displayPETsGenerated();
 
 
