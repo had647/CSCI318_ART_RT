@@ -315,11 +315,28 @@ function RUN() {
 
 
 function Initialize() {
-	generateAllPetCombinations();
-	logger.write("Generation of all PET combinations complete...");
-	generateErrorRegion();
-	logger.write("Generation of error region complete...");
-	logger.write("Initialization process now complete.");
+	
+	let userErrorPercent = document.getElementById("userErrorPrecent");
+	let userErrorPercentInput = parseInt(userErrorPercent.value);
+	
+	if(userErrorPercentInput < 100 && userErrorPercentInput > 0) {
+		state.errorPct = userErrorPercentInput / 100; //convert to percentage
+		logger.write("Error Region Percent set to " + userErrorPercentInput + "%...");
+		generateAllPetCombinations();
+		logger.write("Generation of all PET combinations complete...");
+		generateErrorRegion();
+		logger.write("Generation of error region complete...");
+		logger.write("Initialization process now complete.");
+		
+	} else {
+		logger.write("Default Error Region Percent set to 1%...");
+		generateAllPetCombinations();
+		logger.write("Generation of all PET combinations complete...");
+		generateErrorRegion();
+		logger.write("Generation of error region complete...");
+		logger.write("Initialization process now complete.");
+	} 
+
 }
 
 
