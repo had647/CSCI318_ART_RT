@@ -12,7 +12,6 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-//Generated 10 random candiates. 
 let state = {
     candidates: [],
     petList: [],
@@ -21,9 +20,7 @@ let state = {
 
 let logger = {
     write: function (input) {
-        //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
-        document.getElementById("console-output").value += `${input}\n\n`; // Changed the output style because the date was flooding the page.
-
+        document.getElementById("console-output").value += `${input}\n\n`;
     },
     writeError: function (input) {
         document.getElementById("console-output").value += `ERROR: ${input}\n\n`;
@@ -39,51 +36,17 @@ function displayPETsGenerated() {
     }
 
     logger.write(`Amount of PETs Generated: ${state.petList.length}`);
-
-    if (state.petList.length <= 1000) {
-        for (let i = 0; i < state.petList.length; i++) {
-            logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
-        }
-    } else {
-        // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
-        for (let i = 0; i < 1000; i++) {
-            logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
-        }
+    for (let i = 0; i < ((state.petList.length > 1000 )?1000:state.petList.length); i++) {
+        logger.write(`PET Index[${i}]:(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
     }
 }
 
-//This is just used for testing (not actually used in algorithm)
+//This is just used for testing
 function getDistance(object_x, object_y) {
     let distance = 10;
-    if (object_x.color === object_y.color) {
-        distance--;
-    }
-    if (object_x.type === object_y.type) {
-        distance--;
-    }
-    if (object_x.name === object_y.name) {
-        distance--;
-    }
-    if (object_x.diet === object_y.diet) {
-        distance--;
-    }
-    if (object_x.owner === object_y.owner) {
-        distance--;
-    }
-    if (object_x.numLegs === object_y.numLegs) {
-        distance--;
-    }
-    if (object_x.age === object_y.age) {
-        distance--;
-    }
-    if (object_x.numEyes === object_y.numEyes) {
-        distance--;
-    }
-    if (object_x.height === object_y.height) {
-        distance--;
-    }
-    if (object_x.weight === object_y.weight) {
-        distance--;
+    for(let key in object_x){
+        if(object_x[key] === object_y[key])
+            distance--;
     }
     return distance;
 }
@@ -95,20 +58,6 @@ function getRandomInt(min, max) {
         return null;
     }
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-//This is used for testing
-function displayPetConsole(Pet) {
-    logger.write(Pet.color);
-    logger.write(Pet.type);
-    logger.write(Pet.name);
-    logger.write(Pet.diet);
-    logger.write(Pet.owner);
-    logger.write(Pet.numLegs);
-    logger.write(Pet.age);
-    logger.write(Pet.numEyes);
-    logger.write(Pet.height);
-    logger.write(Pet.weight);
 }
 
 function generateCandiates() {
