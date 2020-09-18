@@ -127,49 +127,49 @@ function returnObjectChoicePosition(pet) {
 
     var i;
     for (i = 0; i < 40; i++) categoriesAndChoices[i] = 0;
-    var colour_index = attributePool.color.indexOf(pet.Colour);
+    var colour_index = attributePool.color.indexOf(pet.color);
     categoriesAndChoices[0 + (colour_index + 1)] = 1;
 
-    var type_index = attributePool.type.indexOf(pet.Type);
+    var type_index = attributePool.type.indexOf(pet.type);
     categoriesAndChoices[4 + (type_index + 1)] = 1;
 
-    var name_index = attributePool.name.indexOf(pet.Name);
+    var name_index = attributePool.name.indexOf(pet.name);
     categoriesAndChoices[8 + (name_index + 1)] = 1;
 
-    var diet_index = attributePool.diet.indexOf(pet.Diet);
+    var diet_index = attributePool.diet.indexOf(pet.diet);
     categoriesAndChoices[12 + (diet_index + 1)] = 1;
 
     var owner_name_index = attributePool.owner.indexOf(pet.OwnerName);
     categoriesAndChoices[16 + (owner_name_index + 1)] = 1;
 
     var number_of_legs_index;
-    if (pet.NumberOfLegs < 4) number_of_legs_index = 0;
-    else if (pet.NumberOfLegs == 4) number_of_legs_index = 1;
-    else if (pet.NumberOfLegs > 4) number_of_legs_index = 2;
+    if (pet.numLegs === "<4") number_of_legs_index = 0;
+    else if (pet.numLegs === "4") number_of_legs_index = 1;
+    else if (pet.numLegs === ">4") number_of_legs_index = 2;
     categoriesAndChoices[20 + (number_of_legs_index + 1)] = 1;
 
     var age_index;
-    if (pet.Age < 10) age_index = 0;
-    else if (pet.Age == 10) age_index = 1;
-    else if (pet.Age > 10) age_index = 2;
+    if (pet.age === "<10") age_index = 0;
+    else if (pet.age === "10") age_index = 1;
+    else if (pet.age === ">10") age_index = 2;
     categoriesAndChoices[24 + (age_index + 1)] = 1;
 
     var number_of_eyes_index;
-    if (pet.numEyes < 2) number_of_eyes_index = 0;
-    else if (pet.numEyes == 2) number_of_eyes_index = 1;
-    else if (pet.numEyes > 2) number_of_eyes_index = 2;
+    if (pet.numEyes === "<2") number_of_eyes_index = 0;
+    else if (pet.numEyes === "2") number_of_eyes_index = 1;
+    else if (pet.numEyes === ">2") number_of_eyes_index = 2;
     categoriesAndChoices[28 + (number_of_eyes_index + 1)] = 1;
 
     var height_index;
-    if (pet.height < 40) height_index = 0;
-    else if (pet.height == 40) height_index = 1;
-    else if (pet.height > 40) height_index = 2;
+    if (pet.height === "<40") height_index = 0;
+    else if (pet.height === "40") height_index = 1;
+    else if (pet.height === ">40") height_index = 2;
     categoriesAndChoices[32 + (height_index + 1)] = 1;
 
     var weight_index;
-    if (pet.Weight < 1000) weight_index = 0;
-    else if (pet.Weight == 1000) weight_index = 1;
-    else if (pet.Weight > 1000) weight_index = 2;
+    if (pet.weight === "<1000") weight_index = 0;
+    else if (pet.weight === "1000") weight_index = 1;
+    else if (pet.weight === ">1000") weight_index = 2;
     categoriesAndChoices[36 + (weight_index + 1)] = 1;
 
     return categoriesAndChoices;
