@@ -15,7 +15,8 @@ const attributePool = {
 //Generated 10 random candiates. 
 let state = {
     candidates: [],
-    petList: []
+    petList: [],
+    errorPct: 0.50
 };
 
 let logger = {
@@ -53,36 +54,35 @@ function displayPETsGenerated() {
 
 //This is just used for testing (not actually used in algorithm)
 function getDistance(object_x, object_y) {
-    //let max_distance = 10;
     let distance = 10;
-    if (object_x.Colour == object_y.Colour) {
+    if (object_x.color === object_y.color) {
         distance--;
     }
-    if (object_x.Type == object_y.Type) {
+    if (object_x.type === object_y.type) {
         distance--;
     }
-    if (object_x.Name == object_y.Name) {
+    if (object_x.name === object_y.name) {
         distance--;
     }
-    if (object_x.Diet == object_y.Diet) {
+    if (object_x.diet === object_y.diet) {
         distance--;
     }
-    if (object_x.OwnerName == object_y.OwnerName) {
+    if (object_x.owner === object_y.owner) {
         distance--;
     }
-    if ((object_x.NumberOfLegs < 4 && object_y.NumberOfLegs < 4) || (object_x.NumberOfLegs == 4 && object_y.NumberOfLegs == 4) || (object_x.NumberOfLegs > 4 && object_y.NumberOfLegs > 4)) {
+    if (object_x.numLegs === object_y.numLegs) {
         distance--;
     }
-    if ((object_x.Age < 10 && object_y.Age < 10) || (object_x.Age == 10 && object_y.Age == 10) || (object_x.Age > 10 && object_y.Age > 10)) {
+    if (object_x.age === object_y.age) {
         distance--;
     }
-    if ((object_x.NumberOfEyes < 2 && object_y.NumberOfEyes < 2) || (object_x.NumberOfEyes == 2 && object_y.NumberOfEyes == 2) || (object_x.NumberOfEyes > 2 && object_y.NumberOfEyes > 2)) {
+    if (object_x.numEyes === object_y.numEyes) {
         distance--;
     }
-    if ((object_x.Height < 40 && object_y.Height < 40) || (object_x.Height == 40 && object_y.Height == 40) || (object_x.Height > 40 && object_y.Height > 40)) {
+    if (object_x.height === object_y.height) {
         distance--;
     }
-    if ((object_x.Weight < 1000 && object_y.Weight < 1000) || (object_x.Weight == 1000 && object_y.Weight == 1000) || (object_x.Weight > 1000 && object_y.Weight > 1000)) {
+    if (object_x.weight === object_y.weight) {
         distance--;
     }
     return distance;
@@ -97,34 +97,18 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/*//Generates a random Pet object. This will most likley be used with a Oracle. Not from an object heap.
-function getRandomPet() {
-    return {
-        Colour: attributePool.color[getRandomInt(0, 2)],
-        Type: attributePool.type[getRandomInt(0, 2)],
-        Name: attributePool.name[getRandomInt(0, 2)],
-        Diet: attributePool.diet[getRandomInt(0, 2)],
-        OwnerName: attributePool.owner[getRandomInt(0, 2)],
-        NumberOfLegs: getRandomInt(0, 8), // <4, 4, >4          range(0-8) inclusive          
-        Age: getRandomInt(0, 20), //<10, 10, >10        range(0-20)
-        NumberOfEyes: getRandomInt(0, 4), //<2, 2, >2       range(0-4)
-        Height: getRandomInt(0, 80), //<40, 40, >40                   range(0-80)
-        Weight: getRandomInt(0, 2000) //<1000, 1000, >1000                range(0-2000)
-    };
-}*/
-
 //This is used for testing
 function displayPetConsole(Pet) {
-    logger.write(Pet.Colour);
-    logger.write(Pet.Type);
-    logger.write(Pet.Name);
-    logger.write(Pet.Diet);
-    logger.write(Pet.OwnerName);
-    logger.write(Pet.NumberOfLegs);
-    logger.write(Pet.Age);
-    logger.write(Pet.NumberOfEyes);
-    logger.write(Pet.Height);
-    logger.write(Pet.Weight);
+    logger.write(Pet.color);
+    logger.write(Pet.type);
+    logger.write(Pet.name);
+    logger.write(Pet.diet);
+    logger.write(Pet.owner);
+    logger.write(Pet.numLegs);
+    logger.write(Pet.age);
+    logger.write(Pet.numEyes);
+    logger.write(Pet.height);
+    logger.write(Pet.weight);
 }
 
 function generateCandiates() {
@@ -171,15 +155,15 @@ function returnObjectChoicePosition(pet) {
     categoriesAndChoices[24 + (age_index + 1)] = 1;
 
     var number_of_eyes_index;
-    if (pet.NumberOfEyes < 2) number_of_eyes_index = 0;
-    else if (pet.NumberOfEyes == 2) number_of_eyes_index = 1;
-    else if (pet.NumberOfEyes > 2) number_of_eyes_index = 2;
+    if (pet.numEyes < 2) number_of_eyes_index = 0;
+    else if (pet.numEyes == 2) number_of_eyes_index = 1;
+    else if (pet.numEyes > 2) number_of_eyes_index = 2;
     categoriesAndChoices[28 + (number_of_eyes_index + 1)] = 1;
 
     var height_index;
-    if (pet.Height < 40) height_index = 0;
-    else if (pet.Height == 40) height_index = 1;
-    else if (pet.Height > 40) height_index = 2;
+    if (pet.height < 40) height_index = 0;
+    else if (pet.height == 40) height_index = 1;
+    else if (pet.height > 40) height_index = 2;
     categoriesAndChoices[32 + (height_index + 1)] = 1;
 
     var weight_index;
@@ -232,6 +216,24 @@ function calculate_sum_distance(n, S, S_temp) {
     return sum_distance;
 }
 
+function generateErrorRegion() {
+    let numErrItems = Math.floor(state.errorPct * state.petList.length);
+    console.log(`Generating error region ${state.errorPct}x${state.petList.length}=${numErrItems}`);
+    let startIdx = getRandomInt(0, state.petList.length - 1);
+    state.petList[startIdx].error = true;
+
+    for (let diffThreshold = 0; diffThreshold < 11; diffThreshold++) {
+        for (let petIdx = 0; petIdx < state.petList.length; petIdx++) {
+            if (getDistance(state.petList[startIdx], state.petList[petIdx]) <= diffThreshold) {
+                state.petList[petIdx].error = true;
+                numErrItems--;
+            }
+            if (numErrItems === 0) {
+                return;
+            }
+        }
+    }
+}
 
 function generateAllPetCombinations() {
     for (let typesIndex = 0; typesIndex < attributePool.type.length; typesIndex++) {
@@ -254,7 +256,8 @@ function generateAllPetCombinations() {
                                                 age: attributePool.age[ageIndex],
                                                 numEyes: attributePool.numEyes[numOfEyesIndex],
                                                 height: attributePool.height[heightIndex],
-                                                weight: attributePool.weight[weightIndex]
+                                                weight: attributePool.weight[weightIndex],
+                                                error: false
                                             });
                                         }
                                     }
