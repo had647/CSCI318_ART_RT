@@ -15,7 +15,8 @@ const attributePool = {
 let state = {
     candidates: [],
     petList: [],
-    errorPct: 0.01
+    errorPct: 0.01,
+	initialized: false
 };
 
 let logger = {
@@ -195,6 +196,7 @@ function generateAllPetCombinations() {
                                                 weight: attributePool.weight[weightIndex],
                                                 error: false
                                             });
+
                                         }
                                     }
                                 }
@@ -205,6 +207,7 @@ function generateAllPetCombinations() {
             }
         }
     }
+	state.initialized = true;
 }
 
 /*This is how the distance is calculated between the two objects*/
@@ -284,25 +287,30 @@ function RT() {
 }
 
 function RUN() {
-    let ARTwins = 0;
-    let RTwins = 0;
-    let ties = 0;
-    let artTemp;
-    let rtTemp;
+	if (state.initialized != true) {
+		logger.write("Please initalize the data set first.");
+	} else {
+		let ARTwins = 0;
+		let RTwins = 0;
+		let ties = 0;
+		let artTemp;
+		let rtTemp;
 
-    for (let i = 0; i < 1000; i++) {
-        artTemp = ART();
-        rtTemp = RT();
-        if (artTemp > rtTemp) {
-            RTwins++;
-        } else if (artTemp < rtTemp) {
-            ARTwins++;
-        } else {
-            ties++;
-        }
-    }
+		for (let i = 0; i < 1000; i++) {
+			artTemp = ART();
+			rtTemp = RT();
+			if (artTemp > rtTemp) {
+				RTwins++;
+			} else if (artTemp < rtTemp) {
+				ARTwins++;
+			} else {
+				ties++;
+			}
+		}
 
-    logger.write(`\nARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
+		logger.write(`\nARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
+	}
+
 }
 
 
