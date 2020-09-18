@@ -302,13 +302,18 @@ function RUN() {
         }
     }
 
-    console.log(`ARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
+    logger.write(`\nARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
 }
 
-generateAllPetCombinations();
-displayPETsGenerated();
-generateErrorRegion();
-RUN();
+
+function Initialize() {
+	generateAllPetCombinations();
+	logger.write("Generation of all PET combinations complete...");
+	generateErrorRegion();
+	logger.write("Generation of error region complete...");
+	logger.write("Initialization process now complete.");
+}
+
 
 /*
 	This function was just testing how to generate many combinations of given strings.
