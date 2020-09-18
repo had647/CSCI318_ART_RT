@@ -1,32 +1,32 @@
 // Just using the same values made at the top of the page.
 const attributePool = {
-    type: ['Cat', 'Dog', "Bird"],
-    color: ['Blue', 'Red', 'Green'],
-    name: ['James', 'Tim', "Bob"],
-    diet: ['Rats', 'Birdseed', "Apples"],
-    owner: ['Jim', 'Jane', "Bryce"],
-    numLegs: ['<4', '4', ">4"],
-    age: ['<10', '10', ">10"],
-    numEyes: ['<2', '2', ">2"],
-    height: ['<40', '40', ">40"],	// in centimeters?
-    weight: ['<1000', '1000', ">1000"]  // in grams?
+    type: ["Cat", "Dog", "Bird"],
+    color: ["Blue", "Red", "Green"],
+    name: ["James", "Tim", "Bob"],
+    diet: ["Rats", "Birdseed", "Apples"],
+    owner: ["Jim", "Jane", "Bryce"],
+    numLegs: ["<4", "4", ">4"],
+    age: ["<10", "10", ">10"],
+    numEyes: ["<2", "2", ">2"],
+    height: ["<40", "40", ">40"],	// in centimeters?
+    weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
 //Generated 10 random candiates. 
 let state = {
     candidates: [],
     petList: [],
-    errorPct: 0.50
+    errorPct: 0.01
 };
 
 let logger = {
     write: function (input) {
         //document.getElementById("console-output").value += "===" + (new Date()).toISOString() + "===" + "\n" + input + "\n\n";
-        document.getElementById("console-output").value += input + "\n\n"; // Changed the output style because the date was flooding the page.
+        document.getElementById("console-output").value += `${input}\n\n`; // Changed the output style because the date was flooding the page.
 
     },
     writeError: function (input) {
-        document.getElementById("console-output").value += "ERROR: " + input + "\n\n";
+        document.getElementById("console-output").value += `ERROR: ${input}\n\n`;
     },
     clear: function () {
         document.getElementById("console-output").value = "";
@@ -38,15 +38,15 @@ function displayPETsGenerated() {
         console.warn(`There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
     }
 
-    logger.write("Amount of PETs Generated: " + state.petList.length);
+    logger.write(`Amount of PETs Generated: ${state.petList.length}`);
 
     if (state.petList.length <= 1000) {
-        for (var i = 0; i < state.petList.length; i++) {
+        for (let i = 0; i < state.petList.length; i++) {
             logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
         }
     } else {
         // You can try state.petList.length but it will take a while to load all so I put 1000 just for display purposes.
-        for (var i = 0; i < 1000; i++) {
+        for (let i = 0; i < 1000; i++) {
             logger.write(`PET${i}(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
         }
     }
@@ -123,50 +123,49 @@ function generateCandiates() {
 
 //This creates S set for a candidate (see Article 2 for knowledge on S set)
 function returnObjectChoicePosition(pet) {
-    var categoriesAndChoices = [];
+    let i, categoriesAndChoices = [];
 
-    var i;
     for (i = 0; i < 40; i++) categoriesAndChoices[i] = 0;
-    var colour_index = attributePool.color.indexOf(pet.color);
+    let colour_index = attributePool.color.indexOf(pet.color);
     categoriesAndChoices[0 + (colour_index + 1)] = 1;
 
-    var type_index = attributePool.type.indexOf(pet.type);
+    let type_index = attributePool.type.indexOf(pet.type);
     categoriesAndChoices[4 + (type_index + 1)] = 1;
 
-    var name_index = attributePool.name.indexOf(pet.name);
+    let name_index = attributePool.name.indexOf(pet.name);
     categoriesAndChoices[8 + (name_index + 1)] = 1;
 
-    var diet_index = attributePool.diet.indexOf(pet.diet);
+    let diet_index = attributePool.diet.indexOf(pet.diet);
     categoriesAndChoices[12 + (diet_index + 1)] = 1;
 
-    var owner_name_index = attributePool.owner.indexOf(pet.OwnerName);
+    let owner_name_index = attributePool.owner.indexOf(pet.owner);
     categoriesAndChoices[16 + (owner_name_index + 1)] = 1;
 
-    var number_of_legs_index;
+    let number_of_legs_index;
     if (pet.numLegs === "<4") number_of_legs_index = 0;
     else if (pet.numLegs === "4") number_of_legs_index = 1;
     else if (pet.numLegs === ">4") number_of_legs_index = 2;
     categoriesAndChoices[20 + (number_of_legs_index + 1)] = 1;
 
-    var age_index;
+    let age_index;
     if (pet.age === "<10") age_index = 0;
     else if (pet.age === "10") age_index = 1;
     else if (pet.age === ">10") age_index = 2;
     categoriesAndChoices[24 + (age_index + 1)] = 1;
 
-    var number_of_eyes_index;
+    let number_of_eyes_index;
     if (pet.numEyes === "<2") number_of_eyes_index = 0;
     else if (pet.numEyes === "2") number_of_eyes_index = 1;
     else if (pet.numEyes === ">2") number_of_eyes_index = 2;
     categoriesAndChoices[28 + (number_of_eyes_index + 1)] = 1;
 
-    var height_index;
+    let height_index;
     if (pet.height === "<40") height_index = 0;
     else if (pet.height === "40") height_index = 1;
     else if (pet.height === ">40") height_index = 2;
     categoriesAndChoices[32 + (height_index + 1)] = 1;
 
-    var weight_index;
+    let weight_index;
     if (pet.weight === "<1000") weight_index = 0;
     else if (pet.weight === "1000") weight_index = 1;
     else if (pet.weight === ">1000") weight_index = 2;
@@ -176,44 +175,32 @@ function returnObjectChoicePosition(pet) {
 }
 
 //Calculates the distance between the candidate S set and the 'main' S set
-function calculate_sum_distance(n, S, S_temp) {
-    var choice_1;
-    var choice_2;
-    var choice_3;
-    var choice_4;
-    var choice_5;
-    var choice_6;
-    var choice_7;
-    var choice_8;
-    var choice_9;
-    var choice_10;
+function calculate_sum_distance(numTestCases, S_array, candidate_S) {
+    let i, choice_1, choice_2, choice_3, choice_4, choice_5, choice_6, choice_7, choice_8, choice_9, choice_10;
 
-    var i;
     for (i = 0; i < 4; i++)
-        if (S_temp[i] == 1) choice_1 = S[i];
+        if (candidate_S[i] == 1) choice_1 = S_array[i];
     for (i = 4; i < 8; i++)
-        if (S_temp[i] == 1) choice_2 = S[i];
+        if (candidate_S[i] == 1) choice_2 = S_array[i];
     for (i = 8; i < 12; i++)
-        if (S_temp[i] == 1) choice_3 = S[i];
+        if (candidate_S[i] == 1) choice_3 = S_array[i];
     for (i = 12; i < 16; i++)
-        if (S_temp[i] == 1) choice_4 = S[i];
+        if (candidate_S[i] == 1) choice_4 = S_array[i];
     for (i = 16; i < 20; i++)
-        if (S_temp[i] == 1) choice_5 = S[i];
+        if (candidate_S[i] == 1) choice_5 = S_array[i];
     for (i = 20; i < 24; i++)
-        if (S_temp[i] == 1) choice_6 = S[i];
+        if (candidate_S[i] == 1) choice_6 = S_array[i];
     for (i = 24; i < 28; i++)
-        if (S_temp[i] == 1) choice_7 = S[i];
+        if (candidate_S[i] == 1) choice_7 = S_array[i];
     for (i = 28; i < 32; i++)
-        if (S_temp[i] == 1) choice_8 = S[i];
+        if (candidate_S[i] == 1) choice_8 = S_array[i];
     for (i = 32; i < 36; i++)
-        if (S_temp[i] == 1) choice_9 = S[i];
+        if (candidate_S[i] == 1) choice_9 = S_array[i];
     for (i = 36; i < 40; i++)
-        if (S_temp[i] == 1) choice_10 = S[i];
+        if (candidate_S[i] == 1) choice_10 = S_array[i];
 
-    var sum_distance = (n - choice_1) + (n - choice_2) + (n - choice_3) + (n - choice_4) + (n - choice_5) +
-        (n - choice_6) + (n - choice_7) + (n - choice_8) + (n - choice_9) + (n - choice_10);
-
-    return sum_distance;
+    return (numTestCases - choice_1) + (numTestCases - choice_2) + (numTestCases - choice_3) + (numTestCases - choice_4) + (numTestCases - choice_5) +
+        (numTestCases - choice_6) + (numTestCases - choice_7) + (numTestCases - choice_8) + (numTestCases - choice_9) + (numTestCases - choice_10);
 }
 
 function generateErrorRegion() {
@@ -276,31 +263,33 @@ function generateAllPetCombinations() {
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
 
 function ART() {
-    var S = [];
-    var k;
-    for (k = 0; k < 40; k++) S[k] = 0; //init S set
+    let S = [];
+    let k;
+    for (k = 0; k < 40; k++) {
+        S[k] = 0; //init S set
+    }
 
-    var E = []; //past test cases
-    var test_case; //is initialized by either the first test case or the candidate with the largest distance
+    let E = []; //past test cases
+    let test_case; //is initialized by either the first test case or the candidate with the largest distance
+    let breakLoop = false;
+    let n = 0;
 
-    var n = 0;
-
-    var g; //for loop needs to be replaced with while(condition- failed test case)
-    for (g = 0; g < 60000; g++) {
+    //let g; //for loop needs to be replaced with while(condition- failed test case)
+    while (breakLoop === false) {
         n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it. 
 
         if (n === 1) {
             test_case = state.petList[getRandomInt(0, state.petList.length - 1)];
         } else {
-            generateCandiates(); //generate state.candidates
+            generateCandiates(); //generate state.candidate
 
-            var max_sum = -1;
-            var current_sum;
-            var candidate;
-            var candidate_S;
-            var max_candidate_index = -1;
+            let max_sum = -1;
+            let current_sum;
+            let candidate;
+            let candidate_S;
+            let max_candidate_index = -1;
 
-            var j;
+            let j;
             for (j = 0; j < state.candidates.length; j++) { //calculating the candidate with teh max distance between it and the S set
                 candidate = state.candidates[j];
                 candidate_S = returnObjectChoicePosition(candidate);
@@ -312,22 +301,65 @@ function ART() {
                 }
             }
             test_case = state.candidates[max_candidate_index];
+            if (test_case.error === true) {
+                breakLoop = true;
+            }
         }
 
         E[n - 1] = test_case;
 
-        var i; //incrementing S set accordingly
-        var S_test_case = returnObjectChoicePosition(test_case);
-        for (i = 0; i < S.length; i++)
-            if (S_test_case[i] == 1) S[i]++;
+        let i; //incrementing S set accordingly
+        let S_test_case = returnObjectChoicePosition(test_case);
+        for (i = 0; i < S.length; i++) {
+            if (S_test_case[i] == 1) {
+                S[i]++;
+            }
+        }
     }
+    //console.log(`ART n: ${n}`);
+    //logger.write(`n: ${n}`);
+    return n;
 }
 
-logger.write("done");
+function RT() {
+    let rndPet = { error: false };
+    let n = 0;
+
+    while (rndPet.error === false) {
+        rndPet = state.petList[getRandomInt(0, state.petList.length - 1)];
+        n++;
+    }
+
+    //console.log(`RT n: ${n}`);
+    return n;
+}
+
+function RUN() {
+    let ARTwins = 0;
+    let RTwins = 0;
+    let ties = 0;
+    let artTemp;
+    let rtTemp;
+
+    for (let i = 0; i < 1000; i++) {
+        artTemp = ART();
+        rtTemp = RT();
+        if (artTemp > rtTemp) {
+            RTwins++;
+        } else if (artTemp < rtTemp) {
+            ARTwins++;
+        } else {
+            ties++;
+        }
+    }
+
+    console.log(`ARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
+}
 
 generateAllPetCombinations();
 displayPETsGenerated();
-
+generateErrorRegion();
+RUN();
 
 /*
 	This function was just testing how to generate many combinations of given strings.
