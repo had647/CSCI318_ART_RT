@@ -29,13 +29,13 @@ h1 {
 h2 {
   font-size: 2.56rem;
   line-height: 110%;
-  margin: 2.3733333333rem 0 1.424rem 0;
+  margin: 2.4rem 0 1.4rem 0;
 }
 
 h3 {
   font-size: 1.92rem;
   line-height: 110%;
-  margin: 1.9466666667rem 0 1.168rem 0;
+  margin: 2rem 0 1.2rem 0;
 }
 
 h1#site-title {
@@ -99,14 +99,4 @@ div.divider {
 
 .btn:hover {
   background-color: #2bbbad;
-}
-
-.shadow-background {
-  -webkit-box-shadow: 0 8px 17px 2px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 8px 17px 2px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-background:hover {
-  -webkit-box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
 }
