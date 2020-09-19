@@ -16,14 +16,15 @@ let state = {
     candidates: [],
     petList: [],
     errorPct: 0.01,
-	initialized: false
+    initialized: false,
+    numTests: 1000
 };
 
 let logger = {
     write: function (input) {
         document.getElementById("console-output").value += `${input}\n\n`;
     },
-    writeError: function (input) {
+    error: function (input) {
         document.getElementById("console-output").value += `ERROR: ${input}\n\n`;
     },
     clear: function () {
@@ -36,17 +37,19 @@ function displayPETsGenerated() {
         console.warn(`There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
     }
 
-    logger.write(`Amount of PETs Generated: ${state.petList.length}`);
-    for (let i = 0; i < ((state.petList.length > 1000 )?1000:state.petList.length); i++) {
+    logger.write(`Number of PETs generated: ${state.petList.length}`);
+    for (let i = 0; i < ((state.petList.length > 1000) ? 1000 : state.petList.length); i++) {
         logger.write(`PET Index[${i}]:(${state.petList[i].type},${state.petList[i].color},${state.petList[i].name},${state.petList[i].diet},${state.petList[i].owner},${state.petList[i].numLegs},${state.petList[i].age},${state.petList[i].numEyes},${state.petList[i].height},${state.petList[i].weight})`);
     }
 }
 
-//This is just used for testing
+/*This is how the distance is calculated between the two objects*/
+/*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
+/*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
 function getDistance(object_x, object_y) {
     let distance = 10;
-    for(let key in object_x){
-        if(object_x[key] === object_y[key])
+    for (let key in object_x) {
+        if (object_x[key] === object_y[key])
             distance--;
     }
     return distance;
@@ -155,7 +158,7 @@ function calculate_sum_distance(numTestCases, S_array, candidate_S) {
 
 function generateErrorRegion() {
     let numErrItems = Math.floor(state.errorPct * state.petList.length);
-    console.log(`Generating error region ${state.errorPct}x${state.petList.length}=${numErrItems}`);
+    logger.write(`Generating error region: ${state.errorPct} x ${state.petList.length} = ${numErrItems}`);
     let startIdx = getRandomInt(0, state.petList.length - 1);
     state.petList[startIdx].error = true;
 
@@ -173,7 +176,7 @@ function generateErrorRegion() {
 }
 
 function generateAllPetCombinations() {
-    if(!state.initialized){
+    if (!state.initialized) {
         for (let typesIndex = 0; typesIndex < attributePool.type.length; typesIndex++) {
             for (let colorsIndex = 0; colorsIndex < attributePool.color.length; colorsIndex++) {
                 for (let namesIndex = 0; namesIndex < attributePool.name.length; namesIndex++) {
@@ -197,7 +200,6 @@ function generateAllPetCombinations() {
                                                     weight: attributePool.weight[weightIndex],
                                                     error: false
                                                 });
-
                                             }
                                         }
                                     }
@@ -210,12 +212,7 @@ function generateAllPetCombinations() {
         }
         state.initialized = true;
     }
-	
 }
-
-/*This is how the distance is calculated between the two objects*/
-/*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
-/*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
 
 function ART() {
     let S = [];
@@ -285,89 +282,41 @@ function RT() {
 }
 
 function RUN() {
-	if (state.initialized != true) {
-		logger.write("Please initalize the data set first.");
-	} else {
-		let ARTwins = 0;
-		let RTwins = 0;
-		let ties = 0;
-		let artTemp;
-		let rtTemp;
+    if (state.initialized != true) {
+        logger.error(`Please initalize the data set first.`);
+    } else {
+        logger.write(`Running ${state.numTests} tests...`);
+        let ARTwins = 0, RTwins = 0, ties = 0, artTemp, rtTemp;
 
-		for (let i = 0; i < 1000; i++) {
-			artTemp = ART();
-			rtTemp = RT();
-			if (artTemp > rtTemp) {
-				RTwins++;
-			} else if (artTemp < rtTemp) {
-				ARTwins++;
-			} else {
-				ties++;
-			}
-		}
-
-		logger.write(`\nARTwins: ${ARTwins}\nRTwins: ${RTwins}\nties: ${ties}`);
-	}
-
+        for (let i = 0; i < state.numTests; i++) {
+            artTemp = ART();
+            rtTemp = RT();
+            if (artTemp > rtTemp) {
+                RTwins++;
+            } else if (artTemp < rtTemp) {
+                ARTwins++;
+            } else {
+                ties++;
+            }
+        }
+        logger.write(`ARTwins: ${ARTwins}\nRTwins: ${RTwins}\nTies: ${ties}`);
+    }
 }
 
 
 function initialize() {
-	
-	let userErrorPercent = document.getElementById("userErrorPrecent");
-	let userErrorPercentInput = parseInt(userErrorPercent.value);
-	
-	if(userErrorPercentInput < 100 && userErrorPercentInput > 0) {
-		state.errorPct = userErrorPercentInput / 100; //convert to percentage
-		logger.write("Error Region Percent set to " + userErrorPercentInput + "%...");
-		generateAllPetCombinations();
-		logger.write("Generation of all PET combinations complete...");
-		generateErrorRegion();
-		logger.write("Generation of error region complete...");
-		logger.write("Initialization process now complete.");
-		
-	} else {
-		logger.write("Default Error Region Percent set to 1%...");
-		generateAllPetCombinations();
-		logger.write("Generation of all PET combinations complete...");
-		generateErrorRegion();
-		logger.write("Generation of error region complete...");
-		logger.write("Initialization process now complete.");
-	} 
+    let userErrorPercentInput = parseInt(document.getElementById("userErrorPrecent").value);
 
-}
-
-
-/*
-	This function was just testing how to generate many combinations of given strings.
-	Uncomment to see how it works. If no use for it, it can be deleted.
-
-	  size is the amount of letters you want there to be in each PET.
-      letters is the type of characters that we want to use.
-
-      eg.
-      petGenerator(3, "abc");
-
-      This should return an array of size 27 with all possible combinations.
-
-
-function petGenerator(size, letters) {
-    var results = [];
-
-    function recurse(cache) {
-        for (var i = 0; i < letters.length; i++) {
-            cache += letters[i];
-            if (cache.length === size) {
-                results.push(cache);
-            } else {
-                recurse(cache);
-            }
-            cache = cache.slice(0, -1);
-        }
+    if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
+        state.errorPct = userErrorPercentInput / 100; //convert to percentage
+        logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
+    } else {
+        logger.write(`Default Error Region Percent set to 1%...`);
     }
-    recurse(""); // Call recursive function with empty string.
-    return results;
-};
 
-logger.write(petGenerator(3, "abc"));
-*/
+    generateAllPetCombinations();
+    logger.write(`Generation of all PET combinations complete...`);
+    generateErrorRegion();
+    logger.write(`Generation of error region complete...`);
+    logger.write(`Initialization process now complete.`);
+}
