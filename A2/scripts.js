@@ -277,11 +277,11 @@ function ART() {
 }
 
 function RT() {
-    let numberOfErrors = 0;
-    while (!state.petList[getRandomInt(0, state.petList.length - 1)].error) {
-        numberOfErrors++;
+    let numberOfCorrectPets = 0;
+    while (!state.petList[getRandomInt(0, state.petList.length - 1)].error) { // If the pet is having error: false
+        numberOfCorrectPets++;
     }
-    return numberOfErrors;
+    return numberOfCorrectPets;
 }
 
 function RUN() {
