@@ -173,30 +173,32 @@ function generateErrorRegion() {
 }
 
 function generateAllPetCombinations() {
-    for (let typesIndex = 0; typesIndex < attributePool.type.length; typesIndex++) {
-        for (let colorsIndex = 0; colorsIndex < attributePool.color.length; colorsIndex++) {
-            for (let namesIndex = 0; namesIndex < attributePool.name.length; namesIndex++) {
-                for (let dietsIndex = 0; dietsIndex < attributePool.diet.length; dietsIndex++) {
-                    for (let ownersNameIndex = 0; ownersNameIndex < attributePool.owner.length; ownersNameIndex++) {
-                        for (let numOfLegsIndex = 0; numOfLegsIndex < attributePool.numLegs.length; numOfLegsIndex++) {
-                            for (let ageIndex = 0; ageIndex < attributePool.age.length; ageIndex++) {
-                                for (let numOfEyesIndex = 0; numOfEyesIndex < attributePool.numEyes.length; numOfEyesIndex++) {
-                                    for (let heightIndex = 0; heightIndex < attributePool.height.length; heightIndex++) {
-                                        for (let weightIndex = 0; weightIndex < attributePool.weight.length; weightIndex++) {
-                                            state.petList.push({
-                                                type: attributePool.type[typesIndex],
-                                                color: attributePool.color[colorsIndex],
-                                                name: attributePool.name[namesIndex],
-                                                diet: attributePool.diet[dietsIndex],
-                                                owner: attributePool.owner[ownersNameIndex],
-                                                numLegs: attributePool.numLegs[numOfLegsIndex],
-                                                age: attributePool.age[ageIndex],
-                                                numEyes: attributePool.numEyes[numOfEyesIndex],
-                                                height: attributePool.height[heightIndex],
-                                                weight: attributePool.weight[weightIndex],
-                                                error: false
-                                            });
+    if(!state.initialized){
+        for (let typesIndex = 0; typesIndex < attributePool.type.length; typesIndex++) {
+            for (let colorsIndex = 0; colorsIndex < attributePool.color.length; colorsIndex++) {
+                for (let namesIndex = 0; namesIndex < attributePool.name.length; namesIndex++) {
+                    for (let dietsIndex = 0; dietsIndex < attributePool.diet.length; dietsIndex++) {
+                        for (let ownersNameIndex = 0; ownersNameIndex < attributePool.owner.length; ownersNameIndex++) {
+                            for (let numOfLegsIndex = 0; numOfLegsIndex < attributePool.numLegs.length; numOfLegsIndex++) {
+                                for (let ageIndex = 0; ageIndex < attributePool.age.length; ageIndex++) {
+                                    for (let numOfEyesIndex = 0; numOfEyesIndex < attributePool.numEyes.length; numOfEyesIndex++) {
+                                        for (let heightIndex = 0; heightIndex < attributePool.height.length; heightIndex++) {
+                                            for (let weightIndex = 0; weightIndex < attributePool.weight.length; weightIndex++) {
+                                                state.petList.push({
+                                                    type: attributePool.type[typesIndex],
+                                                    color: attributePool.color[colorsIndex],
+                                                    name: attributePool.name[namesIndex],
+                                                    diet: attributePool.diet[dietsIndex],
+                                                    owner: attributePool.owner[ownersNameIndex],
+                                                    numLegs: attributePool.numLegs[numOfLegsIndex],
+                                                    age: attributePool.age[ageIndex],
+                                                    numEyes: attributePool.numEyes[numOfEyesIndex],
+                                                    height: attributePool.height[heightIndex],
+                                                    weight: attributePool.weight[weightIndex],
+                                                    error: false
+                                                });
 
+                                            }
                                         }
                                     }
                                 }
@@ -206,8 +208,9 @@ function generateAllPetCombinations() {
                 }
             }
         }
+        state.initialized = true;
     }
-	state.initialized = true;
+	
 }
 
 /*This is how the distance is calculated between the two objects*/
@@ -274,16 +277,11 @@ function ART() {
 }
 
 function RT() {
-    let rndPet = { error: false };
-    let n = 0;
-
-    while (rndPet.error === false) {
-        rndPet = state.petList[getRandomInt(0, state.petList.length - 1)];
-        n++;
+    let numberOfErrors = 0;
+    while (!state.petList[getRandomInt(0, state.petList.length - 1)].error) {
+        numberOfErrors++;
     }
-
-    //console.log(`RT n: ${n}`);
-    return n;
+    return numberOfErrors;
 }
 
 function RUN() {
@@ -314,7 +312,7 @@ function RUN() {
 }
 
 
-function Initialize() {
+function initialize() {
 	
 	let userErrorPercent = document.getElementById("userErrorPrecent");
 	let userErrorPercentInput = parseInt(userErrorPercent.value);
