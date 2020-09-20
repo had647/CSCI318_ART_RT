@@ -254,20 +254,34 @@ function RUN() {
     }
 }
 
-
 function initialize() {
-    let userErrorPercentInput = parseInt(document.getElementById("userErrorPrecent").value);
-
-    if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
-        state.errorPct = userErrorPercentInput / 100; //convert to percentage
-        logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
+    if(state.initialized){
+        let confirmReinitialize = confirm(`Do you want to reinitialize the dataset?\n\nCurrent data:\n-Error percentage: ${state.errorPct * 100}%\n-Pet list contains: ${state.petList.length} pet(s).`);
+        if(confirmReinitialize){
+            state = {
+                candidates: [],
+                petList: [],
+                errorPct: 0.01,
+                initialized: false,
+                numberOfCategoriesAndChoices: 0,
+                numTests: 1000
+            };
+            initialize();
+        }
     } else {
-        logger.write(`Default Error Region Percent set to 1%...`);
-    }
+        let userErrorPercentInput = parseInt(document.getElementById("userErrorPrecent").value);
+        
+        if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
+            state.errorPct = userErrorPercentInput / 100; //convert to percentage
+            logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
+        } else {
+            logger.write(`Default Error Region Percent set to 1%...`);
+        }
 
-    generateAllPetCombinations();
-    logger.write(`Generation of all PET combinations complete...`);
-    generateErrorRegion();
-    logger.write(`Generation of error region complete...`);
-    logger.write(`Initialization process now complete.`);
+        generateAllPetCombinations();
+        logger.write(`Generation of all PET combinations complete...`);
+        generateErrorRegion();
+        logger.write(`Generation of error region complete...`);
+        logger.write(`Initialization process now complete.`);
+    }
 }
