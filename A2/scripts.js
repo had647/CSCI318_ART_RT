@@ -17,15 +17,18 @@ let state = {
     petList: [],
     errorPct: 0.01,
     initialized: false,
+    numberOfCategoriesAndChoices: 0,
     numTests: 1000
 };
 
 let logger = {
     write: function (input) {
         document.getElementById("console-output").value += `${input}\n\n`;
+        document.getElementById("console-output").scrollTop = document.getElementById("console-output").scrollHeight;
     },
     error: function (input) {
         document.getElementById("console-output").value += `ERROR: ${input}\n\n`;
+        document.getElementById("console-output").scrollTop = document.getElementById("console-output").scrollHeight;
     },
     clear: function () {
         document.getElementById("console-output").value = "";
@@ -45,7 +48,7 @@ function displayPETsGenerated() {
 
 /*This is how the distance is calculated between the two objects*/
 /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
-/*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance btween them woudl be increased by 1*/
+/*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance between them would be increased by 1*/
 function getDistance(object_x, object_y) {
     let distance = 10;
     for (let key in object_x) {
@@ -76,84 +79,29 @@ function generateCandiates() {
 
 //This creates S set for a candidate (see Article 2 for knowledge on S set)
 function returnObjectChoicePosition(pet) {
-    let i, categoriesAndChoices = [];
+    let i, categoriesAndChoices = new Array(state.numberOfCategoriesAndChoices);
 
-    for (i = 0; i < 40; i++) categoriesAndChoices[i] = 0;
-    let colour_index = attributePool.color.indexOf(pet.color);
-    categoriesAndChoices[0 + (colour_index + 1)] = 1;
-
-    let type_index = attributePool.type.indexOf(pet.type);
-    categoriesAndChoices[4 + (type_index + 1)] = 1;
-
-    let name_index = attributePool.name.indexOf(pet.name);
-    categoriesAndChoices[8 + (name_index + 1)] = 1;
-
-    let diet_index = attributePool.diet.indexOf(pet.diet);
-    categoriesAndChoices[12 + (diet_index + 1)] = 1;
-
-    let owner_name_index = attributePool.owner.indexOf(pet.owner);
-    categoriesAndChoices[16 + (owner_name_index + 1)] = 1;
-
-    let number_of_legs_index;
-    if (pet.numLegs === "<4") number_of_legs_index = 0;
-    else if (pet.numLegs === "4") number_of_legs_index = 1;
-    else if (pet.numLegs === ">4") number_of_legs_index = 2;
-    categoriesAndChoices[20 + (number_of_legs_index + 1)] = 1;
-
-    let age_index;
-    if (pet.age === "<10") age_index = 0;
-    else if (pet.age === "10") age_index = 1;
-    else if (pet.age === ">10") age_index = 2;
-    categoriesAndChoices[24 + (age_index + 1)] = 1;
-
-    let number_of_eyes_index;
-    if (pet.numEyes === "<2") number_of_eyes_index = 0;
-    else if (pet.numEyes === "2") number_of_eyes_index = 1;
-    else if (pet.numEyes === ">2") number_of_eyes_index = 2;
-    categoriesAndChoices[28 + (number_of_eyes_index + 1)] = 1;
-
-    let height_index;
-    if (pet.height === "<40") height_index = 0;
-    else if (pet.height === "40") height_index = 1;
-    else if (pet.height === ">40") height_index = 2;
-    categoriesAndChoices[32 + (height_index + 1)] = 1;
-
-    let weight_index;
-    if (pet.weight === "<1000") weight_index = 0;
-    else if (pet.weight === "1000") weight_index = 1;
-    else if (pet.weight === ">1000") weight_index = 2;
-    categoriesAndChoices[36 + (weight_index + 1)] = 1;
-
+    for (i = 0; i < state.numberOfCategoriesAndChoices; i++) categoriesAndChoices[i] = 0;
+    i = 0;
+    for(attribute in pet){
+        if(attribute in attributePool){
+            categoriesAndChoices[i + (attributePool[attribute].indexOf(pet[attribute]) + 1)] = 1;
+            i+= attributePool[attribute].length + 1;
+        }
+    }
     return categoriesAndChoices;
 }
 
 //Calculates the distance between the candidate S set and the 'main' S set
 function calculate_sum_distance(numTestCases, S_array, candidate_S) {
-    let i, choice_1, choice_2, choice_3, choice_4, choice_5, choice_6, choice_7, choice_8, choice_9, choice_10;
-
-    for (i = 0; i < 4; i++)
-        if (candidate_S[i] == 1) choice_1 = S_array[i];
-    for (i = 4; i < 8; i++)
-        if (candidate_S[i] == 1) choice_2 = S_array[i];
-    for (i = 8; i < 12; i++)
-        if (candidate_S[i] == 1) choice_3 = S_array[i];
-    for (i = 12; i < 16; i++)
-        if (candidate_S[i] == 1) choice_4 = S_array[i];
-    for (i = 16; i < 20; i++)
-        if (candidate_S[i] == 1) choice_5 = S_array[i];
-    for (i = 20; i < 24; i++)
-        if (candidate_S[i] == 1) choice_6 = S_array[i];
-    for (i = 24; i < 28; i++)
-        if (candidate_S[i] == 1) choice_7 = S_array[i];
-    for (i = 28; i < 32; i++)
-        if (candidate_S[i] == 1) choice_8 = S_array[i];
-    for (i = 32; i < 36; i++)
-        if (candidate_S[i] == 1) choice_9 = S_array[i];
-    for (i = 36; i < 40; i++)
-        if (candidate_S[i] == 1) choice_10 = S_array[i];
-
-    return (numTestCases - choice_1) + (numTestCases - choice_2) + (numTestCases - choice_3) + (numTestCases - choice_4) + (numTestCases - choice_5) +
-        (numTestCases - choice_6) + (numTestCases - choice_7) + (numTestCases - choice_8) + (numTestCases - choice_9) + (numTestCases - choice_10);
+    let i, sum;
+    sum = 0;
+    for(i = 0; i < state.numberOfCategoriesAndChoices; i++){
+        if(candidate_S[i] == 1){
+            sum += (numTestCases - S_array[i]);
+        }
+    }
+    return sum;
 }
 
 function generateErrorRegion() {
@@ -210,14 +158,17 @@ function generateAllPetCombinations() {
                 }
             }
         }
+        for(attribute in attributePool){
+            state.numberOfCategoriesAndChoices += attributePool[attribute].length + 1;
+        }
         state.initialized = true;
     }
 }
 
 function ART() {
-    let S = [];
+    let S = new Array(state.numberOfCategoriesAndChoices);
     let k;
-    for (k = 0; k < 40; k++) {
+    for (k = 0; k < state.numberOfCategoriesAndChoices; k++) {
         S[k] = 0; //init S set
     }
 
