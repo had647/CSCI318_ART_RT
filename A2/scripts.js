@@ -40,28 +40,29 @@ let logger = {
 };
 
 function createSelectList() {
-    let container = document.createElement("div");
+    let label, select, option, container = document.createElement("div");
+
     for (attribute in attributePool) {
         //console.log(attribute);
-        container.appendChild(createSelect(attribute));
+        label = document.createElement("span");
+        label.innerText = attribute;
+        select = document.createElement("select");
+        select.setAttribute("name", attribute);
+        select.setAttribute("id", attribute);
+
+        for (element in attributePool[attribute]) {
+            option = document.createElement("option");
+            //console.log(attributePool[attribute][element]);
+            option.setAttribute("value", attributePool[attribute][element]);
+            option.innerText = attributePool[attribute][element];
+            select.appendChild(option);
+        }
+        container.appendChild(label);
+        container.appendChild(select);
+        container.appendChild(document.createElement("br"));
     }
     document.getElementById("sidePanel").appendChild(container);
-    return container;
-}
-
-function createSelect(attribute) {
-    let select = document.createElement("select");
-    select.setAttribute("name", attribute);
-    select.setAttribute("id", attribute);
-    let option;
-    for (element in attributePool[attribute]) {
-        option = document.createElement("option");
-        //console.log(attributePool[attribute][element]);
-        option.setAttribute("value", attributePool[attribute][element]);
-        option.innerText = attributePool[attribute][element];
-        select.appendChild(option);
-    }
-    return select;
+    //return container;
 }
 
 function displayPETsGenerated() {

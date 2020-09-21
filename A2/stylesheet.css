@@ -123,15 +123,17 @@ div.divider {
 
 .lowerArea{
   display: flex;
+  margin: 0;
+  padding: 0;
 }
 
 textarea#console-output {
-  width: 500px;
-  height: 500px;
+  width: calc(100% - 200px);
+  height: 700px;
 }
 
 .sidePanel{
-  width: 150px;
+  width: 200px;
   margin: 0;
   padding: 0;
 }
