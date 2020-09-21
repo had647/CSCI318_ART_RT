@@ -8,19 +8,30 @@
 
 <body>
     <div class="container">
-        <h4>Enter an error percent region: <input type="text" id="userErrorPrecent"></input> </h4>
+        <h4>Enter an error percent region: <input type="text" id="userErrorPercent"></input> </h4>
         <h3>
             <a class="btn" onclick="initialize()">Initialize </a>
             <a class="btn" onclick="RUN()">Run </a>
             <a class="btn" onclick="logger.clear()">Clear Console</a>
         </h3>
+        <h5>
+            Create a Pet Object for the error region:
+            <form>
+                <input type="checkbox" id="createPetCheckBox" name="createPetCheckBox" value="Create">
+                <label for="createPetCheckBox"> Create my own Pet </label>
+            </form>
+        </h5>
         <br />
-        <div class="divider"></div>
-        <div class="lowerArea">
-            <div id="sidePanel" class="sidePanel"></div>
+
+    </div>
+    <div class="divider"></div>
+    <div class="container">
+        <div id="error-region-input" class="flex-10">
+
+        </div>
+        <div id="console-output" class="flex-2">
             <textarea id="console-output" readonly="true"></textarea>
         </div>
-
     </div>
 </body>
 

@@ -42,6 +42,13 @@ let logger = {
 function createSelectList() {
     let label, select, option, container = document.createElement("div");
 
+    /*let checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", "createPetCheckBox");
+    checkbox.setAttribute("name", "createPetCheckBox");
+    checkbox.setAttribute("value", "Create");
+    container.appendChild(checkbox);*/
+
     for (attribute in attributePool) {
         //console.log(attribute);
         label = document.createElement("span");
@@ -61,7 +68,7 @@ function createSelectList() {
         container.appendChild(select);
         container.appendChild(document.createElement("br"));
     }
-    document.getElementById("sidePanel").appendChild(container);
+    document.getElementById("error-region-input").appendChild(container);
     //return container;
 }
 
@@ -297,7 +304,7 @@ function initialize() {
             initialize();
         }
     } else {
-        let userErrorPercentInput = parseInt(document.getElementById("userErrorPrecent").value);
+        let userErrorPercentInput = parseInt(document.getElementById("userErrorPercent").value);
 
         if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
             state.errorPct = userErrorPercentInput / 100; //convert to percentage
