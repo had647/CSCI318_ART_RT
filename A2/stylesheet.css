@@ -139,6 +139,8 @@ div.divider {
 }
 
 textarea#console-output {
-  width: calc(100% - 200px);
+  /*needed to override this to see output*/
+  /*width: calc(100% - 200px);*/
+  width: 600px;
   height: 700px;
 }

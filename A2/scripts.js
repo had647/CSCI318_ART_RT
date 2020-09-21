@@ -39,15 +39,9 @@ let logger = {
     }
 };
 
+
 function createSelectList() {
     let label, select, option, container = document.createElement("div");
-
-    /*let checkbox = document.createElement("input");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", "createPetCheckBox");
-    checkbox.setAttribute("name", "createPetCheckBox");
-    checkbox.setAttribute("value", "Create");
-    container.appendChild(checkbox);*/
 
     for (attribute in attributePool) {
         //console.log(attribute);
@@ -69,7 +63,6 @@ function createSelectList() {
         container.appendChild(document.createElement("br"));
     }
     document.getElementById("error-region-input").appendChild(container);
-    //return container;
 }
 
 function displayPETsGenerated() {
@@ -146,9 +139,47 @@ function calculate_sum_distance(numTestCases, S_array, candidate_S) {
 function generateErrorRegion() {
     let numErrItems = Math.floor(state.errorPct * state.petList.length);
     logger.write(`Generating error region: ${state.errorPct} x ${state.petList.length} = ${numErrItems}`);
-    let startIdx = getRandomInt(0, state.petList.length - 1);
-    state.petList[startIdx].error = true;
+    let startIdx;
 
+    if (document.getElementById("createPetCheckBox").checked) {
+        //read checkbox values and search for that pet in array
+        //set startIdx to index of that pet
+
+        let customPet = {
+            type: document.getElementById("type").value,
+            color: document.getElementById("color").value,
+            name: document.getElementById("name").value,
+            diet: document.getElementById("diet").value,
+            owner: document.getElementById("owner").value,
+            numLegs: document.getElementById("numLegs").value,
+            age: document.getElementById("age").value,
+            numEyes: document.getElementById("numEyes").value,
+            height: document.getElementById("height").value,
+            weight: document.getElementById("weight").value
+        };
+        logger.write(`Custom pet:\n${JSON.stringify(customPet)}`);
+        let attMatches;
+        for (element in state.petList) {
+            attMatches = 0;
+            for (attribute in customPet) {
+                if (customPet[attribute] != state.petList[element][attribute]) {
+                    break;
+                }
+                attMatches++;
+            }
+            if (attMatches === 10) {
+                startIdx = element;
+                break;
+            }
+        }
+        logger.write(`Using custom pet @ index ${startIdx}.`);
+        logger.write(`Found pet:\n${JSON.stringify(state.petList[startIdx])}`);
+    } else {
+        startIdx = getRandomInt(0, state.petList.length - 1);
+        logger.write(`Using random pet @ index ${startIdx}.`);
+        logger.write(`Found pet:\n${JSON.stringify(state.petList[startIdx])}`);
+    }
+    state.petList[startIdx].error = true;
     for (let diffThreshold = 0; diffThreshold < 11; diffThreshold++) {
         for (let petIdx = 0; petIdx < state.petList.length; petIdx++) {
             if (getDistance(state.petList[startIdx], state.petList[petIdx]) <= diffThreshold) {
