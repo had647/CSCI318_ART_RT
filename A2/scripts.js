@@ -12,7 +12,7 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-let state = {
+const stateDefault = {
     candidates: [],
     petList: [],
     errorPct: 0.01,
@@ -20,6 +20,10 @@ let state = {
     numberOfCategoriesAndChoices: 0,
     numTests: 1000
 };
+
+//Not sure if this is an ideal way to deep copy from stateDefault.
+//But it prevents us from needing to modify the default state in multiple places.
+let state = JSON.parse(JSON.stringify(stateDefault));
 
 let logger = {
     write: function (input) {
@@ -34,6 +38,31 @@ let logger = {
         document.getElementById("console-output").value = "";
     }
 };
+
+function createSelectList() {
+    let container = document.createElement("div");
+    for (attribute in attributePool) {
+        //console.log(attribute);
+        container.appendChild(createSelect(attribute));
+    }
+    document.getElementById("sidePanel").appendChild(container);
+    return container;
+}
+
+function createSelect(attribute) {
+    let select = document.createElement("select");
+    select.setAttribute("name", attribute);
+    select.setAttribute("id", attribute);
+    let option;
+    for (element in attributePool[attribute]) {
+        option = document.createElement("option");
+        //console.log(attributePool[attribute][element]);
+        option.setAttribute("value", attributePool[attribute][element]);
+        option.innerText = attributePool[attribute][element];
+        select.appendChild(option);
+    }
+    return select;
+}
 
 function displayPETsGenerated() {
     if (state.petList.length === 0) {
@@ -81,12 +110,15 @@ function generateCandiates() {
 function returnObjectChoicePosition(pet) {
     let i, categoriesAndChoices = new Array(state.numberOfCategoriesAndChoices);
 
-    for (i = 0; i < state.numberOfCategoriesAndChoices; i++) categoriesAndChoices[i] = 0;
+    for (i = 0; i < state.numberOfCategoriesAndChoices; i++) {
+        categoriesAndChoices[i] = 0;
+    }
+
     i = 0;
-    for(attribute in pet){
-        if(attribute in attributePool){
+    for (attribute in pet) {
+        if (attribute in attributePool) {
             categoriesAndChoices[i + (attributePool[attribute].indexOf(pet[attribute]) + 1)] = 1;
-            i+= attributePool[attribute].length + 1;
+            i += attributePool[attribute].length + 1;
         }
     }
     return categoriesAndChoices;
@@ -94,10 +126,9 @@ function returnObjectChoicePosition(pet) {
 
 //Calculates the distance between the candidate S set and the 'main' S set
 function calculate_sum_distance(numTestCases, S_array, candidate_S) {
-    let i, sum;
-    sum = 0;
-    for(i = 0; i < state.numberOfCategoriesAndChoices; i++){
-        if(candidate_S[i] == 1){
+    let i, sum = 0;
+    for (i = 0; i < state.numberOfCategoriesAndChoices; i++) {
+        if (candidate_S[i] == 1) {
             sum += (numTestCases - S_array[i]);
         }
     }
@@ -121,6 +152,7 @@ function generateErrorRegion() {
             }
         }
     }
+    logger.write(`Generation of error region complete...`);
 }
 
 function generateAllPetCombinations() {
@@ -158,10 +190,13 @@ function generateAllPetCombinations() {
                 }
             }
         }
-        for(attribute in attributePool){
+        for (attribute in attributePool) {
             state.numberOfCategoriesAndChoices += attributePool[attribute].length + 1;
         }
         state.initialized = true;
+        logger.write(`Finished generating all pet combinations.`);
+    } else {
+        logger.error(`state.petList has already been initialized. Clear the petList and set state.initialized = false before continuing.`);
     }
 }
 
@@ -233,8 +268,8 @@ function RT() {
 }
 
 function RUN() {
-    if (state.initialized != true) {
-        logger.error(`Please initalize the data set first.`);
+    if (!state.initialized) {
+        logger.error(`The app has not been initialized. Please call initalize() first before attempting to run.`);
     } else {
         logger.write(`Running ${state.numTests} tests...`);
         let ARTwins = 0, RTwins = 0, ties = 0, artTemp, rtTemp;
@@ -250,27 +285,19 @@ function RUN() {
                 ties++;
             }
         }
-        logger.write(`ARTwins: ${ARTwins}\nRTwins: ${RTwins}\nTies: ${ties}`);
+        logger.write(`SUMMARY:\nARTwins: ${ARTwins}\nRTwins: ${RTwins}\nTies: ${ties}`);
     }
 }
 
 function initialize() {
-    if(state.initialized){
-        let confirmReinitialize = confirm(`Do you want to reinitialize the dataset?\n\nCurrent data:\n-Error percentage: ${state.errorPct * 100}%\n-Pet list contains: ${state.petList.length} pet(s).`);
-        if(confirmReinitialize){
-            state = {
-                candidates: [],
-                petList: [],
-                errorPct: 0.01,
-                initialized: false,
-                numberOfCategoriesAndChoices: 0,
-                numTests: 1000
-            };
+    if (state.initialized) {
+        if (confirm(`Do you want to reinitialize the dataset?\n\nCurrent data:\n-Error percentage: ${state.errorPct * 100}%\n-Pet list contains: ${state.petList.length} pet(s).`)) {
+            state = JSON.parse(JSON.stringify(stateDefault));
             initialize();
         }
     } else {
         let userErrorPercentInput = parseInt(document.getElementById("userErrorPrecent").value);
-        
+
         if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
             state.errorPct = userErrorPercentInput / 100; //convert to percentage
             logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
@@ -279,9 +306,7 @@ function initialize() {
         }
 
         generateAllPetCombinations();
-        logger.write(`Generation of all PET combinations complete...`);
         generateErrorRegion();
-        logger.write(`Generation of error region complete...`);
         logger.write(`Initialization process now complete.`);
     }
 }

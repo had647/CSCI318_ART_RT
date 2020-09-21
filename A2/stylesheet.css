@@ -121,7 +121,17 @@ div.divider {
   background-color: #2bbbad;
 }
 
+.lowerArea{
+  display: flex;
+}
+
 textarea#console-output {
-  width: 100%;
-  height: 70%;
+  width: 500px;
+  height: 500px;
+}
+
+.sidePanel{
+  width: 150px;
+  margin: 0;
+  padding: 0;
 }
