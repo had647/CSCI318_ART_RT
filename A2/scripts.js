@@ -39,8 +39,6 @@ let logger = {
         document.getElementById("console-output").value = "";
     }
 };
-
-
 function createSelectList() {
     var createPetCheckbox = document.getElementById("create-pet-checkbox").checked
     if(createPetCheckbox){
