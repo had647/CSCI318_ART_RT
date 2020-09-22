@@ -12,7 +12,7 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-const stateDefault = "{\"candidates\":[],\"petList\":[],\"errorPct\":0.01,\"initialized\":false,\"numberOfCategoriesAndChoices\":0,\"numTests\":1000}";
+const stateDefault = `{"candidates":[],"petList":[],"errorPct":0.01,"initialized":false,"numberOfCategoriesAndChoices":0,"numTests":1000}`;
 
 //Not sure if this is an ideal way to deep copy from stateDefault.
 //But it prevents us from needing to modify the default state in multiple places.
@@ -73,10 +73,10 @@ function displayPETsGenerated() {
 /*Need to work out how to compensate for the circumstance that one object might not have the same properties as another*/
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance between them would be increased by 1*/
 function getDistance(object_x, object_y) {
-    let distance = 10;
+    let distance = 0;
     for (let key in object_x) {
         if (object_x[key] === object_y[key])
-            distance--;
+            distance++;
     }
     return distance;
 }
