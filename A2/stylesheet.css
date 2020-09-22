@@ -211,6 +211,29 @@ div.input-field div h1, div.input-field div h2, div.input-field div h3, div.inpu
   display: inline-block;
 }
 
+div#error-region-selectboxes div label{
+  display: block;
+  margin: 0.5rem;
+}
+
+div#error-region-selectboxes div label select {
+  display: inline-block;
+  font-size: 14px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjIgMTIiIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiPjx0aXRsZT5kb3duPC90aXRsZT48ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz48ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDIyLjAwMDAwMCwgLTEwNy4wMDAwMDApIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGZpbGw9IiMwMDAwMDAiPjxwb2x5Z29uIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQzMy4yNTAwMDAsIDEwOC4yNTAwMDApIHJvdGF0ZSg0NS4wMDAwMDApIHRyYW5zbGF0ZSgtNDMzLjI1MDAwMCwgLTEwOC4yNTAwMDApICIgcG9pbnRzPSI0MjUuOTI4OTMyIDExNC41NzEwNjggNDI1LjkyODkzMiAxMTUuNTcxMDY4IDQ0MC41NzEwNjggMTE1LjU3MTA2OCA0NDAuNTcxMDY4IDEwMC45Mjg5MzIgNDM5LjU3MTA2OCAxMDAuOTI4OTMyIDQzOS41NzEwNjggMTE0LjU3MTA2OCI+PC9wb2x5Z29uPjwvZz48L2c+PC9zdmc+");
+  background-repeat: no-repeat, repeat;
+  background-position: right .5em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+  box-shadow: 0 0 12px 0.5px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+  text-align: left;
+  transition: background-color 0.2s ease-in, border 0.2s ease-in;
+}
+
+div#error-region-selectboxes div label select:hover {
+  border: 1px solid #26a69a;
+  background-color: rgba(38, 166, 154, 0.3);
+}
 
 div.divider {
   height: 1px;

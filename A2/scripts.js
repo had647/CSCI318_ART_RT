@@ -47,27 +47,27 @@ function createSelectList() {
         let label, select, option, container = document.createElement("div");
 
         for (attribute in attributePool) {
-            //console.log(attribute);
+            selectBox = document.createElement("label");
+            selectBox.setAttribute("for", attribute);
             label = document.createElement("span");
-            label.innerText = attribute;
+            label.innerText = attribute + ": ";
             select = document.createElement("select");
             select.setAttribute("name", attribute);
             select.setAttribute("id", attribute);
 
             for (element in attributePool[attribute]) {
                 option = document.createElement("option");
-                //console.log(attributePool[attribute][element]);
                 option.setAttribute("value", attributePool[attribute][element]);
                 option.innerText = attributePool[attribute][element];
                 select.appendChild(option);
             }
-            container.appendChild(label);
-            container.appendChild(select);
-            container.appendChild(document.createElement("br"));
+            selectBox.appendChild(label);
+            selectBox.appendChild(select);
+            container.appendChild(selectBox);
         }
-        document.getElementById("error-region-checkboxes").appendChild(container);
+        document.getElementById("error-region-selectboxes").appendChild(container);
     } else {
-        document.getElementById("error-region-checkboxes").innerHTML = "";
+        document.getElementById("error-region-selectboxes").innerHTML = "";
     }
 }
 
