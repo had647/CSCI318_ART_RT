@@ -12,7 +12,15 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-const stateDefault = `{"candidates":[],"petList":[],"errorPct":0.01,"initialized":false,"numberOfCategoriesAndChoices":0,"numTests":1000}`;
+const stateDefault = `{
+    "candidates":[],
+    "petList":[],
+    "errorPct":0.01,
+    "initialized":false,
+    "numberOfCategoriesAndChoices":0,
+    "numTests":1000,
+    "numCandidates":50
+}`;
 
 //Not sure if this is an ideal way to deep copy from stateDefault.
 //But it prevents us from needing to modify the default state in multiple places.
@@ -95,7 +103,7 @@ function generateCandiates() {
         console.error(`Cannot generate candidates. There is currently no data in the state.petList array. Run generateAllPetCombinations() first to fix this.`);
         return null;
     }
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < state.numCandidates; i++) {
         state.candidates[i] = state.petList[getRandomInt(0, state.petList.length - 1)];
     }
 }
@@ -180,11 +188,11 @@ function generateErrorRegion() {
                 numErrItems--;
             }
             if (numErrItems === 0) {
+                logger.write(`Generation of error region complete...`);
                 return;
             }
         }
     }
-    logger.write(`Generation of error region complete...`);
 }
 
 function generateAllPetCombinations() {
