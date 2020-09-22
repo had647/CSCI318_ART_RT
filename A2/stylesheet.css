@@ -95,10 +95,10 @@ input[type=checkbox]:checked {
 }
 input[type=checkbox]:checked:after {
   content: '\2713';
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   top: 0px;
-  left: 2px;
+  left: 4px;
   color: #ffffff;
 }
 

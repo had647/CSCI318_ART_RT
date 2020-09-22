@@ -42,28 +42,33 @@ let logger = {
 
 
 function createSelectList() {
-    let label, select, option, container = document.createElement("div");
+    var createPetCheckbox = document.getElementById("create-pet-checkbox").checked
+    if(createPetCheckbox){
+        let label, select, option, container = document.createElement("div");
 
-    for (attribute in attributePool) {
-        //console.log(attribute);
-        label = document.createElement("span");
-        label.innerText = attribute;
-        select = document.createElement("select");
-        select.setAttribute("name", attribute);
-        select.setAttribute("id", attribute);
+        for (attribute in attributePool) {
+            //console.log(attribute);
+            label = document.createElement("span");
+            label.innerText = attribute;
+            select = document.createElement("select");
+            select.setAttribute("name", attribute);
+            select.setAttribute("id", attribute);
 
-        for (element in attributePool[attribute]) {
-            option = document.createElement("option");
-            //console.log(attributePool[attribute][element]);
-            option.setAttribute("value", attributePool[attribute][element]);
-            option.innerText = attributePool[attribute][element];
-            select.appendChild(option);
+            for (element in attributePool[attribute]) {
+                option = document.createElement("option");
+                //console.log(attributePool[attribute][element]);
+                option.setAttribute("value", attributePool[attribute][element]);
+                option.innerText = attributePool[attribute][element];
+                select.appendChild(option);
+            }
+            container.appendChild(label);
+            container.appendChild(select);
+            container.appendChild(document.createElement("br"));
         }
-        container.appendChild(label);
-        container.appendChild(select);
-        container.appendChild(document.createElement("br"));
+        document.getElementById("error-region-checkboxes").appendChild(container);
+    } else {
+        document.getElementById("error-region-checkboxes").innerHTML = "";
     }
-    document.getElementById("error-region-input").appendChild(container);
 }
 
 function displayPETsGenerated() {
