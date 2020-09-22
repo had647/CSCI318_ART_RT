@@ -195,7 +195,7 @@ div.container .flex-12{
   flex-basis:auto;
 }
 
-div.input-field {
+div.input-field, div#error-region-input {
   margin: 0.5rem 2rem 0.5rem 2rem !important;
   padding: 0.5rem !important;
   width: 100%;
@@ -233,6 +233,10 @@ div#error-region-selectboxes div label select {
 div#error-region-selectboxes div label select:hover {
   border: 1px solid #26a69a;
   background-color: rgba(38, 166, 154, 0.3);
+}
+
+div#error-region-input {
+ width: 0;
 }
 
 div.divider {
