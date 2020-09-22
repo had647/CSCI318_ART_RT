@@ -74,8 +74,8 @@ function displayPETsGenerated() {
 /*e.g. If Pet_0 has a property 'Name', but Pet_1 does not. Then the distance between them would be increased by 1*/
 function getDistance(object_x, object_y) {
     let distance = 0;
-    for (let key in object_x) {
-        if (object_x[key] === object_y[key])
+    for (key in attributePool) {
+        if (object_x[key] != object_y[key])
             distance++;
     }
     return distance;
