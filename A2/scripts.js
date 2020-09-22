@@ -348,10 +348,12 @@ function initialize() {
             logger.write(`---------------------------------------------------------------------------`);
             logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
             logger.write(`Number of tests set to ${userNumberOfTestsInput}...`);
+			logger.write(`---------------------------------------------------------------------------`);
         } else {
             logger.write(`---------------------------------------------------------------------------`);
             logger.write(`Default Error Region Percent set to 1%...`);
             logger.write(`Default Number of tests set to 1000...`);
+			logger.write(`---------------------------------------------------------------------------`);
             document.getElementById("userErrorPercent").value = state.errorPct * 100;
             document.getElementById("userNumberOfTests").value = state.numTests
         }
@@ -360,5 +362,7 @@ function initialize() {
         generateAllPetCombinations();
         generateErrorRegion();
         logger.write(`Initialization process now complete.`);
+		logger.write(`---------------------------------------------------------------------------`);
+
     }
 }
