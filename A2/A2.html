@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>CSCI318 - ART and RT with non-numerical inputs</title>
+    <title>CSCI318 - Assessment 2 - ART and RT with Non-Numerical Inputs</title>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <script type="text/javascript" src="scripts.js"></script>
 </head>
@@ -11,11 +11,12 @@
         <div class="input-field">
             <h5>CSCI318 - Assessment 2 - ART and RT with Non-Numerical Inputs</h5>
             <div id="error-percent-input">
-                <h6>Enter an error percent region: <input type="number" id="userErrorPercent" min="1" max="100"></input>% (1% - 100%)</h6>
+                <h6>Enter an error percent region: <input type="number" id="userErrorPercent"></input>% (&gt;0% &
+                    &lt;100%)</h6>
                 <h6>Enter number of tests: <input type="number" id="userNumberOfTests" min="1"></input></h6>
                 <h3>
-                    <a class="btn" onclick="initialize()">Initialize </a>
-                    <a class="btn" onclick="RUN()">Run </a>
+                    <a class="btn" onclick="initialize()">Initialize</a>
+                    <a class="btn" onclick="RUN()">RUN</a>
                     <a class="btn" onclick="logger.clear()">Clear Console</a>
                 </h3>
             </div>
@@ -23,19 +24,17 @@
     </div>
     <div class="divider"></div>
     <div class="container">
-        <div id="error-region-input" class="flex-4" >
+        <div id="error-region-input" class="flex-4">
             <div id="create-pet-input">
                 <h6>Create a Pet Object for the error region:</h6>
                 <label for="create-pet-checkbox">
                     <input type="checkbox" id="create-pet-checkbox" value="Create" onclick="createSelectList();">
                     <span>Create my own Pet</span>
                 </label>
-                <div id="error-region-selectboxes">
-                  
-                </div>
+                <div id="error-region-selectboxes"></div>
             </div>
         </div>
-        <div id="console-output-container" class="flex-8" >
+        <div id="console-output-container" class="flex-8">
             <textarea id="console-output" readonly="true"></textarea>
         </div>
     </div>

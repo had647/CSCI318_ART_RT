@@ -39,9 +39,10 @@ let logger = {
         document.getElementById("console-output").value = "";
     }
 };
+
 function createSelectList() {
-    var createPetCheckbox = document.getElementById("create-pet-checkbox").checked
-    if(createPetCheckbox){
+    let createPetCheckbox = document.getElementById("create-pet-checkbox").checked;
+    if (createPetCheckbox) {
         let label, select, option, container = document.createElement("div");
 
         for (attribute in attributePool) {
@@ -297,8 +298,6 @@ function ART() {
             }
         }
     }
-    //console.log(`ART n: ${n}`);
-    //logger.write(`n: ${n}`);
     return n;
 }
 
@@ -339,30 +338,31 @@ function initialize() {
             initialize();
         }
     } else {
-        let userErrorPercentInput = parseInt(document.getElementById("userErrorPercent").value);
-        let userNumberOfTestsInput = parseInt(document.getElementById("userNumberOfTests").value);
+        let userErrorPercentInput = parseFloat(document.getElementById("userErrorPercent").value);
+        let userNumberOfTests = parseInt(document.getElementById("userNumberOfTests").value);
 
         if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
             state.errorPct = userErrorPercentInput / 100; //convert to percentage
-            state.numTests = userNumberOfTestsInput;
             logger.write(`---------------------------------------------------------------------------`);
-            logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
-            logger.write(`Number of tests set to ${userNumberOfTestsInput}...`);
-			logger.write(`---------------------------------------------------------------------------`);
+            logger.write(`Error region percent set to ${state.errorPct * 100}%...`);
         } else {
-            logger.write(`---------------------------------------------------------------------------`);
-            logger.write(`Default Error Region Percent set to 1%...`);
-            logger.write(`Default Number of tests set to 1000...`);
-			logger.write(`---------------------------------------------------------------------------`);
             document.getElementById("userErrorPercent").value = state.errorPct * 100;
-            document.getElementById("userNumberOfTests").value = state.numTests
+            logger.write(`---------------------------------------------------------------------------`);
+            logger.write(`Default error region percent set to ${state.errorPct * 100}%...`);
         }
 
-
+        if (userNumberOfTests > 0) {
+            state.numTests = userNumberOfTests;
+            logger.write(`Number of tests set to ${state.numTests}...`);
+            logger.write(`---------------------------------------------------------------------------`);
+        } else {
+            document.getElementById("userNumberOfTests").value = state.numTests;
+            logger.write(`Default number of tests set to ${state.numTests}...`);
+            logger.write(`---------------------------------------------------------------------------`);
+        }
         generateAllPetCombinations();
         generateErrorRegion();
         logger.write(`Initialization process now complete.`);
-		logger.write(`---------------------------------------------------------------------------`);
-
+        logger.write(`---------------------------------------------------------------------------`);
     }
 }
