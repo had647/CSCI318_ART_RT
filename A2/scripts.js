@@ -246,7 +246,7 @@ function ART() {
 
     //let g; //for loop needs to be replaced with while(condition- failed test case)
     while (breakLoop === false) {
-        n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it. 
+        n++; //dont ask me why n is incremented here rather than at the end of the loop... the paper told me to do it.
 
         if (n === 1) {
             test_case = state.petList[getRandomInt(0, state.petList.length - 1)];
@@ -329,14 +329,20 @@ function initialize() {
         }
     } else {
         let userErrorPercentInput = parseInt(document.getElementById("userErrorPercent").value);
+        let userNumberOfTestsInput = parseInt(document.getElementById("userNumberOfTests").value);
 
         if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
             state.errorPct = userErrorPercentInput / 100; //convert to percentage
+            state.numTests = userNumberOfTestsInput;
             logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
+            logger.write(`Number of tests set to ${userNumberOfTestsInput}...`);
         } else {
             logger.write(`Default Error Region Percent set to 1%...`);
+            logger.write(`Default Number of tests set to 1000...`);
             document.getElementById("userErrorPercent").value = state.errorPct * 100;
+            document.getElementById("userNumberOfTests").value = state.numTests
         }
+
 
         generateAllPetCombinations();
         generateErrorRegion();
