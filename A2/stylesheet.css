@@ -1,12 +1,10 @@
 html {
   line-height: 1.15;
-  -ms-text-size-adjust: 100%; /*Equivalent to 2*/
-  -webkit-text-size-adjust: 100%; /*Equivalent to 2*/
 }
 
 body {
   margin: 0;
-  min-width: 720px; 
+  min-width: 950px;
   font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -132,69 +130,6 @@ div.container div {
   padding: 16px;
 }
 
-div.container .flex-1{
-  -ms-flex-grow: 1;
-  flex-grow: 1;
-  flex-basis:auto;
-}
-
-div.container .flex-2{
-  -ms-flex-grow: 2;
-  flex-grow: 2;
-  flex-basis:auto;
-}
-
-div.container .flex-3{
-  -ms-flex-grow: 3;
-  flex-grow: 3;
-  flex-basis:auto;
-}
-div.container .flex-4{
-  -ms-flex-grow: 4;
-  flex-grow: 4;
-  flex-basis:auto;
-}
-div.container .flex-5{
-  -ms-flex-grow: 5;
-  flex-grow: 5;
-  flex-basis:auto;
-}
-div.container .flex-6{
-  -ms-flex-grow: 6;
-  flex-grow: 6;
-  flex-basis:auto;
-}
-div.container .flex-7{
-  -ms-flex-grow: 7;
-  flex-grow: 7;
-  flex-basis:auto;
-}
-div.container .flex-8{
-  -ms-flex-grow: 8;
-  flex-grow: 8;
-  flex-basis:auto;
-}
-div.container .flex-9{
-  -ms-flex-grow: 9;
-  flex-grow: 9;
-  flex-basis:auto;
-}
-div.container .flex-10 {
-  -ms-flex-grow: 10;
-  flex-grow: 10;
-  flex-basis:auto;
-}
-div.container .flex-11{
-  -ms-flex-grow: 11;
-  flex-grow: 11;
-  flex-basis:auto;
-}
-div.container .flex-12{
-  -ms-flex-grow: 12;
-  flex-grow: 12;
-  flex-basis:auto;
-}
-
 div.input-field, div#error-region-input {
   margin: 0.5rem 2rem 0.5rem 2rem !important;
   padding: 0.5rem !important;
@@ -236,7 +171,24 @@ div#error-region-selectboxes div label select:hover {
 }
 
 div#error-region-input {
- width: 0;
+  width: 300px;
+}
+
+div#console-output-container {
+  width: calc(100% - 450px);
+}
+
+div#error-region-selectboxes {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+div#create-pet-input {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 div.divider {
