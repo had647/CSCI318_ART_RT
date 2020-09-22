@@ -12,18 +12,11 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-const stateDefault = {
-    candidates: [],
-    petList: [],
-    errorPct: 0.01,
-    initialized: false,
-    numberOfCategoriesAndChoices: 0,
-    numTests: 1000
-};
+const stateDefault = "{\"candidates\":[],\"petList\":[],\"errorPct\":0.01,\"initialized\":false,\"numberOfCategoriesAndChoices\":0,\"numTests\":1000}";
 
 //Not sure if this is an ideal way to deep copy from stateDefault.
 //But it prevents us from needing to modify the default state in multiple places.
-let state = JSON.parse(JSON.stringify(stateDefault));
+let state = JSON.parse(stateDefault);
 
 let logger = {
     write: function (input) {
@@ -141,7 +134,7 @@ function generateErrorRegion() {
     logger.write(`Generating error region: ${state.errorPct} x ${state.petList.length} = ${numErrItems}`);
     let startIdx;
 
-    if (document.getElementById("createPetCheckBox").checked) {
+    if (document.getElementById("create-pet-checkbox").checked) {
         //read checkbox values and search for that pet in array
         //set startIdx to index of that pet
 
@@ -331,7 +324,7 @@ function RUN() {
 function initialize() {
     if (state.initialized) {
         if (confirm(`Do you want to reinitialize the dataset?\n\nCurrent data:\n-Error percentage: ${state.errorPct * 100}%\n-Pet list contains: ${state.petList.length} pet(s).`)) {
-            state = JSON.parse(JSON.stringify(stateDefault));
+            state = JSON.parse(stateDefault);
             initialize();
         }
     } else {
@@ -342,6 +335,7 @@ function initialize() {
             logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
         } else {
             logger.write(`Default Error Region Percent set to 1%...`);
+            document.getElementById("userErrorPercent").value = state.errorPct * 100;
         }
 
         generateAllPetCombinations();

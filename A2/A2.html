@@ -8,30 +8,32 @@
 
 <body>
     <div class="container">
-        <h4>Enter an error percent region: <input type="text" id="userErrorPercent"></input> </h4>
-        <h3>
-            <a class="btn" onclick="initialize()">Initialize </a>
-            <a class="btn" onclick="RUN()">Run </a>
-            <a class="btn" onclick="logger.clear()">Clear Console</a>
-        </h3>
-        <h5>
-            Create a Pet Object for the error region:
-            <form>
-                <input type="checkbox" id="createPetCheckBox" name="createPetCheckBox" value="Create">
-                <label for="createPetCheckBox"> Create my own Pet </label>
-            </form>
-        </h5>
-        <br />
-
+        <div class="input-field">
+            <h5>CSCI318 - Assessment 2 - ART and RT with OOP</h5>
+            <div id="error-percent-input">
+                <h6>Enter an error percent region: <input type="number" id="userErrorPercent" min="1" max="100"></input>% (1% - 100%)</h6>
+                <h3>
+                    <a class="btn" onclick="initialize()">Initialize </a>
+                    <a class="btn" onclick="RUN()">Run </a>
+                    <a class="btn" onclick="logger.clear()">Clear Console</a>
+                </h3>
+            </div>
+        </div>
     </div>
     <div class="divider"></div>
     <div class="container">
-        <div id="error-region-input" class="flex-10">
-
+        <div id="error-region-input" class="flex-4" >
+            <div id="create-pet-input">
+                <h6>Create a Pet Object for the error region:</h6>
+                <label for="create-pet-checkbox">
+                    <input type="checkbox" id="create-pet-checkbox" value="Create">
+                    <span>Create my own Pet</span>
+                </label>
+            </div>
         </div>
-        <!--<div id="console-output" class="flex-2">-->
-        <textarea id="console-output" readonly="true"></textarea>
-        <!--</div>-->
+        <div id="console-output-container" class="flex-8" >
+            <textarea id="console-output" readonly="true"></textarea>
+        </div>
     </div>
 </body>
 

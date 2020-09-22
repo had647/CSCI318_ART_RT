@@ -6,16 +6,11 @@ html {
 
 body {
   margin: 0;
+  min-width: 720px; 
   font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-div {
-  border-radius: 5px;
-  margin: 0.5rem 0 1rem 0;
-  padding: 24px;
-}
-
-h1, h2, h3, h4{
+h1, h2, h3, h4, h5, h6{
   font-weight: 400;
   line-height: 1.3;
 }
@@ -38,6 +33,24 @@ h3 {
   margin: 2rem 0 1.2rem 0;
 }
 
+h4 {
+  font-size: 2.28rem;
+  line-height: 110%;
+  margin: 1.5rem 0 1rem 0;
+}
+
+h5 {
+  font-size: 1.64rem;
+  line-height: 110%;
+  margin: 1.1rem 0 .65rem 0;
+}
+
+h6 {
+  font-size: 1.15rem;
+  line-height: 110%;
+  margin: .7rem 0 .5rem 0;
+}
+
 textarea {
   margin: 8px 0 16px 0;
 }
@@ -57,6 +70,47 @@ input:focus {
 input:hover {
   border-bottom: 2px solid #2bbbad;
 }
+input[type=checkbox] {
+  appearance: none;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  border: 1px solid black;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease-in, content 0.2s ease-in, border 0.2s ease-in;
+}
+
+input[type=checkbox]:hover {
+  border: 1px solid #26a69a;
+}
+
+input[type=checkbox]:checked:hover {
+  border: 1px solid black;
+}
+
+input[type=checkbox]:checked {
+  background-color: #26a69a;
+  border: 1px solid #eeeeee;
+  color: #99a1a7;
+}
+input[type=checkbox]:checked:after {
+  content: '\2713';
+  font-size: 14px;
+  position: absolute;
+  top: 0px;
+  left: 2px;
+  color: #ffffff;
+}
+
+input[type=checkbox] + span {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  height: 25px;
+  line-height: 25px;
+  font-size: 1rem;
+}
 
 h1#site-title {
 	color: #0288d1;
@@ -64,19 +118,99 @@ h1#site-title {
 }
 
 div.container {
-	margin: 24px 16px 24px 16px;
+  border-radius: 5px;
+  margin: 0.5rem 0 1rem 0;
+  padding: 0;
+  width: 100%;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+div.container div {
+  margin: 0.5rem 0 1rem 0;
+  padding: 16px;
+}
+
+div.container .flex-1{
+  -ms-flex-grow: 1;
+  flex-grow: 1;
+  flex-basis:auto;
 }
 
 div.container .flex-2{
-  -ms-flex: 2;
-  flex: 2;
+  -ms-flex-grow: 2;
+  flex-grow: 2;
+  flex-basis:auto;
 }
 
-div.container .flex-10 {
-  -ms-flex: 10;
-  flex: 10;
+div.container .flex-3{
+  -ms-flex-grow: 3;
+  flex-grow: 3;
+  flex-basis:auto;
 }
+div.container .flex-4{
+  -ms-flex-grow: 4;
+  flex-grow: 4;
+  flex-basis:auto;
+}
+div.container .flex-5{
+  -ms-flex-grow: 5;
+  flex-grow: 5;
+  flex-basis:auto;
+}
+div.container .flex-6{
+  -ms-flex-grow: 6;
+  flex-grow: 6;
+  flex-basis:auto;
+}
+div.container .flex-7{
+  -ms-flex-grow: 7;
+  flex-grow: 7;
+  flex-basis:auto;
+}
+div.container .flex-8{
+  -ms-flex-grow: 8;
+  flex-grow: 8;
+  flex-basis:auto;
+}
+div.container .flex-9{
+  -ms-flex-grow: 9;
+  flex-grow: 9;
+  flex-basis:auto;
+}
+div.container .flex-10 {
+  -ms-flex-grow: 10;
+  flex-grow: 10;
+  flex-basis:auto;
+}
+div.container .flex-11{
+  -ms-flex-grow: 11;
+  flex-grow: 11;
+  flex-basis:auto;
+}
+div.container .flex-12{
+  -ms-flex-grow: 12;
+  flex-grow: 12;
+  flex-basis:auto;
+}
+
+div.input-field {
+  margin: 0.5rem 2rem 0.5rem 2rem !important;
+  padding: 0.5rem !important;
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: 0 0 12px 1px rgba(0, 0, 0, 0.4);
+}
+
+div.input-field div{
+  padding: 0 0.5rem 0 0.5rem !important;
+}
+
+div.input-field div h1, div.input-field div h2, div.input-field div h3, div.input-field div h4, div.input-field div h5 {
+  display: inline-block;
+}
+
 
 div.divider {
   height: 1px;
@@ -132,15 +266,9 @@ div.divider {
   background-color: #2bbbad;
 }
 
-.lowerArea{
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
 textarea#console-output {
-  /*needed to override this to see output*/
-  /*width: calc(100% - 200px);*/
-  width: 600px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
+  min-height: 440px;
+  resize: vertical;
 }
