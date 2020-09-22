@@ -12,7 +12,7 @@ const attributePool = {
     weight: ["<1000", "1000", ">1000"]  // in grams?
 };
 
-const stateDefault = "{\"candidates\":[],\"petList\":[],\"errorPct\":0.01,\"initialized\":false,\"numberOfCategoriesAndChoices\":0,\"numTests\":1000}";
+const stateDefault = "{\"candidates\":[],\"petList\":[],\"errorPct\":0.01,\"initialized\":false,\"numberOfCategoriesAndChoices\":0,\"numTests\":10000}";
 
 //Not sure if this is an ideal way to deep copy from stateDefault.
 //But it prevents us from needing to modify the default state in multiple places.
