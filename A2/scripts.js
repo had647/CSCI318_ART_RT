@@ -334,9 +334,11 @@ function initialize() {
         if (userErrorPercentInput < 100 && userErrorPercentInput > 0) {
             state.errorPct = userErrorPercentInput / 100; //convert to percentage
             state.numTests = userNumberOfTestsInput;
+            logger.write(`---------------------------------------------------------------------------`);
             logger.write(`Error Region Percent set to ${userErrorPercentInput}%...`);
             logger.write(`Number of tests set to ${userNumberOfTestsInput}...`);
         } else {
+            logger.write(`---------------------------------------------------------------------------`);
             logger.write(`Default Error Region Percent set to 1%...`);
             logger.write(`Default Number of tests set to 1000...`);
             document.getElementById("userErrorPercent").value = state.errorPct * 100;
