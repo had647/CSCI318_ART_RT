@@ -12,7 +12,7 @@
 
 
 
-
+import java.io.*;
 import java.util.ArrayList;
 
 class ART{ 
@@ -55,26 +55,22 @@ class ART{
         return sum;
     }
 
-    static String getOracleOutput(){
-        //return output of Oracle
-        return "";
+
+    static Process feedInput(String grepVersion, String test_case, String file_path) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepVersion + " " + test_case + " " + file_path);
+        return process;
     }
+
     
-    static String getTestOutput(){
-        //return output of Test program
-        return "";
+    static String returnOutputString(Process process) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = "";
+        String output = "";
+        while ((line = reader.readLine()) != null) output += line;
+
+        reader.close();
+        return output;
     }
-
-
-
-
-
-    static boolean check_outputs_match(String oracle_output, String test_program_output){
-        if(oracle_output == test_program_output) return true;
-        return false;
-    }
-
-
 
 
 
@@ -121,7 +117,7 @@ class ART{
                     }
                 }
                 test_case = candidates[max_candidate_index];
-                if(!check_outputs_match(getOracleOutput(), getTestOutput())) break_loop = true;
+               // if(!check_outputs_match(getOracleOutput(), getTestOutput())) break_loop = true;       need to change this condition (Isaac)
             }
             E.add(test_case);
             generate_S_Array(S_test_case, test_case);
@@ -139,11 +135,18 @@ class ART{
 
 
 
-
+    //IMORTANT Do not try and run ART() right now. It has not been finished
 
     public static void main(String args[]){ 
+        String file_path = "your/file/path.txt";
+        String grepv1 = "grepv1";
+        String test_case = "a test case";
 
-     
+        try{
+            Process p1 = feedInput(grepv1, test_case, file_path);    //still testing here (Isaac)
+            String output_v1 = returnOutputString(p1);
+        }
+        catch(IOException e){ System.out.println(e); }
     
 
     } 
