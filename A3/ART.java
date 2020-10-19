@@ -4,8 +4,8 @@
 //Implement makeTestcaseObjecdt(Sring) (medium)
 //Implement getTestCase() (easy)
 //Implement generate_S_Candidate(int[], GREPInput); (easy)
-//Work out how to call ./grep within program (easy)
-//Work out how to read ./grep output within program (easy-medium) -- implement getTestOutput(), getOracleOutput
+
+
 
 
 
@@ -15,11 +15,29 @@
 import java.io.*;
 import java.util.ArrayList;
 
+
+
+
+
+
+
+
+
 class ART{ 
     static int num_cat_choice = 57; //this value may change if we remove more categories due to the Perl issue
     static int num_of_candidates = 10;
 
+    static String grepv1 = "grepv1";    //this should be user specified
+    static String grepv2 = "grepv2";    //so should this
+    static String file_path = "/Users/isaac/Desktop/ART/test_file.txt";        //so should this. You will need to edit this for testing depending where you test file or folders are
+
     static GREPInput[] candidates = new GREPInput[num_of_candidates];
+
+
+
+
+
+
 
     static void generateCandiates(){
         for(GREPInput i: candidates)i = makeTestcaseObject(getTestCase());
@@ -56,13 +74,18 @@ class ART{
     }
 
 
-    static Process feedInput(String grepVersion, String test_case, String file_path) throws IOException{
-        Process process = Runtime.getRuntime().exec("./" + grepVersion + " " + test_case + " " + file_path);
-        return process;
-    }
 
-    
-    static String returnOutputString(Process process) throws IOException {
+
+
+
+
+
+
+
+
+    static String feedInputGrepv1(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepv1 + " " + test_case + " " + file_path);
+        
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
         String output = "";
@@ -71,6 +94,23 @@ class ART{
         reader.close();
         return output;
     }
+
+     static String feedInputGrepv2(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepv2 + " " + test_case + " " + file_path);
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = "";
+        String output = "";
+        while ((line = reader.readLine()) != null) output += line;
+
+        reader.close();
+        return output;
+    }
+
+
+
+    
+ 
 
 
 
@@ -117,7 +157,13 @@ class ART{
                     }
                 }
                 test_case = candidates[max_candidate_index];
-               // if(!check_outputs_match(getOracleOutput(), getTestOutput())) break_loop = true;       need to change this condition (Isaac)
+
+                //will need to return test case as a string here some how
+                String test_case_string = "";
+                try{
+                    if(!feedInputGrepv1(test_case_string).equals(feedInputGrepv2(test_case_string))) break_loop = true;   
+                }
+                catch(IOException e){ System.out.println(e); }
             }
             E.add(test_case);
             generate_S_Array(S_test_case, test_case);
@@ -138,15 +184,24 @@ class ART{
     //IMORTANT Do not try and run ART() right now. It has not been finished
 
     public static void main(String args[]){ 
-        String file_path = "your/file/path.txt";
-        String grepv1 = "grepv1";
-        String test_case = "a test case";
+
+        //testing (Isaac)
+        
+        String test_case = "crinkled";
 
         try{
-            Process p1 = feedInput(grepv1, test_case, file_path);    //still testing here (Isaac)
-            String output_v1 = returnOutputString(p1);
-        }
-        catch(IOException e){ System.out.println(e); }
+        
+            String output_v1 = feedInputGrepv1(test_case);
+            String output_v2 = feedInputGrepv2(test_case);
+            System.out.println(output_v1);
+            System.out.println(output_v2);
+
+            if(output_v1.equals(output_v2)){
+                System.out.println("They are equal");
+            }
+
+        }catch(IOException e){ System.out.println(e); }
+        
     
 
     } 
@@ -162,7 +217,10 @@ class ART{
 
 
 
-//this will need to be rep
+
+
+
+//might not need to store in a class?
 class GREPInput{
     
     enum NamedSymbol {
