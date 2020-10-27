@@ -5,69 +5,68 @@
 //Implement getTestCase() (easy)
 //Implement generate_S_Candidate(int[], GREPInput); (easy)
 
-
-
-
-
-//test
-
-
 import java.io.*;
 import java.util.ArrayList;
-
-
-
-
-
-
-
-
+import java.util.Properties;
+import java.lang.Integer;
 
 class ART{ 
-    static int num_cat_choice = 57; //this value may change if we remove more categories due to the Perl issue
-    static int num_of_candidates = 10;
+    private int categoriesChoices;
+    private int candidatesCount;
+    private String grepV1;
+    private String grepV2;
+    private String filePath;
+    private GREPInput[] candidates;
 
-    static String grepv1 = "grepv1";    //this should be user specified
-    static String grepv2 = "grepv2";    //so should this
-    static String file_path = "/Users/isaac/Desktop/ART/test_file.txt";        //so should this. You will need to edit this for testing depending where you test file or folders are
-
-    static GREPInput[] candidates = new GREPInput[num_of_candidates];
-
-
-
-
-
-
-
-    static void generateCandiates(){
-        for(GREPInput i: candidates)i = makeTestcaseObject(getTestCase());
+    public ART(){
+        try {
+            Properties artProperties = new Properties();
+            FileInputStream propertiesFile = new FileInputStream("runtime.properties");
+            artProperties.load(propertiesFile);
+            categoriesChoices = Integer.parseInt(artProperties.getProperty("categoriesChoices", "57")); //this value may change if we remove more categories due to the Perl issue
+            candidatesCount = Integer.parseInt(artProperties.getProperty("candidatesCount", "10"));
+            grepV1 = artProperties.getProperty("grepV1", "grepV1");    //this should be user specified
+            grepV2 = artProperties.getProperty("grepV2", "grepV2");    //so should this
+            filePath = artProperties.getProperty("filePath", "test_file.txt");        //so should this. You will need to edit this for testing depending where you test file or folders are
+            candidates = new GREPInput[candidatesCount];
+            propertiesFile.close();
+        } catch(Exception e) {
+            System.out.println("ERROR: Failed to initialize the program");
+            System.out.println("Details: " + e.getMessage());
+            System.err.println("Stacktrace:");
+            e.printStackTrace();
+        }
     }
 
-    static GREPInput makeTestcaseObject(String input){                          
-        GREPInput input_as_object = new GREPInput();
+    private void generateCandiates(){
+        for(GREPInput i: candidates)
+            i = makeTestCase(getTestCase());
+    }
+
+    private GREPInput makeTestCase(String input){
         /*turns a testcase from a string to an object    
           e.g. if the test case string was "A" then the object would be-- GREPInput input; input.normalCar = 0;... 
           ..and the rest of the memebers for 'input' object would be their default values*/
-        return input_as_object;
+        return new GREPInput();
     }
 
-    static void generate_pool(){
+    private void generatePool(){
         //do stuff
     }
 
-    static String getTestCase(){
+    private String getTestCase(){
         String test_case = "";
         //test_case = get a test case from the pool as a string
         return test_case;
     }
 
-    static void generate_S_Array(int[] S_candidate, GREPInput candidate){
+    private void generate_S_Array(int[] S_candidate, GREPInput candidate){
         //populate the S_candidate array with 0's and 1's according to the candidates values
     }
     
-    static int calculate_sum_distance(int n, int[] S, int[] S_candidate){
+    private int calculate_sum_distance(int n, int[] S, int[] S_candidate){
         int sum = 0;
-        for(int i = 0; i < num_cat_choice; i++){
+        for(int i = 0; i < categoriesChoices; i++){
             if(S_candidate[i] == 1) sum += (n - S[i]);
         }
         return sum;
@@ -75,16 +74,8 @@ class ART{
 
 
 
-
-
-
-
-
-
-
-
-    static String feedInputGrepv1(String test_case) throws IOException{
-        Process process = Runtime.getRuntime().exec("./" + grepv1 + " " + test_case + " " + file_path);
+    private String feedInputGrepv1(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepV1 + " " + test_case + " " + filePath);
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
@@ -95,8 +86,8 @@ class ART{
         return output;
     }
 
-     static String feedInputGrepv2(String test_case) throws IOException{
-        Process process = Runtime.getRuntime().exec("./" + grepv2 + " " + test_case + " " + file_path);
+    private String feedInputGrepv2(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepV2 + " " + test_case + " " + filePath);
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
@@ -109,25 +100,16 @@ class ART{
 
 
 
-    
- 
 
-
-
-
-
-
-
-
-    static int ART(){
-        int[] S = new int[num_cat_choice]; 
+    private int runART(){
+        int[] S = new int[categoriesChoices]; 
         for(int i : S) i = 0;
 
         ArrayList<GREPInput> E = new ArrayList<GREPInput>();
 
         GREPInput test_case;
         
-        int[] S_test_case = new int[num_cat_choice];
+        int[] S_test_case = new int[categoriesChoices];
 
         boolean break_loop = false;
 
@@ -135,18 +117,18 @@ class ART{
 
         while(!break_loop){
             n++;
-            if(n == 1) test_case = makeTestcaseObject(getTestCase());
+            if(n == 1) test_case = makeTestCase(getTestCase());
             else{
                 generateCandiates();
 
                 int max_sum = -1;               /*initialize outside loop? */
                 int current_sum = -1;
                 GREPInput candidate;
-                int[] S_candidate = new int[num_cat_choice];
+                int[] S_candidate = new int[categoriesChoices];
                 int max_candidate_index = -1;
                 
 
-                for(int i = 0; i < num_of_candidates; i++){
+                for(int i = 0; i < candidatesCount; i++){
                     candidate = candidates[i];
                     generate_S_Array(S_candidate, candidate);
                     current_sum = calculate_sum_distance(n - 1, S, S_candidate);
@@ -167,7 +149,7 @@ class ART{
             }
             E.add(test_case);
             generate_S_Array(S_test_case, test_case);
-            for(int i = 0; i < num_cat_choice; i++){
+            for(int i = 0; i < categoriesChoices; i++){
                 if(S_test_case[i] == 1) S[i]++;
             }
         }
@@ -178,21 +160,17 @@ class ART{
 
 
 
-
-
-
     //IMORTANT Do not try and run ART() right now. It has not been finished
 
     public static void main(String args[]){ 
 
-        //testing (Isaac)
-        
+        ART artInstance = new ART();
         String test_case = "crinkled";
 
         try{
         
-            String output_v1 = feedInputGrepv1(test_case);
-            String output_v2 = feedInputGrepv2(test_case);
+            String output_v1 = artInstance.feedInputGrepv1(test_case);
+            String output_v2 = artInstance.feedInputGrepv2(test_case);
             System.out.println(output_v1);
             System.out.println(output_v2);
 
@@ -209,89 +187,3 @@ class ART{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//might not need to store in a class?
-class GREPInput{
-    
-    enum NamedSymbol {
-        novalue,
-        ALPHA,
-        UPPER,
-        LOWER,
-        DIGIT,
-        XDIGIT,
-        SPACE,
-        PUNCT,
-        ALNUM,
-        PRINT,
-        GRAPH,
-        CNTRL,
-        BLANK
-    }
-
-    enum Range{
-        novalue,
-        NumRange,
-        UpcaseRange,
-        LowcaseRange
-    }
-
-    enum Iteration{
-        novalue,
-        Qmark,
-        Star,
-        Plus,
-        Repminmax
-    }
-
-    enum Line{
-        novalue,
-        BegLine,
-        EndLine,
-        BegEndLine
-    }
-
-    enum Word{
-        novalue,
-        BegWord,
-        EndWord,
-        BegEndWord
-    }
-
-    enum Edge{
-        novalue,
-        YesEdgeBeg,
-        YesEdgeEnd,
-        YesEdgeBegEnd,
-        NoEdgeBeg,
-        NoEdgeEnd,
-        NoEdgeBegEnd
-    }
-
-
-
-    public int normalChar = 0;  //-1 is uninit, 0 is first choice, 1 is second choice
-    public int wordSymbol = -1;  
-    //public boolean DigitSymbol;   //use this if we can get Perl compatable grep
-    public int spaceSymbol = -1;
-    public NamedSymbol namedSymbol = NamedSymbol.novalue;
-    public boolean AnyChar = false; //false is uninit
-    public Range range = Range.novalue;
-    public int bracket = -1;
-    public Iteration iteration = Iteration.novalue;
-    public int parentheses = -1;
-    public Line line = Line.novalue;
-    public Word word = Word.novalue;
-    public Edge edge = Edge.novalue;
-    public int combine = -1;
-}
