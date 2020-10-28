@@ -23,19 +23,14 @@ class ART {
 			Properties artProperties = new Properties();
 			FileInputStream propertiesFile = new FileInputStream("runtime.properties");
 			artProperties.load(propertiesFile);
-			categoriesChoices = Integer.parseInt(artProperties.getProperty("categoriesChoices", "57")); // this value
-																										// may change if
-																										// we remove
-																										// more
-																										// categories
-																										// due to the
-																										// Perl issue
+			// this value may change if we remove more categories due to the Perl issue
+			categoriesChoices = Integer.parseInt(artProperties.getProperty("categoriesChoices", "57"));
 			candidatesCount = Integer.parseInt(artProperties.getProperty("candidatesCount", "10"));
 			grepV1 = artProperties.getProperty("grepV1", "grepV1"); // this should be user specified
 			grepV2 = artProperties.getProperty("grepV2", "grepV2"); // so should this
-			filePath = artProperties.getProperty("filePath", "test_file.txt"); // so should this. You will need to edit
-																				// this for testing depending where you
-																				// test file or folders are
+			// so should this. You will need to edit this for testing depending where you
+			// test file or folders are
+			filePath = artProperties.getProperty("filePath", "test_file.txt");
 			candidates = new GREPInput[candidatesCount];
 			propertiesFile.close();
 		} catch (Exception e) {
