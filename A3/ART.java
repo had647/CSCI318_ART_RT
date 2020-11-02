@@ -55,9 +55,152 @@ class ART {
 		return new GREPInput();
 	}
 
-	private void generatePool() {
-		// do stuff
-	}
+	private static ArrayList generatePool() {
+		 //category -> choices -> expression
+		 String[] normalChar = {"normalAlNum","normalPunct"}; // literal chars    i
+		 String[] wordSymbol = {"yesWord","noWord"}; // \w \W        i
+		 String[] digitSymbol = {"yesDigit","noDigit"}; // \d \D     i
+		 String[] spaceSymbol = {"yesSpace","noSpace"}; // \s \S     i
+		 String[] namedSymbol = {"alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
+		 String[] anyChar = {"dot"}; // "."      i
+		 String[] range = {"numRange","upcaseRange","lowcaseRange"}; // [0-9] [A-Z] [a-z]    i
+		 String[] bracket = {"normalBracket","caretBracket"}; // [] [^]      d
+		 String[] iteration = {"qmark","star","plus","repMinMax"}; // "?" "*" "+" {1,2}      d
+		 String[] parentheses = {"normParen","backref"}; // () what is backref?      d
+		 String[] line = {"begLine","endLine","begEndLine"}; // presence of patterns at beg,end and beg end line     d
+		 String[] word = {"begWord","endWord","begEndWord"}; // presence of patterns at beg,end and beg end word     d
+		 String[] edge = {"yesEdgeBeg","yesEdgeEnd","yesEdgeBegEnd","noEdgeBeg","noEdgeEnd","noEdgeBegEnd"}; //      d
+		 String[] combine = {"concatenation","alternative"}; //      d
+ 
+		 //categories
+		 String[][] categories = {normalChar, wordSymbol, digitSymbol, spaceSymbol, namedSymbol, anyChar, range, bracket, iteration, parentheses, line, word, edge, combine};
+		 String[][] independentCat = {normalChar, wordSymbol, digitSymbol, spaceSymbol, namedSymbol, anyChar, range};
+		 String[][] dependentCat = {bracket, iteration, parentheses, line, word, edge, combine};
+ 
+		//  System.out.println("Independent categories: ");
+		//  for (String[] category : independentCat) {
+		// 	 for (String choice : category) {
+		// 		 System.out.print(choice + " / ");
+		// 	 }
+		// 	 System.out.println();
+		//  }
+ 
+		//  System.out.println("\nDependent categories: ");
+		//  for (String[] category : dependentCat) {
+		// 	 for (String choice : category) {
+		// 		 System.out.print(choice + " / ");
+		// 	 }
+		// 	 System.out.println();
+		//  }
+ 
+		 //System.out.println("========================================================================");
+ 
+		 ArrayList<String> grepInputPool = new ArrayList<>();
+		 for (String[] category : independentCat) {
+			 for (String choice : category) {
+				//  System.out.println(choice + ": ");
+ 
+				 switch (choice) {
+ 
+					 case "normalAlNum":
+						 char[] alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+						 for (char c : alphaNum) {
+							 grepInputPool.add(String.valueOf(c));
+						 }
+						 break;
+ 
+					 case "normalPunct":
+						 char[] punct = ",`~;:'&%$#@!".toCharArray();
+						 for (char p : punct) {
+							 grepInputPool.add(String.valueOf(p));
+						 }
+						 break;
+ 
+					 case "yesWord":
+						 grepInputPool.add("\\w");
+						 break;
+ 
+					 case "noWord":
+						 grepInputPool.add("\\W");
+						 break;
+ 
+					 case "yesDigit":
+						 grepInputPool.add("\\d");
+						 break;
+ 
+					 case "noDigit":
+						 grepInputPool.add("\\D");
+						 break;
+ 
+					 case "yesSpace":
+						 grepInputPool.add("\\s");
+						 break;
+ 
+					 case "noSpace":
+						 grepInputPool.add("\\S");
+						 break;
+ 
+					 case "alpha":
+						 grepInputPool.add("[[:alpha:]]");
+						 break;
+ 
+					 case "upper":
+						 grepInputPool.add("[[:upper:]]");
+						 break;
+ 
+					 case "lower":
+						 grepInputPool.add("[[:lower:]]");
+						 break;
+ 
+					 case "digit":
+						 grepInputPool.add("[[:digit:]]");
+						 break;
+ 
+					 case "xdigit":
+						 grepInputPool.add("[[:xdigit:]]");
+						 break;
+ 
+					 case "space":
+						 grepInputPool.add("[[:space:]]");
+						 break;
+ 
+					 case "punct":
+						 grepInputPool.add("[[:punct:]]");
+						 break;
+ 
+					 case "alnum":
+						 grepInputPool.add("[[:alnum:]]");
+						 break;
+ 
+					 case "print":
+						 grepInputPool.add("[[:print:]]");
+						 break;
+ 
+					 case "graph":
+						 grepInputPool.add("[[:graph:]]");
+						 break;
+ 
+					 case "cntrl":
+						 grepInputPool.add("[[:cntrl:]]");
+						 break;
+ 
+					 case "blank":
+						 grepInputPool.add("[[:blank:]]");
+						 break;
+				 }
+ 
+				//  System.out.println("done!");
+ 
+			 }
+			//  System.out.println();
+		 }
+		//  for (String i : grepInputPool) {
+		// 	 System.out.print(i);
+		//  }
+
+		 return grepInputPool;
+	 }
+ 
 
 	private String getTestCase() {
 		String test_case = "";
@@ -147,27 +290,34 @@ class ART {
 		// these will eventually be provided as input arguments
 		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
 		String grepVersionToTest = "grep_oracle";
+		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/grep-3.5/*"; // Put path to your testing file or directory. the * just means all files within directory.
 
-		// outputs version info to test if its working
-		String[] commands = { "wsl", localGrepFolderDir + grepVersionToTest, "-V" };
-		Process proc = Runtime.getRuntime().exec(commands);
+		ArrayList<String> grepPool = generatePool();
 
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		for(String item : grepPool)
+		{
+					// outputs version info to test if its working
+			String[] commands = { "wsl", localGrepFolderDir + grepVersionToTest, item, fileToTest};
+			Process proc = Runtime.getRuntime().exec(commands);
 
-		BufferedReader stdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+			BufferedReader stdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-		// Read the output from the command
-		System.out.println("*****Standard Output*****\n");
-		String s = null;
-		while ((s = stdIn.readLine()) != null) {
-			System.out.println(s);
+			BufferedReader stdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+			// Read the output from the command
+			System.out.println("*****Standard Output*****\n");
+			String s = null;
+			while ((s = stdIn.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			// Read any errors from the attempted command
+			System.out.println("*****Standard Error*****\n");
+			while ((s = stdErr.readLine()) != null) {
+				System.out.println(s);
+			}
 		}
 
-		// Read any errors from the attempted command
-		System.out.println("*****Standard Error*****\n");
-		while ((s = stdErr.readLine()) != null) {
-			System.out.println(s);
-		}
 	}
 
 	// we can deal with error handling later
