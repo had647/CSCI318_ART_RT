@@ -216,8 +216,9 @@ class ART {
 		}
 
 		// Grep doesn't recognise the input for their Combination of Categories "Combine; Iteration; Parentheses; NormalChar; Range" with their test case being (A[0-9])+    ?????
+
 		// Combine the lists
-		//grepInputPool.addAll(dependantPool);
+		grepInputPool.addAll(dependentPool);
 
 		
 		return grepInputPool;
@@ -307,49 +308,93 @@ class ART {
 	// IMORTANT Do not try and run ART() right now. It has not been finished
 	// Main is runnable now for demo :)
 
-	private static void generateGrepCommand() throws IOException {
+	private static void generateGrepCommand(ArrayList<String> grepPool) throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
 		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
-		String grepVersionToTest = "grep_oracle";
+		String grepOracle = "grep_oracle";
+		String grepBad = "grep_bad";
 		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
 
-		ArrayList<String> grepPool = generatePool();
+		int oracleErrorCounter = 0;
+		int oracleSuccessCounter = 0;
+		int oldErrorCounter = 0;
+		int oldSuccessCounter = 0;
 
 		for(String item : grepPool)
 		{
-					// outputs version info to test if its working
-			String[] commands = { "wsl", localGrepFolderDir + grepVersionToTest, item, fileToTest};
-			Process proc = Runtime.getRuntime().exec(commands);
+			// For the Grep Oracle
+			String[] oracleCommands = { "wsl", localGrepFolderDir + grepOracle, item, fileToTest};
+			Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
 
-			BufferedReader stdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			BufferedReader oracleStdIn = new BufferedReader(new InputStreamReader(oracleProc.getInputStream()));
 
-			BufferedReader stdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+			BufferedReader oracleStdErr = new BufferedReader(new InputStreamReader(oracleProc.getErrorStream()));
 
 			// Read the output from the command
-			System.out.println("*****Standard Output*****\n");
-			String s = null;
-			while ((s = stdIn.readLine()) != null) {
-				System.out.println(s);
+			//System.out.println("*****Standard Output*****\n");
+			String oracleS = null;
+			while ((oracleS = oracleStdIn.readLine()) != null) {
+				//System.out.println(s);
+				oracleSuccessCounter++;
 			}
 
 			// Read any errors from the attempted command
-			System.out.println("*****Standard Error*****\n");
-			while ((s = stdErr.readLine()) != null) {
-				System.out.println(s);
+			//System.out.println("*****Standard Error*****\n");
+			while ((oracleS = oracleStdErr.readLine()) != null) {
+				//System.out.println(s);
+				oracleErrorCounter++;
 			}
+
+			// For the old Grep 
+			String[] oldCommands = { "wsl", localGrepFolderDir + grepBad, item, fileToTest};
+			Process proc = Runtime.getRuntime().exec(oldCommands);
+
+			BufferedReader oldStdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+			BufferedReader oldStdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+			// Read the output from the command
+			//System.out.println("*****Standard Output*****\n");
+			String oldS = null;
+			while ((oldS = oldStdIn.readLine()) != null) {
+				//System.out.println(s);
+				oldSuccessCounter++;
+			}
+
+			// Read any errors from the attempted command
+			//System.out.println("*****Standard Error*****\n");
+			while ((oldS = oldStdErr.readLine()) != null) {
+				//System.out.println(s);
+				oldErrorCounter++;
+
+			}
+
 		}
-
+		
+		System.out.println("ORACLE RESULTS:");
 		System.out.println("Total # Tests: " + grepPool.size());
+		System.out.println("Total # Errors: " + oracleErrorCounter);
+		System.out.println("Total # Success: " + oracleSuccessCounter);
 
+		System.out.println("OLD RESULTS:");
+		System.out.println("Total # Tests: " + grepPool.size());
+		System.out.println("Total # Errors: " + oldErrorCounter);
+		System.out.println("Total # Success: " + oldSuccessCounter);
 	}
+
 
 	// we can deal with error handling later
 	// for now main throws the exceptions and dies if something is wrong
 	public static void main(String args[]) throws IOException {
 
-		// demo run for wsl
-		generateGrepCommand();
+		// Creating the pool of commands
+		ArrayList<String> grepPool = generatePool();
+
+		// Using windows WSL
+		System.out.println("ORACLE");
+		generateGrepCommand(grepPool);
+
 
 		// keeping this for later use
 		/*
