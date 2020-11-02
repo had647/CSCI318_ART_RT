@@ -7,6 +7,7 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.lang.Integer;
 
@@ -59,7 +60,6 @@ class ART {
 		 //category -> choices -> expression
 		 String[] normalChar = {"normalAlNum","normalPunct"}; // literal chars    i
 		 String[] wordSymbol = {"yesWord","noWord"}; // \w \W        i
-		 String[] digitSymbol = {"yesDigit","noDigit"}; // \d \D     i
 		 String[] spaceSymbol = {"yesSpace","noSpace"}; // \s \S     i
 		 String[] namedSymbol = {"alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
 		 String[] anyChar = {"dot"}; // "."      i
@@ -73,27 +73,10 @@ class ART {
 		 String[] combine = {"concatenation","alternative"}; //      d
  
 		 //categories
-		 String[][] categories = {normalChar, wordSymbol, digitSymbol, spaceSymbol, namedSymbol, anyChar, range, bracket, iteration, parentheses, line, word, edge, combine};
-		 String[][] independentCat = {normalChar, wordSymbol, digitSymbol, spaceSymbol, namedSymbol, anyChar, range};
+		 String[][] categories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range, bracket, iteration, parentheses, line, word, edge, combine};
+		 String[][] independentCat = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range};
 		 String[][] dependentCat = {bracket, iteration, parentheses, line, word, edge, combine};
  
-		//  System.out.println("Independent categories: ");
-		//  for (String[] category : independentCat) {
-		// 	 for (String choice : category) {
-		// 		 System.out.print(choice + " / ");
-		// 	 }
-		// 	 System.out.println();
-		//  }
- 
-		//  System.out.println("\nDependent categories: ");
-		//  for (String[] category : dependentCat) {
-		// 	 for (String choice : category) {
-		// 		 System.out.print(choice + " / ");
-		// 	 }
-		// 	 System.out.println();
-		//  }
- 
-		 //System.out.println("========================================================================");
  
 		 ArrayList<String> grepInputPool = new ArrayList<>();
 		 for (String[] category : independentCat) {
@@ -122,14 +105,6 @@ class ART {
  
 					 case "noWord":
 						 grepInputPool.add("\\W");
-						 break;
- 
-					 case "yesDigit":
-						 grepInputPool.add("\\d");
-						 break;
- 
-					 case "noDigit":
-						 grepInputPool.add("\\D");
 						 break;
  
 					 case "yesSpace":
@@ -188,18 +163,65 @@ class ART {
 						 grepInputPool.add("[[:blank:]]");
 						 break;
 				 }
- 
-				//  System.out.println("done!");
- 
-			 }
-			//  System.out.println();
-		 }
-		//  for (String i : grepInputPool) {
-		// 	 System.out.print(i);
-		//  }
 
-		 return grepInputPool;
-	 }
+			 }
+		 }
+
+		 ArrayList<String> dependentPool = new ArrayList<>();
+		 for (String[] category : categories) {
+			 for (String choice : category) {
+
+				switch (choice) {
+ 
+					 case "normalBracket":
+						 char[] alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+						 for (char c : alphaNum) {
+							dependentPool.add("["+ c +"]");
+						 }
+						 break;
+					// Range will expand on each iteration. [A-B]*, [A-C]* ... etc
+					 case "star":
+						 char[] upcaseRange = "BCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+						 for (char endRange : upcaseRange) {
+							dependentPool.add("["+"A"+"-"+endRange+"]*");
+						 }
+						 break;
+ 
+					//  case "normParen":
+					//  	 dependantPool.add("(A)"+"\\d+)"); // Leaving this one out for now as it used YesDigit and that is only supported by Perl.
+					// 	 break;
+ 
+					 case "begLine":
+					 	dependentPool.add("^\\w"); 
+						 break;
+ 
+					//  case "endWord":
+					//  	dependantPool.add("\\d\>"); // This relies on DigitSymbol too
+					// 	 break;
+ 
+					 case "yesEdgeBegEnd":
+					 	dependentPool.add("\\b" + "[1-9]" + "\\b");
+						 break;
+ 
+					 case "concatenation":
+						 char[] concatRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+						 for (char letter: concatRange) {
+							dependentPool.add("(" + letter + "[0-9])+");
+						 }
+					 	 break;
+ 
+				}
+
+			}
+		}
+
+		// Grep doesn't recognise the input for their Combination of Categories "Combine; Iteration; Parentheses; NormalChar; Range" with their test case being (A[0-9])+    ?????
+		// Combine the lists
+		//grepInputPool.addAll(dependantPool);
+
+		
+		return grepInputPool;
+	}
  
 
 	private String getTestCase() {
@@ -290,7 +312,7 @@ class ART {
 		// these will eventually be provided as input arguments
 		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
 		String grepVersionToTest = "grep_oracle";
-		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/grep-3.5/*"; // Put path to your testing file or directory. the * just means all files within directory.
+		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
 
 		ArrayList<String> grepPool = generatePool();
 
