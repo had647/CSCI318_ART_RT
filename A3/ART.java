@@ -340,6 +340,8 @@ class ART {
 			}
 		}
 
+		System.out.println("Total # Tests: " + grepPool.size());
+
 	}
 
 	// we can deal with error handling later
