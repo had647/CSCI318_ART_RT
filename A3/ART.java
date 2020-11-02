@@ -55,7 +55,7 @@ class ART {
 		return new GREPInput();
 	}
 
-	private static ArrayList generatePool() {
+	private static ArrayList<String> generatePool() {
 		 //category -> choices -> expression
 		 String[] normalChar = {"normalAlNum","normalPunct"}; // literal chars    i
 		 String[] wordSymbol = {"yesWord","noWord"}; // \w \W        i
@@ -288,9 +288,9 @@ class ART {
 	private static void generateGrepCommand() throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
-		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
+		String localGrepFolderDir = "/mnt/c/Users/Ben/Desktop/grep/";
 		String grepVersionToTest = "grep_oracle";
-		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/grep-3.5/*"; // Put path to your testing file or directory. the * just means all files within directory.
+		String fileToTest = "/mnt/c/Users/Ben/Desktop/CSCI318_ART_RT/CSCI318_ART_RT/A3/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
 
 		ArrayList<String> grepPool = generatePool();
 
@@ -317,7 +317,7 @@ class ART {
 				System.out.println(s);
 			}
 		}
-
+		System.out.println("Total # Tests: "+grepPool.size());
 	}
 
 	// we can deal with error handling later
