@@ -145,7 +145,7 @@ class ART {
 	private static void generateGrepCommand() throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
-		String localGrepFolderDir = "/mnt/c/Users/Ben/Desktop/grep/";
+		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
 		String grepVersionToTest = "grep_oracle";
 
 		// outputs version info to test if its working
