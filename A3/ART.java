@@ -56,7 +56,7 @@ class ART {
 		return new GREPInput();
 	}
 
-	private static ArrayList generatePool() {
+	private static ArrayList<String> generatePool() {
 		 //category -> choices -> expression
 		 String[] normalChar = {"normalAlNum","normalPunct"}; // literal chars    i
 		 String[] wordSymbol = {"yesWord","noWord"}; // \w \W        i
@@ -311,10 +311,10 @@ class ART {
 	private static void generateGrepCommand(ArrayList<String> grepPool) throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
-		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
+		String localGrepFolderDir = "/mnt/c/Users/Ben/Desktop/grep/";
 		String grepOracle = "grep_oracle";
 		String grepBad = "grep_bad";
-		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
+		String fileToTest = "/mnt/c/Users/Ben/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
 
 		int oracleErrorCounter = 0;
 		int oracleSuccessCounter = 0;
@@ -324,7 +324,7 @@ class ART {
 		for(String item : grepPool)
 		{
 			// For the Grep Oracle
-			String[] oracleCommands = { "wsl", localGrepFolderDir + grepOracle, item, fileToTest};
+			String[] oracleCommands = { "wsl", "\""+localGrepFolderDir + grepOracle+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
 			Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
 
 			BufferedReader oracleStdIn = new BufferedReader(new InputStreamReader(oracleProc.getInputStream()));
@@ -334,20 +334,30 @@ class ART {
 			// Read the output from the command
 			//System.out.println("*****Standard Output*****\n");
 			String oracleS = null;
+			String oracleStdOutput="";
 			while ((oracleS = oracleStdIn.readLine()) != null) {
+				oracleStdOutput=oracleStdOutput+oracleS;
 				//System.out.println(s);
+				
+			}
+			if(oracleStdOutput.length()>0) {
 				oracleSuccessCounter++;
 			}
 
 			// Read any errors from the attempted command
 			//System.out.println("*****Standard Error*****\n");
+			String oracleErrOutput="";
 			while ((oracleS = oracleStdErr.readLine()) != null) {
-				//System.out.println(s);
+				oracleErrOutput=oracleErrOutput+oracleS;
+				System.out.println(oracleErrOutput);
+				
+			}
+			if(oracleErrOutput.length()>0) {
 				oracleErrorCounter++;
 			}
 
 			// For the old Grep 
-			String[] oldCommands = { "wsl", localGrepFolderDir + grepBad, item, fileToTest};
+			String[] oldCommands = { "wsl", "\""+localGrepFolderDir + grepBad+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
 			Process proc = Runtime.getRuntime().exec(oldCommands);
 
 			BufferedReader oldStdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -357,28 +367,38 @@ class ART {
 			// Read the output from the command
 			//System.out.println("*****Standard Output*****\n");
 			String oldS = null;
+			String oldStdOutput="";
 			while ((oldS = oldStdIn.readLine()) != null) {
+				oldStdOutput=oldStdOutput+oldS;
 				//System.out.println(s);
+				
+			}
+			if(oldStdOutput.length()>0) {
 				oldSuccessCounter++;
 			}
 
 			// Read any errors from the attempted command
 			//System.out.println("*****Standard Error*****\n");
+			String oldErrOutput="";
 			while ((oldS = oldStdErr.readLine()) != null) {
-				//System.out.println(s);
-				oldErrorCounter++;
+				oldErrOutput=oldErrOutput+oldS;
+				System.out.println(oldErrOutput);
+				
 
+			}
+			if(oldErrOutput.length()>0) {
+				oldErrorCounter++;
 			}
 
 		}
 		
 		System.out.println("ORACLE RESULTS:");
-		System.out.println("Total # Tests: " + grepPool.size());
+		System.out.println("GrepPool Size: " + grepPool.size());
 		System.out.println("Total # Errors: " + oracleErrorCounter);
 		System.out.println("Total # Success: " + oracleSuccessCounter);
 
 		System.out.println("OLD RESULTS:");
-		System.out.println("Total # Tests: " + grepPool.size());
+		System.out.println("GrepPool Size: " + grepPool.size());
 		System.out.println("Total # Errors: " + oldErrorCounter);
 		System.out.println("Total # Success: " + oldSuccessCounter);
 	}
