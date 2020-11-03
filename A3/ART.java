@@ -312,95 +312,194 @@ class ART {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
 		String localGrepFolderDir = "/mnt/c/Users/Ben/Desktop/grep/";
+		String linuxGrepFolder = "/home/daniel/Desktop/ARTv2/";
 		String grepOracle = "grep_oracle";
 		String grepBad = "grep_bad";
 		String fileToTest = "/mnt/c/Users/Ben/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
-
+		String linuxFileToTest = "/home/daniel/Desktop/ARTv2/SlyFox.txt"; 
+	
 		int oracleErrorCounter = 0;
 		int oracleSuccessCounter = 0;
 		int oldErrorCounter = 0;
 		int oldSuccessCounter = 0;
 
-		for(String item : grepPool)
-		{
-			// For the Grep Oracle
-			String[] oracleCommands = { "wsl", "\""+localGrepFolderDir + grepOracle+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
-			Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
+		String os = System.getProperty("os.name"); 
+		if (os.contains("nux")) {
 
-			BufferedReader oracleStdIn = new BufferedReader(new InputStreamReader(oracleProc.getInputStream()));
+			// If it doesn't work run this in terminal. It's a permission denied issue. chmod u=rwx,g=r,o=r /home/daniel/Desktop/ARTv2/grep_oracle 
 
-			BufferedReader oracleStdErr = new BufferedReader(new InputStreamReader(oracleProc.getErrorStream()));
-
-			// Read the output from the command
-			//System.out.println("*****Standard Output*****\n");
-			String oracleS = null;
-			String oracleStdOutput="";
-			while ((oracleS = oracleStdIn.readLine()) != null) {
-				oracleStdOutput=oracleStdOutput+oracleS;
-				//System.out.println(s);
-				
-			}
-			if(oracleStdOutput.length()>0) {
-				oracleSuccessCounter++;
-			}
-
-			// Read any errors from the attempted command
-			//System.out.println("*****Standard Error*****\n");
-			String oracleErrOutput="";
-			while ((oracleS = oracleStdErr.readLine()) != null) {
-				oracleErrOutput=oracleErrOutput+oracleS;
-				//System.out.println(oracleErrOutput);
-				
-			}
-			if(oracleErrOutput.length()>0) {
-				oracleErrorCounter++;
-			}
-
-			// For the old Grep 
-			String[] oldCommands = { "wsl", "\""+localGrepFolderDir + grepBad+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
-			Process proc = Runtime.getRuntime().exec(oldCommands);
-
-			BufferedReader oldStdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-			BufferedReader oldStdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
-			// Read the output from the command
-			//System.out.println("*****Standard Output*****\n");
-			String oldS = null;
-			String oldStdOutput="";
-			while ((oldS = oldStdIn.readLine()) != null) {
-				oldStdOutput=oldStdOutput+oldS;
-				//System.out.println(s);
-				
-			}
-			if(oldStdOutput.length()>0) {
-				oldSuccessCounter++;
-			}
-
-			// Read any errors from the attempted command
-			//System.out.println("*****Standard Error*****\n");
-			String oldErrOutput="";
-			while ((oldS = oldStdErr.readLine()) != null) {
-				oldErrOutput=oldErrOutput+oldS;
-				//System.out.println(oldErrOutput);
-			}
-			if(oldErrOutput.length()>0) {
-				oldErrorCounter++;
-			}
+			System.out.println("LINUX");
 			
-			
-			if(oracleStdOutput.compareTo(oldStdOutput)!=0) {
-				System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
+
+			for(String item : grepPool)
+			{	
+				// For the Grep Oracle
+				String[] oracleCommands = {linuxGrepFolder + grepOracle, item, linuxFileToTest};
+
+				Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
+
+				BufferedReader oracleStdIn = new BufferedReader(new InputStreamReader(oracleProc.getInputStream()));
+
+				BufferedReader oracleStdErr = new BufferedReader(new InputStreamReader(oracleProc.getErrorStream()));
+
+				// Read the output from the command
+				//System.out.println("*****Standard Output*****\n");
+				String oracleS = null;
+				String oracleStdOutput="";
+				while ((oracleS = oracleStdIn.readLine()) != null) {
+					oracleStdOutput=oracleStdOutput+oracleS;
+					//System.out.println(s);
+					
+				}
+				if(oracleStdOutput.length()>0) {
+					oracleSuccessCounter++;
+				}
+
+				// Read any errors from the attempted command
+				//System.out.println("*****Standard Error*****\n");
+				String oracleErrOutput="";
+				while ((oracleS = oracleStdErr.readLine()) != null) {
+					oracleErrOutput=oracleErrOutput+oracleS;
+					//System.out.println(oracleErrOutput);
+					
+				}
+				if(oracleErrOutput.length()>0) {
+					oracleErrorCounter++;
+				}
+
+				// For the old Grep 
+				String[] oldCommands = {linuxGrepFolder + grepBad, item, linuxFileToTest};
+				Process proc = Runtime.getRuntime().exec(oldCommands);
+
+				BufferedReader oldStdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+				BufferedReader oldStdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+				// Read the output from the command
+				//System.out.println("*****Standard Output*****\n");
+				String oldS = null;
+				String oldStdOutput="";
+				while ((oldS = oldStdIn.readLine()) != null) {
+					oldStdOutput=oldStdOutput+oldS;
+					//System.out.println(s);
+					
+				}
+				if(oldStdOutput.length()>0) {
+					oldSuccessCounter++;
+				}
+
+				// Read any errors from the attempted command
+				//System.out.println("*****Standard Error*****\n");
+				String oldErrOutput="";
+				while ((oldS = oldStdErr.readLine()) != null) {
+					oldErrOutput=oldErrOutput+oldS;
+					//System.out.println(oldErrOutput);
+				}
+				if(oldErrOutput.length()>0) {
+					oldErrorCounter++;
+				}
 				
-				System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
-			}
-			if(oracleErrOutput.compareTo(oldErrOutput)!=0) {
-				System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
 				
-				System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
+				if(oracleStdOutput.compareTo(oldStdOutput)!=0) {
+					System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
+					
+					System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
+				}
+				if(oracleErrOutput.compareTo(oldErrOutput)!=0) {
+					System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
+					
+					System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
+				}
+
 			}
+
+		} else { // If windows
+
+			for(String item : grepPool)
+			{	
+				// For the Grep Oracle
+				String[] oracleCommands = { "wsl", "\""+localGrepFolderDir + grepOracle+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
+				Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
+
+				BufferedReader oracleStdIn = new BufferedReader(new InputStreamReader(oracleProc.getInputStream()));
+
+				BufferedReader oracleStdErr = new BufferedReader(new InputStreamReader(oracleProc.getErrorStream()));
+
+				// Read the output from the command
+				//System.out.println("*****Standard Output*****\n");
+				String oracleS = null;
+				String oracleStdOutput="";
+				while ((oracleS = oracleStdIn.readLine()) != null) {
+					oracleStdOutput=oracleStdOutput+oracleS;
+					//System.out.println(s);
+					
+				}
+				if(oracleStdOutput.length()>0) {
+					oracleSuccessCounter++;
+				}
+
+				// Read any errors from the attempted command
+				//System.out.println("*****Standard Error*****\n");
+				String oracleErrOutput="";
+				while ((oracleS = oracleStdErr.readLine()) != null) {
+					oracleErrOutput=oracleErrOutput+oracleS;
+					//System.out.println(oracleErrOutput);
+					
+				}
+				if(oracleErrOutput.length()>0) {
+					oracleErrorCounter++;
+				}
+
+				// For the old Grep 
+				String[] oldCommands = { "wsl", "\""+localGrepFolderDir + grepBad+"\"", "\""+item+"\"", "\""+fileToTest+"\""};
+				Process proc = Runtime.getRuntime().exec(oldCommands);
+
+				BufferedReader oldStdIn = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+				BufferedReader oldStdErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+				// Read the output from the command
+				//System.out.println("*****Standard Output*****\n");
+				String oldS = null;
+				String oldStdOutput="";
+				while ((oldS = oldStdIn.readLine()) != null) {
+					oldStdOutput=oldStdOutput+oldS;
+					//System.out.println(s);
+					
+				}
+				if(oldStdOutput.length()>0) {
+					oldSuccessCounter++;
+				}
+
+				// Read any errors from the attempted command
+				//System.out.println("*****Standard Error*****\n");
+				String oldErrOutput="";
+				while ((oldS = oldStdErr.readLine()) != null) {
+					oldErrOutput=oldErrOutput+oldS;
+					//System.out.println(oldErrOutput);
+				}
+				if(oldErrOutput.length()>0) {
+					oldErrorCounter++;
+				}
+				
+				
+				if(oracleStdOutput.compareTo(oldStdOutput)!=0) {
+					System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
+					
+					System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
+				}
+				if(oracleErrOutput.compareTo(oldErrOutput)!=0) {
+					System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
+					
+					System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
+				}
+
+			}
+
 
 		}
+
+		
 		
 		System.out.println("ORACLE RESULTS:");
 		System.out.println("GrepPool Size: " + grepPool.size());
@@ -422,7 +521,6 @@ class ART {
 		ArrayList<String> grepPool = generatePool();
 
 		// Using windows WSL
-		System.out.println("ORACLE");
 		generateGrepCommand(grepPool);
 
 
