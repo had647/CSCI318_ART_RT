@@ -64,22 +64,35 @@ class ART {
 		 String[] namedSymbol = {"alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
 		 String[] anyChar = {"dot"}; // "."      i
 		 String[] range = {"numRange","upcaseRange","lowcaseRange"}; // [0-9] [A-Z] [a-z]    i
-		 String[] bracket = {"normalBracket","caretBracket"}; // [] [^]      d
-		 String[] iteration = {"qmark","star","plus","repMinMax"}; // "?" "*" "+" {1,2}      d
-		 String[] parentheses = {"normParen","backref"}; // () what is backref?      d
-		 String[] line = {"begLine","endLine","begEndLine"}; // presence of patterns at beg,end and beg end line     d
-		 String[] word = {"begWord","endWord","begEndWord"}; // presence of patterns at beg,end and beg end word     d
-		 String[] edge = {"yesEdgeBeg","yesEdgeEnd","yesEdgeBegEnd","noEdgeBeg","noEdgeEnd","noEdgeBegEnd"}; //      d
-		 String[] combine = {"concatenation","alternative"}; //      d
- 
+		  
+		//exampleObject{normalAlnum, yesWord, yesSpace, alpha, dot, numRange}
+
+		//Should be 2808 Test Cases
+
 		 //categories
-		 String[][] categories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range, bracket, iteration, parentheses, line, word, edge, combine};
-		 String[][] independentCat = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range};
-		 String[][] dependentCat = {bracket, iteration, parentheses, line, word, edge, combine};
- 
+		String[][] independentCategories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range}; 
+
+		int cnt = 0;
+
+		 for (int i = 0 ; i != independentCategories[0].length ; i++) {
+			for (int j = 0 ; j != independentCategories[1].length ; j++) {
+				for (int k = 0 ; k != independentCategories[2].length ; k++) {
+					for (int l = 0 ; l != independentCategories[3].length ; l++) {
+						for (int m = 0 ; m != independentCategories[4].length ; m++) {
+							for (int n = 0 ; n != independentCategories[5].length ; n++) {
+								System.out.println(""+independentCategories[0][i]+independentCategories[1][j]+independentCategories[2][k]+independentCategories[3][l]+independentCategories[4][m]+independentCategories[5][n]);
+								cnt++;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		System.out.println(cnt);
  
 		 ArrayList<String> grepInputPool = new ArrayList<>();
-		 for (String[] category : independentCat) {
+		 for (String[] category : independentCategories) {
 			 for (String choice : category) {
 				//  System.out.println(choice + ": ");
  
@@ -165,62 +178,7 @@ class ART {
 				 }
 
 			 }
-		 }
-
-		 ArrayList<String> dependentPool = new ArrayList<>();
-		 for (String[] category : categories) {
-			 for (String choice : category) {
-
-				switch (choice) {
- 
-					 case "normalBracket":
-						 char[] alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-						 for (char c : alphaNum) {
-							dependentPool.add("["+ c +"]");
-						 }
-						 break;
-					// Range will expand on each iteration. [A-B]*, [A-C]* ... etc
-					 case "star":
-						 char[] upcaseRange = "BCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-						 for (char endRange : upcaseRange) {
-							dependentPool.add("["+"A"+"-"+endRange+"]*");
-						 }
-						 break;
- 
-					//  case "normParen":
-					//  	 dependantPool.add("(A)"+"\\d+)"); // Leaving this one out for now as it used YesDigit and that is only supported by Perl.
-					// 	 break;
- 
-					 case "begLine":
-					 	dependentPool.add("^\\w"); 
-						 break;
- 
-					//  case "endWord":
-					//  	dependantPool.add("\\d\>"); // This relies on DigitSymbol too
-					// 	 break;
- 
-					 case "yesEdgeBegEnd":
-					 	dependentPool.add("\\b" + "[1-9]" + "\\b");
-						 break;
- 
-					 case "concatenation":
-						 char[] concatRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-						 for (char letter: concatRange) {
-							dependentPool.add("(" + letter + "[0-9])+");
-						 }
-					 	 break;
- 
-				}
-
-			}
-		}
-
-		// Grep doesn't recognise the input for their Combination of Categories "Combine; Iteration; Parentheses; NormalChar; Range" with their test case being (A[0-9])+    ?????
-
-		// Combine the lists
-		grepInputPool.addAll(dependentPool);
-
-		
+		 }		
 		return grepInputPool;
 	}
  
@@ -329,12 +287,11 @@ class ART {
 			// If it doesn't work run this in terminal. It's a permission denied issue. chmod u=rwx,g=r,o=r /home/daniel/Desktop/ARTv2/grep_oracle 
 
 			System.out.println("LINUX");
-			
 
 			for(String item : grepPool)
 			{	
 				// For the Grep Oracle
-				String[] oracleCommands = {linuxGrepFolder + grepOracle, item, linuxFileToTest};
+				String[] oracleCommands = {linuxGrepFolder + grepOracle, item, linuxFileToTest}; //Input needs to be different from windows WSL, Otherwise can't locate files.
 
 				Process oracleProc = Runtime.getRuntime().exec(oracleCommands);
 
@@ -401,14 +358,14 @@ class ART {
 				
 				
 				if(oracleStdOutput.compareTo(oldStdOutput)!=0) {
-					System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
+					//System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
 					
-					System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
+					//System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
 				}
 				if(oracleErrOutput.compareTo(oldErrOutput)!=0) {
-					System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
+					//System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
 					
-					System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
+					//System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
 				}
 
 			}
