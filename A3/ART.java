@@ -349,7 +349,7 @@ class ART {
 			String oracleErrOutput="";
 			while ((oracleS = oracleStdErr.readLine()) != null) {
 				oracleErrOutput=oracleErrOutput+oracleS;
-				System.out.println(oracleErrOutput);
+				//System.out.println(oracleErrOutput);
 				
 			}
 			if(oracleErrOutput.length()>0) {
@@ -382,12 +382,22 @@ class ART {
 			String oldErrOutput="";
 			while ((oldS = oldStdErr.readLine()) != null) {
 				oldErrOutput=oldErrOutput+oldS;
-				System.out.println(oldErrOutput);
-				
-
+				//System.out.println(oldErrOutput);
 			}
 			if(oldErrOutput.length()>0) {
 				oldErrorCounter++;
+			}
+			
+			
+			if(oracleStdOutput.compareTo(oldStdOutput)!=0) {
+				System.out.println("*****oracleStdOutput*****\n"+oracleStdOutput);
+				
+				System.out.println("*****oldStdOutput*****\n"+oldStdOutput);
+			}
+			if(oracleErrOutput.compareTo(oldErrOutput)!=0) {
+				System.out.println("*****oracleErrOutput*****\n"+oracleErrOutput);
+				
+				System.out.println("*****oldErrOutput*****\n"+oldErrOutput);
 			}
 
 		}
