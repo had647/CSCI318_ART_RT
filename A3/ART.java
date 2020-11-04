@@ -58,12 +58,12 @@ class ART {
 
 	private static ArrayList<String> generatePool() {
 		 //category -> choices -> expression
-		 String[] normalChar = {"normalAlNum","normalPunct"}; // literal chars    i
-		 String[] wordSymbol = {"yesWord","noWord"}; // \w \W        i
-		 String[] spaceSymbol = {"yesSpace","noSpace"}; // \s \S     i
-		 String[] namedSymbol = {"alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
-		 String[] anyChar = {"dot"}; // "."      i
-		 String[] range = {"numRange","upcaseRange","lowcaseRange"}; // [0-9] [A-Z] [a-z]    i
+		 String[] normalChar = {"","normalAlNum","normalPunct"}; // literal chars    i
+		 String[] wordSymbol = {"","yesWord","noWord"}; // \w \W        i
+		 String[] spaceSymbol = {"","yesSpace","noSpace"}; // \s \S     i
+		 String[] namedSymbol = {"","alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
+		 String[] anyChar = {"", "dot"}; // "."      i
+		 String[] range = {"", "numRange","upcaseRange","lowcaseRange"}; // [0-9] [A-Z] [a-z]    i
 		  
 		//exampleObject{normalAlnum, yesWord, yesSpace, alpha, dot, numRange}
 
@@ -269,11 +269,11 @@ class ART {
 	private static void generateGrepCommand(ArrayList<String> grepPool) throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
-		String localGrepFolderDir = "/mnt/c/Users/Ben/Desktop/grep/";
+		String localGrepFolderDir = "/mnt/c/Users/Dan/Desktop/grep/";
 		String linuxGrepFolder = "/home/daniel/Desktop/ARTv2/";
 		String grepOracle = "grep_oracle";
 		String grepBad = "grep_bad";
-		String fileToTest = "/mnt/c/Users/Ben/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
+		String fileToTest = "/mnt/c/Users/Dan/Desktop/grep/SlyFox.txt"; // Put path to your testing file or directory. the * just means all files within directory.
 		String linuxFileToTest = "/home/daniel/Desktop/ARTv2/SlyFox.txt"; 
 	
 		int oracleErrorCounter = 0;
