@@ -99,19 +99,54 @@ class ART {
 		return test_case;
 	}
 
-	private void generate_S_Array(int[] S_candidate, GREPInput candidate) {
-		// populate the S_candidate array with 0's and 1's according to the candidates
-		// values
-	}
+	private static int[] returnS(String test_case){
+        int S[] = new int[28];
+        Arrays.fill(S, 0);
 
-	private int calculate_sum_distance(int n, int[] S, int[] S_candidate) {
-		int sum = 0;
-		for (int i = 0; i < categoriesChoices; i++) {
-			if (S_candidate[i] == 1)
-				sum += (n - S[i]);
-		}
-		return sum;
-	}
+        if(test_case.contains("z")) S[1] = 1;
+        else if(test_case.contains("?")) S[2] = 1;
+        else S[0] = 1;
+
+        if(test_case.contains("\\w")) S[4] = 1;
+        else if(test_case.contains("\\W")) S[5] = 1;
+        else S[3] = 1;
+
+        if(test_case.contains("\\s")) S[7] = 1;
+        else if(test_case.contains("\\S")) S[8] = 1;
+        else S[6] = 1;
+
+        if(test_case.contains("[:alpha:]")) S[10] = 1;
+        else if(test_case.contains("[:upper:]")) S[11] = 1;
+        else if(test_case.contains("[:lower:]")) S[12] = 1;
+        else if(test_case.contains("[:digit:]")) S[13] = 1;
+        else if(test_case.contains("[:xdigit:]")) S[14] = 1;
+        else if(test_case.contains("[:space:]")) S[15] = 1;
+        else if(test_case.contains("[:punct:]")) S[16] = 1;
+        else if(test_case.contains("[:alnum:]")) S[17] = 1;
+        else if(test_case.contains("[:print:]")) S[18] = 1;
+        else if(test_case.contains("[:graph:]")) S[19] = 1;
+        else if(test_case.contains("[:cntrl:]")) S[20] = 1;
+        else if(test_case.contains("[:blank:]")) S[21] = 1;
+        else S[9] = 1;
+
+        if(test_case.contains(".")) S[23] = 1;
+        else S[22] = 1;
+
+        if(test_case.contains("[0-9]")) S[25] = 1;
+        else if(test_case.contains("[A-P]")) S[26] = 1;
+        else if(test_case.contains("[a-p]")) S[27] = 1;
+        else S[24] = 1; 
+
+        return S;
+    }
+
+	private static int calculate_sum_distance(int numTestCases, int S_array[], int candidate_S[]) {
+        int sum = 0;
+        for(int i = 0; i < 28; i++) {
+            if (candidate_S[i] == 1) sum += (numTestCases - S_array[i]);
+        }
+        return sum;
+    }
 
 	private int runART() {
 		int[] S = new int[categoriesChoices];
