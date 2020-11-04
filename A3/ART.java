@@ -58,19 +58,18 @@ class ART {
 
 	private static ArrayList<String> generatePool() {
 		 //category -> choices -> expression
-		 String[] normalChar = {"","normalAlNum","normalPunct"}; // literal chars    i
-		 String[] wordSymbol = {"","yesWord","noWord"}; // \w \W        i
-		 String[] spaceSymbol = {"","yesSpace","noSpace"}; // \s \S     i
-		 String[] namedSymbol = {"","alpha","upper","lower","digit","xdigit","space","punct","alnum","print","graph","cntrl","blank"}; //   i
-		 String[] anyChar = {"", "dot"}; // "."      i
-		 String[] range = {"", "numRange","upcaseRange","lowcaseRange"}; // [0-9] [A-Z] [a-z]    i
-		  
-		//exampleObject{normalAlnum, yesWord, yesSpace, alpha, dot, numRange}
+		 String[] normalChar = {"","a","?"}; // literal chars    i
+		 String[] wordSymbol = {"","\\w","\\W"}; // \w \W        i
+		 String[] spaceSymbol = {"","\\s","\\S"}; // \s \S     i
+		 String[] namedSymbol = {"","[[:alpha:]]","[[:upper:]]","[[:lower:]]","[[:digit:]]","[[:xdigit:]]","[[:space:]]","[[:punct:]]","[[:alnum:]]","[[:print:]]","[[:graph:]]","[[:cntrl:]]","[[:blank:]]"}; //   i
+		 String[] anyChar = {"", "."}; // "."      i
+		 String[] range = {"", "[0-9]","[A-P]","[A-P]"}; // [0-9] [A-Z] [a-z]    i
 
 		//Should be 2808 Test Cases
 
-		 //categories
+		//categories
 		String[][] independentCategories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range}; 
+		ArrayList<String> grepInputPool = new ArrayList<>();
 
 		int cnt = 0;
 
@@ -80,7 +79,7 @@ class ART {
 					for (int l = 0 ; l != independentCategories[3].length ; l++) {
 						for (int m = 0 ; m != independentCategories[4].length ; m++) {
 							for (int n = 0 ; n != independentCategories[5].length ; n++) {
-								System.out.println(""+independentCategories[0][i]+independentCategories[1][j]+independentCategories[2][k]+independentCategories[3][l]+independentCategories[4][m]+independentCategories[5][n]);
+								grepInputPool.add(independentCategories[0][i]+independentCategories[1][j]+independentCategories[2][k]+independentCategories[3][l]+independentCategories[4][m]+independentCategories[5][n]);
 								cnt++;
 							}
 						}
@@ -89,96 +88,7 @@ class ART {
 			}
 		}
 
-		System.out.println(cnt);
- 
-		 ArrayList<String> grepInputPool = new ArrayList<>();
-		 for (String[] category : independentCategories) {
-			 for (String choice : category) {
-				//  System.out.println(choice + ": ");
- 
-				 switch (choice) {
- 
-					 case "normalAlNum":
-						 char[] alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-						 for (char c : alphaNum) {
-							 grepInputPool.add(String.valueOf(c));
-						 }
-						 break;
- 
-					 case "normalPunct":
-						 char[] punct = ",`~;:'&%$#@!".toCharArray();
-						 for (char p : punct) {
-							 grepInputPool.add(String.valueOf(p));
-						 }
-						 break;
- 
-					 case "yesWord":
-						 grepInputPool.add("\\w");
-						 break;
- 
-					 case "noWord":
-						 grepInputPool.add("\\W");
-						 break;
- 
-					 case "yesSpace":
-						 grepInputPool.add("\\s");
-						 break;
- 
-					 case "noSpace":
-						 grepInputPool.add("\\S");
-						 break;
- 
-					 case "alpha":
-						 grepInputPool.add("[[:alpha:]]");
-						 break;
- 
-					 case "upper":
-						 grepInputPool.add("[[:upper:]]");
-						 break;
- 
-					 case "lower":
-						 grepInputPool.add("[[:lower:]]");
-						 break;
- 
-					 case "digit":
-						 grepInputPool.add("[[:digit:]]");
-						 break;
- 
-					 case "xdigit":
-						 grepInputPool.add("[[:xdigit:]]");
-						 break;
- 
-					 case "space":
-						 grepInputPool.add("[[:space:]]");
-						 break;
- 
-					 case "punct":
-						 grepInputPool.add("[[:punct:]]");
-						 break;
- 
-					 case "alnum":
-						 grepInputPool.add("[[:alnum:]]");
-						 break;
- 
-					 case "print":
-						 grepInputPool.add("[[:print:]]");
-						 break;
- 
-					 case "graph":
-						 grepInputPool.add("[[:graph:]]");
-						 break;
- 
-					 case "cntrl":
-						 grepInputPool.add("[[:cntrl:]]");
-						 break;
- 
-					 case "blank":
-						 grepInputPool.add("[[:blank:]]");
-						 break;
-				 }
-
-			 }
-		 }		
+		System.out.println(cnt);		
 		return grepInputPool;
 	}
  
@@ -477,8 +387,7 @@ class ART {
 		// Creating the pool of commands
 		ArrayList<String> grepPool = generatePool();
 
-		// Using windows WSL
-		generateGrepCommand(grepPool);
+		//generateGrepCommand(grepPool);
 
 
 		// keeping this for later use
