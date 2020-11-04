@@ -103,7 +103,7 @@ class ART {
         int S[] = new int[28];
         Arrays.fill(S, 0);
 
-        if(test_case.contains("z")) S[1] = 1;
+        if(test_case.contains("u")) S[1] = 1;
         else if(test_case.contains("?")) S[2] = 1;
         else S[0] = 1;
 
