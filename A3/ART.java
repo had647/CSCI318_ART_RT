@@ -63,7 +63,7 @@ class ART {
 		 String[] spaceSymbol = {"","\\s","\\S"}; // \s \S     i
 		 String[] namedSymbol = {"","[[:alpha:]]","[[:upper:]]","[[:lower:]]","[[:digit:]]","[[:xdigit:]]","[[:space:]]","[[:punct:]]","[[:alnum:]]","[[:print:]]","[[:graph:]]","[[:cntrl:]]","[[:blank:]]"}; //   i
 		 String[] anyChar = {"", "."}; // "."      i
-		 String[] range = {"", "[0-9]","[A-P]","[A-P]"}; // [0-9] [A-Z] [a-z]    i
+		 String[] range = {"", "[0-9]","[A-P]","[a-p]"}; // [0-9] [A-Z] [a-z]    i
 
 		//Should be 2808 Test Cases
 
@@ -206,6 +206,11 @@ class ART {
 			}
 		}
 		return n;
+	}
+
+	private int[] generate_S_Array(int S_test_case[], GREPInput test_case) {
+		
+		return S_test_case;
 	}
 
 	// IMORTANT Do not try and run ART() right now. It has not been finished
