@@ -1,24 +1,25 @@
 //Tasks that need to be done
-
-//Implement generate_pool() (hard)
-//Implement makeTestcaseObjecdt(Sring) (medium)
-//Implement getTestCase() (easy)
-//Implement generate_S_Candidate(int[], GREPInput); (easy)
+//GUI
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.lang.Integer;
+import java.util.Random;
 
 class ART {
-	private int categoriesChoices;
-	private int candidatesCount;
-	private String grepV1;
-	private String grepV2;
-	private String filePath;
-	private GREPInput[] candidates;
+	//these need to be user defined in the GUI...
+	private static int categoriesChoices = 28;   //...except this. DONT CHANGE THIS VALUE
+	private static int candidatesCount = 10;
+	private static String grepV1 = "grep_bad";
+	private static String grepV2 = "grep_oracle";
+	private static String filePath = "/home/isaac/Desktop/ARTv2/SlyFox.txt";
+	private static ArrayList<String> candidates;
+	private static ArrayList<String> grepPool;
+	private static int max_runs = 1000;
 
+    /*
 	public ART() {
 		try {
 			Properties artProperties = new Properties();
@@ -40,32 +41,51 @@ class ART {
 			System.err.println("Stacktrace:");
 			e.printStackTrace();
 		}
-	}
+	}*/
 
-	private void generateCandiates() {
-		for (GREPInput i : candidates)
-			i = makeTestCase(getTestCase());
-	}
 
-	private GREPInput makeTestCase(String input) {
-		/*
-		 * turns a testcase from a string to an object e.g. if the test case string was
-		 * "A" then the object would be-- GREPInput input; input.normalCar = 0;... ..and
-		 * the rest of the memebers for 'input' object would be their default values
-		 */
-		return new GREPInput();
-	}
+    private static String feedInputGrepv1(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepV1 + " " + test_case + " " + filePath);
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = "";
+        String output = "";
+        while ((line = reader.readLine()) != null) output += line;
+        reader.close();
+        return output;
+    }
+
+    private static String feedInputGrepv2(String test_case) throws IOException{
+        Process process = Runtime.getRuntime().exec("./" + grepV2 + " " + test_case + " " + filePath);
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = "";
+        String output = "";
+        while ((line = reader.readLine()) != null) output += line;
+        reader.close();
+        return output;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 	private static ArrayList<String> generatePool() {
 		 //category -> choices -> expression
-		 String[] normalChar = {"","a","?"}; // literal chars    i
+		 String[] normalChar = {"","z","?"}; // literal chars    i
 		 String[] wordSymbol = {"","\\w","\\W"}; // \w \W        i
 		 String[] spaceSymbol = {"","\\s","\\S"}; // \s \S     i
 		 String[] namedSymbol = {"","[[:alpha:]]","[[:upper:]]","[[:lower:]]","[[:digit:]]","[[:xdigit:]]","[[:space:]]","[[:punct:]]","[[:alnum:]]","[[:print:]]","[[:graph:]]","[[:cntrl:]]","[[:blank:]]"}; //   i
 		 String[] anyChar = {"", "."}; // "."      i
 		 String[] range = {"", "[0-9]","[A-P]","[a-p]"}; // [0-9] [A-Z] [a-z]    i
-
-		//Should be 2808 Test Cases
 
 		//categories
 		String[][] independentCategories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range}; 
@@ -87,20 +107,13 @@ class ART {
 				}
 			}
 		}
-
-		System.out.println(cnt);		
+	
 		return grepInputPool;
 	}
  
 
-	private String getTestCase() {
-		String test_case = "";
-		// test_case = get a test case from the pool as a string
-		return test_case;
-	}
-
 	private static int[] returnS(String test_case){
-        int S[] = new int[28];
+        int S[] = new int[categoriesChoices];
         Arrays.fill(S, 0);
 
         if(test_case.contains("u")) S[1] = 1;
@@ -142,80 +155,122 @@ class ART {
 
 	private static int calculate_sum_distance(int numTestCases, int S_array[], int candidate_S[]) {
         int sum = 0;
-        for(int i = 0; i < 28; i++) {
+        for(int i = 0; i < categoriesChoices; i++) {
             if (candidate_S[i] == 1) sum += (numTestCases - S_array[i]);
         }
         return sum;
     }
+	
+	private static String getRandomTestCase(){
+		return grepPool.get(new Random().nextInt(grepPool.size()));
+	}
 
-	private int runART() {
+	private static ArrayList<String> generateCandiates(){
+		ArrayList<String> candidates = new ArrayList<>();
+		for(int i = 0; i < candidatesCount; i++) candidates.add(getRandomTestCase());
+		return candidates;
+	}
+
+
+
+
+
+
+
+
+	
+	
+	private static void runART() {
 		int[] S = new int[categoriesChoices];
-		for (int i : S)
-			i = 0;
+		Arrays.fill(S, 0);
 
-		ArrayList<GREPInput> E = new ArrayList<GREPInput>();
+		String test_case;
+		String candidate;
 
-		GREPInput test_case;
+		int[] S_test_case;
+		int[] S_candidate;
 
-		int[] S_test_case = new int[categoriesChoices];
+		int max_sum;
+		int current_sum;
+		int max_candidate_index = -1;
 
-		boolean break_loop = false;
+		String grepv1output = "";
+		String grepv2output = "";
 
-		int n = 0;
-
-		while (!break_loop) {
-			n++;
-			if (n == 1)
-				test_case = makeTestCase(getTestCase());
-			else {
-				generateCandiates();
-
-				int max_sum = -1; /* initialize outside loop? */
-				int current_sum = -1;
-				GREPInput candidate;
-				int[] S_candidate = new int[categoriesChoices];
-				int max_candidate_index = -1;
-
+		for(int j = 0; j < max_runs; j++){
+			if(j == 0) test_case = getRandomTestCase();
+			else{
+				candidates = generateCandiates();
+				max_sum = -1; 
+				
 				for (int i = 0; i < candidatesCount; i++) {
-					candidate = candidates[i];
-					generate_S_Array(S_candidate, candidate);
-					current_sum = calculate_sum_distance(n - 1, S, S_candidate);
+					candidate = candidates.get(i);
+					S_candidate = returnS(candidate);
+	
+					current_sum = calculate_sum_distance(j, S, S_candidate);
 
-					if (current_sum > max_sum) {
+					if(current_sum > max_sum) {
 						max_sum = current_sum;
 						max_candidate_index = i;
 					}
 				}
-				test_case = candidates[max_candidate_index];
+				test_case = candidates.get(max_candidate_index);
 
-				// will need to return test case as a string here some how
-				// Some stuff will need to change here
-				// commented to avoid some errors :)
-				// also looks ugly because code formatter fucked it XD
-				/*
-				 * String test_case_string = ""; try { if
-				 * (!feedInputGrepv1(test_case_string).equals(feedInputGrepv2(test_case_string))
-				 * ) break_loop = true; } catch (IOException e) { System.out.println(e); }
-				 */
+				try{
+					grepv1output = feedInputGrepv1(test_case);
+					grepv2output = feedInputGrepv2(test_case);
+				}
+				catch(Exception e){
+					System.out.println("error feeding input to grep");
+					break;
+				}
+			
+				if(!grepv1output.equals(grepv2output)){
+					System.out.println("outputs do not match. Bug found.");
+					System.out.println(test_case);
+					System.out.println(j);
+					break;
+				}	
 			}
-			E.add(test_case);
-			generate_S_Array(S_test_case, test_case);
+
+			S_test_case = returnS(test_case);
 			for (int i = 0; i < categoriesChoices; i++) {
-				if (S_test_case[i] == 1)
-					S[i]++;
+				if(S_test_case[i] == 1) S[i]++;
 			}
 		}
-		return n;
-	}
-
-	private int[] generate_S_Array(int S_test_case[], GREPInput test_case) {
 		
-		return S_test_case;
+
+	}
+	
+	public static void runRT(){
+		String test_case = "";
+		String grepv1output = "";
+		String grepv2output = "";
+		
+		for(int i = 0; i < max_runs; i++){
+			test_case = getRandomTestCase();
+			try{
+				grepv1output = feedInputGrepv1(test_case);
+				grepv2output = feedInputGrepv2(test_case);
+			}
+			catch(Exception e){
+				System.out.println("error feeding input to grep");
+				break;
+			}
+			if(!grepv1output.equals(grepv2output)){
+				System.out.println("outputs do not match. Bug found.");
+				System.out.println(test_case);
+				System.out.println(i);
+				break;
+			}	
+		}
 	}
 
-	// IMORTANT Do not try and run ART() right now. It has not been finished
-	// Main is runnable now for demo :)
+	
+	
 
+
+    /*
 	private static void generateGrepCommand(ArrayList<String> grepPool) throws IOException {
 		// this is placeholder code to demonstrate how this sections works
 		// these will eventually be provided as input arguments
@@ -418,6 +473,8 @@ class ART {
 		System.out.println("Total # Errors: " + oldErrorCounter);
 		System.out.println("Total # Success: " + oldSuccessCounter);
 	}
+*/
+
 
 
 	// we can deal with error handling later
@@ -425,10 +482,22 @@ class ART {
 	public static void main(String args[]) throws IOException {
 
 		// Creating the pool of commands
-		ArrayList<String> grepPool = generatePool();
+		grepPool = generatePool();
 
-		//generateGrepCommand(grepPool);
+		//generatePool currently produces an empty string as input which grep doesnt like.. so manually removing it here.
+		grepPool.remove(0);
+	
+		System.out.println("ART");
+		runART();
+		System.out.println("RT");
+		runRT();
+		
+		
+	
 
+		
+		
+		
 
 		// keeping this for later use
 		/*
