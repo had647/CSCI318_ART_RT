@@ -493,7 +493,25 @@ class ART {
 		runRT();
 		
 		
-	
+
+		/*
+		Notes
+			Some possible things to add to GUI.
+				Let user choose file path to grepv1 and grepv2
+				Let user choose how many candiates are generated
+				Let user define max runs
+				Let user define the names of the grep exe files
+				Let user define name and file path of testing file/directory
+				Let user do an RT comparison	
+		 */
+
+
+
+
+
+
+
+
 
 		
 		
