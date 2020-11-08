@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.lang.Integer;
 import java.util.Random;
 
+
 class ART {
 	//these need to be user defined in the GUI...
 	private static int categoriesChoices = 28;   //...except this. DONT CHANGE THIS VALUE
@@ -475,14 +476,12 @@ class ART {
 	}
 */
 
-
-
 	// we can deal with error handling later
 	// for now main throws the exceptions and dies if something is wrong
 	public static void main(String args[]) throws IOException {
 
 		// Creating the pool of commands
-		grepPool = generatePool();
+		/*grepPool = generatePool();
 
 		//generatePool currently produces an empty string as input which grep doesnt like.. so manually removing it here.
 		grepPool.remove(0);
@@ -490,7 +489,12 @@ class ART {
 		System.out.println("ART");
 		runART();
 		System.out.println("RT");
-		runRT();
+		runRT();*/
+		
+		/*EVERYTHING IS TEMPORARILY COMMENTED OUT TO MAKE GUI TESTING EASIER*/
+		/*GUI DOES NOT WORK YET - JUST MAKING IT LOOK OK*/
+		
+		new GUIWindow();
 		
 		
 
@@ -533,4 +537,6 @@ class ART {
 		 */
 
 	}
+
+
 }
