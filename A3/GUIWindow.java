@@ -282,9 +282,9 @@ public class GUIWindow {
 		this.artRunCheckbox.setText("Run ART");
 		this.rtRunCheckbox.setText("Run RT");
 		this.outputTextAreaLabel.setText("Output: ");
-		this.pathToOldGrepInputFileChooserButton.setText("Open");
-		this.pathToNewGrepInputFileChooserButton.setText("Open");
-		this.pathToTextFileInputFileChooserButton.setText("Open");
+		this.pathToOldGrepInputFileChooserButton.setText("Open File");
+		this.pathToNewGrepInputFileChooserButton.setText("Open File");
+		this.pathToTextFileInputFileChooserButton.setText("Open File");
 		this.runTestButton.setText("Run Test");
 	}
 
