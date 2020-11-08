@@ -1,140 +1,263 @@
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.io.*;
+import java.lang.*;
+public class GUIWindow {
+	private JFrame mainWindow;
+	private JPanel mainPanel;
+	private JLabel applicationLabel;
+	private JLabel numberOfCandidatesInputLabel;
+	private JSpinner numberOfCandidatesInput;
+	private JLabel pathToOldGrepInputLabel;
+	private JTextField pathToOldGrepInput;
+	private JLabel pathToNewGrepInputLabel;
+	private JTextField pathToNewGrepInput;
+	private JLabel pathToTextFileInputLabel;
+	private JTextField pathToTextFileInput;
+	private JLabel numberOfRunsInputLabel;
+	private JSpinner numberOfRunsInput;
+	private JLabel runOptionLabel;
+	private JCheckBox artRunCheckbox;
+	private JCheckBox rtRunCheckbox;
+	private JLabel outputTextAreaLabel;
+	private JScrollPane outputTextAreaScrollPane;
+	private JTextArea outputTextArea;
+	private JButton runTestButton;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+	public GUIWindow(){
+		this.mainWindow = new JFrame();
+		this.mainPanel = new JPanel();
+		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+		this.mainWindow.setContentPane(this.mainPanel);
+		this.applicationLabel = new JLabel();
 
-public class GUIWindow implements ActionListener {
+		// Number of Candidates
+		this.numberOfCandidatesInputLabel = new JLabel();
+		this.numberOfCandidatesInput = new JSpinner();
+		this.numberOfCandidatesInputLabel.setLabelFor(this.numberOfCandidatesInput);
+		
+		// Path to old GREP
+		this.pathToOldGrepInputLabel = new JLabel();
+		this.pathToOldGrepInput = new JTextField();
+		this.pathToOldGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
 
-	ART art = new ART();
+		// Path to new GREP
+		this.pathToNewGrepInputLabel = new JLabel();
+		this.pathToNewGrepInput = new JTextField();
+		this.pathToNewGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
 
-	Font appLableFont = new Font("Helvetica Neue", Font.PLAIN, 20);
-	Font appTitleFont = new Font("Helvetica Neue", Font.PLAIN, 30);
+		// Path to text file
+		this.pathToTextFileInputLabel = new JLabel();
+		this.pathToTextFileInput = new JTextField();
+		this.pathToTextFileInputLabel.setLabelFor(this.pathToTextFileInput);
 
-	JTextField candidatesCountTextBox = newInputField();
-	JTextField grepV1NameTextBox = newInputField();
-	JTextField grepV2NameTextBox = newInputField();
-	JTextField filePathTextBox = newInputField();
-	JTextField maxRunsTextBox = newInputField();
+		// Number of Runs
+		this.numberOfRunsInputLabel = new JLabel();
+		this.numberOfRunsInput = new JSpinner();
+		this.numberOfRunsInputLabel.setLabelFor(this.numberOfRunsInput);
 
-	JLabel candidatesCountTextBoxLabel = newLabel("Number of candidates:");
-	JLabel grepV1NameTextBoxLabel = newLabel("File name of older grep version:");
-	JLabel grepV2NameTextBoxLabel = newLabel("File name of newer grep version:");
-	JLabel filePathTextBoxLabel = newLabel("File path to grep executables:");
-	JLabel maxRunsTextBoxLabel = newLabel("Maximum number of runs:");
+		// Checkboxes for select ART or RT
+		this.runOptionLabel = new JLabel();
+		this.artRunCheckbox = new JCheckBox();
+		this.rtRunCheckbox = new JCheckBox();
 
-	JPanel candidatesCountPanel = new JPanel();
-	JPanel grepV1NamePanel = new JPanel();
-	JPanel grepV2NamePanel = new JPanel();
-	JPanel filePathPanel = new JPanel();
-	JPanel maxRunsPanel = new JPanel();
+		// Output
+		this.outputTextAreaLabel = new JLabel();
+		this.outputTextArea = new JTextArea();
+		this.outputTextAreaScrollPane = new JScrollPane(this.outputTextArea);
+		this.outputTextAreaLabel.setLabelFor(this.outputTextAreaScrollPane);
 
-	JLabel outputLabel = newLabel("Testing output:");
-	JTextArea outputTextArea = new JTextArea(20, 40);
-	JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
 
-	JPanel leftPanel = new JPanel();
-	JPanel rightPanel = new JPanel();
-	JPanel centrePanel = new JPanel();
+		// Button to run test
+		this.runTestButton = new JButton();
+		
 
-	JFrame window = new JFrame();
-	JPanel mainPanel = new JPanel();
+		// Set the default options when closing to exit_on_close
+		this.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.mainWindow.setResizable(true);
 
-	JButton button = new JButton("mega lol");
-	JLabel titleLabel = new JLabel("ART/RT GREP TESTING TOOL");
-	int count = 0;
 
-	public void setDefaultInputs() {
-		candidatesCountTextBox.setText(Integer.toString(art.candidatesCount));
-		grepV1NameTextBox.setText(art.grepV1);
-		grepV2NameTextBox.setText(art.grepV2);
-		filePathTextBox.setText(art.filePath);
-		maxRunsTextBox.setText(Integer.toString(art.max_runs));
+		// Get the current content pane which is running with the borderlayout by default
+		this.mainPanel.setLayout(new GridBagLayout());
+		// Create GridBagConstraints for the gridbaglayout inside of the input panel
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.anchor = GridBagConstraints.BASELINE_LEADING;
+		constraints.ipady = 14;
+
+		// Application Label
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.applicationLabel, constraints);
+
+
+		// Number of Candidates
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.numberOfCandidatesInputLabel, constraints);
+		constraints.gridx = 1;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = 3;
+		this.mainPanel.add(this.numberOfCandidatesInput, constraints);
+
+		// Path to Older GREP Executable
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.pathToOldGrepInputLabel, constraints);
+		constraints.gridx = 1;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToOldGrepInput, constraints);
+
+		// Path to Older GREP Executable
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.pathToNewGrepInputLabel, constraints);
+		constraints.gridx = 1;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToNewGrepInput, constraints);
+
+		// Path to Text file for testing
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.pathToTextFileInputLabel, constraints);
+		constraints.gridx = 1;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToTextFileInput, constraints);
+
+		// Number of Runs
+		constraints.gridx = 0;
+		constraints.gridy = 5;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.numberOfRunsInputLabel, constraints);
+		constraints.gridx = 1;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.numberOfRunsInput, constraints);
+
+		// Checkboxes and button to run
+		constraints.gridx = 0;
+		constraints.gridy = 6;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = 1;
+		this.mainPanel.add(this.runOptionLabel, constraints);
+		constraints.gridx = 1;
+		this.mainPanel.add(this.artRunCheckbox, constraints);
+		constraints.gridx = 2;
+		this.mainPanel.add(this.rtRunCheckbox, constraints);
+		constraints.gridx = 3;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.runTestButton, constraints);
+
+		// Output area
+		constraints.gridx = 0;
+		constraints.gridy = 7;
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.outputTextAreaLabel, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 8;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.gridheight = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.outputTextAreaScrollPane, constraints);
+
+		this.setupData();
+		this.retranslateUI();
+		this.styleUI();
+		
+		this.mainWindow.pack();
+		this.mainWindow.setMinimumSize(new Dimension(600, 800));
+		this.mainWindow.setVisible(true);
 	}
 
-	public GUIWindow() {
-		titleLabel.setFont(appTitleFont);
-
-		buildLeftInputPanel();
-		buildOutputPanel();
-		setDefaultInputs();
-
-		centrePanel.add(leftPanel);
-		centrePanel.add(rightPanel);
-
-		mainPanel.add(titleLabel);
-		mainPanel.add(centrePanel);
-		mainPanel.add(button);
-		button.addActionListener(this);
-
-		// mainPanel.setBorder(BorderFactory.createEmptyBorder(500, 500, 500, 500));
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-
-		window.add(mainPanel, BorderLayout.CENTER);
-
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setTitle("ART/RT GREP TESTING TOOL");
-		window.pack();
-		window.setVisible(true);
-
+	private void setupData(){
+		this.numberOfCandidatesInput.setModel(new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1));
+		this.numberOfRunsInput.setModel(new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1));
+		this.outputTextArea.setText("Test");
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// bla bla bla does nothing useful here
-		count++;
-		titleLabel.setText("lol: " + count);
+	private void retranslateUI(){
+		this.mainWindow.setTitle("GREP(A)RT");
+		this.applicationLabel.setText("GREP(A)RT - A tool to test GREP with ART and RT");
+		this.numberOfCandidatesInputLabel.setText("Number of Candidates: ");
+		this.pathToOldGrepInputLabel.setText("Path to Older GREP executable: ");
+		this.pathToNewGrepInputLabel.setText("Path to New GREP executable: ");
+		this.pathToTextFileInputLabel.setText("Path to text file for testing: ");
+		this.numberOfRunsInputLabel.setText("Maximum number of runs: ");
+		this.runOptionLabel.setText("Run options: ");
+		this.artRunCheckbox.setText("Run ART");
+		this.rtRunCheckbox.setText("Run RT");
+		this.outputTextAreaLabel.setText("Output: ");
+		this.runTestButton.setText("Run Test");
 	}
 
-	public void buildOutputPanel() {
-		outputTextArea.setFont(appLableFont);
-		outputTextArea.setEditable(false);
-		rightPanel.add(outputLabel);
-		rightPanel.add(outputScrollPane);
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
-	}
+	private void styleUI(){
+		Font inputOutputLabelFont = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+		Font inputOutputFieldFont = new Font(Font.MONOSPACED, Font.PLAIN, 14);
+		this.applicationLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		
+		// Set input labels and output labels font
+		this.numberOfCandidatesInputLabel.setFont(inputOutputLabelFont);
+		this.pathToOldGrepInputLabel.setFont(inputOutputLabelFont);
+		this.pathToNewGrepInputLabel.setFont(inputOutputLabelFont);
+		this.pathToTextFileInputLabel.setFont(inputOutputLabelFont);
+		this.numberOfRunsInputLabel.setFont(inputOutputLabelFont);
+		this.runOptionLabel.setFont(inputOutputLabelFont);
+		this.artRunCheckbox.setFont(inputOutputLabelFont);
+		this.rtRunCheckbox.setFont(inputOutputLabelFont);
+		this.outputTextAreaLabel.setFont(inputOutputLabelFont);
 
-	public void buildLeftInputPanel() {
-		candidatesCountPanel.add(candidatesCountTextBoxLabel);
-		candidatesCountPanel.add(candidatesCountTextBox);
-		grepV1NamePanel.add(grepV1NameTextBoxLabel);
-		grepV1NamePanel.add(grepV1NameTextBox);
-		grepV2NamePanel.add(grepV2NameTextBoxLabel);
-		grepV2NamePanel.add(grepV2NameTextBox);
-		filePathPanel.add(filePathTextBoxLabel);
-		filePathPanel.add(filePathTextBox);
-		maxRunsPanel.add(maxRunsTextBoxLabel);
-		maxRunsPanel.add(maxRunsTextBox);
+		// Set input fields and output field font
+		this.numberOfCandidatesInput.setFont(inputOutputFieldFont);
+		this.pathToOldGrepInput.setFont(inputOutputFieldFont);
+		this.pathToNewGrepInput.setFont(inputOutputFieldFont);
+		this.pathToTextFileInput.setFont(inputOutputFieldFont);
+		this.numberOfRunsInput.setFont(inputOutputFieldFont);
 
-		leftPanel.add(candidatesCountPanel);
-		leftPanel.add(grepV1NamePanel);
-		leftPanel.add(grepV2NamePanel);
-		leftPanel.add(filePathPanel);
-		leftPanel.add(maxRunsPanel);
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
-	}
+		// Set spinner fields left align text
+		JSpinner.DefaultEditor numberOfCandidatesInputEditor = (JSpinner.DefaultEditor)this.numberOfCandidatesInput.getEditor();
+		JSpinner.DefaultEditor numberOfRunsInputEditor = (JSpinner.DefaultEditor)this.numberOfRunsInput.getEditor();
+		numberOfCandidatesInputEditor.getTextField().setHorizontalAlignment(JTextField.LEFT);
+		numberOfRunsInputEditor.getTextField().setHorizontalAlignment(JTextField.LEFT);
 
-	public JTextField newInputField() {
-		JTextField field = new JTextField();
-		field.setFont(appLableFont);
-		field.setColumns(30);
-		return field;
-	}
-
-	public JLabel newLabel(String text) {
-		JLabel label = new JLabel(text);
-		label.setFont(appLableFont);
-		return label;
+		// Set output text area to false for editable
+		this.outputTextArea.setEditable(false);
 	}
 
 }
