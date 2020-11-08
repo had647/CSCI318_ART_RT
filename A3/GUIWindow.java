@@ -16,10 +16,13 @@ public class GUIWindow {
 	private JSpinner numberOfCandidatesInput;
 	private JLabel pathToOldGrepInputLabel;
 	private JTextField pathToOldGrepInput;
+	private JButton pathToOldGrepInputFileChooserButton;
 	private JLabel pathToNewGrepInputLabel;
 	private JTextField pathToNewGrepInput;
+	private JButton pathToNewGrepInputFileChooserButton;
 	private JLabel pathToTextFileInputLabel;
 	private JTextField pathToTextFileInput;
+	private JButton pathToTextFileInputFileChooserButton;
 	private JLabel numberOfRunsInputLabel;
 	private JSpinner numberOfRunsInput;
 	private JLabel runOptionLabel;
@@ -45,16 +48,19 @@ public class GUIWindow {
 		// Path to old GREP
 		this.pathToOldGrepInputLabel = new JLabel();
 		this.pathToOldGrepInput = new JTextField();
+		this.pathToOldGrepInputFileChooserButton = new JButton();
 		this.pathToOldGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
 
 		// Path to new GREP
 		this.pathToNewGrepInputLabel = new JLabel();
 		this.pathToNewGrepInput = new JTextField();
+		this.pathToNewGrepInputFileChooserButton = new JButton();
 		this.pathToNewGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
 
 		// Path to text file
 		this.pathToTextFileInputLabel = new JLabel();
 		this.pathToTextFileInput = new JTextField();
+		this.pathToTextFileInputFileChooserButton = new JButton();
 		this.pathToTextFileInputLabel.setLabelFor(this.pathToTextFileInput);
 
 		// Number of Runs
@@ -123,8 +129,13 @@ public class GUIWindow {
 		constraints.gridx = 1;
 		constraints.weightx = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.gridwidth = 2;
 		this.mainPanel.add(this.pathToOldGrepInput, constraints);
+		constraints.gridx = 3;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToOldGrepInputFileChooserButton, constraints);
 
 		// Path to Older GREP Executable
 		constraints.gridx = 0;
@@ -136,8 +147,13 @@ public class GUIWindow {
 		constraints.gridx = 1;
 		constraints.weightx = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.gridwidth = 2;
 		this.mainPanel.add(this.pathToNewGrepInput, constraints);
+		constraints.gridx = 3;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToNewGrepInputFileChooserButton, constraints);
 
 		// Path to Text file for testing
 		constraints.gridx = 0;
@@ -149,8 +165,13 @@ public class GUIWindow {
 		constraints.gridx = 1;
 		constraints.weightx = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.gridwidth = 2;
 		this.mainPanel.add(this.pathToTextFileInput, constraints);
+		constraints.gridx = 3;
+		constraints.weightx = 0;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		this.mainPanel.add(this.pathToTextFileInputFileChooserButton, constraints);
 
 		// Number of Runs
 		constraints.gridx = 0;
@@ -197,6 +218,7 @@ public class GUIWindow {
 		constraints.gridheight = GridBagConstraints.REMAINDER;
 		this.mainPanel.add(this.outputTextAreaScrollPane, constraints);
 
+		this.setupFileChooser();
 		this.setupData();
 		this.retranslateUI();
 		this.styleUI();
@@ -204,6 +226,42 @@ public class GUIWindow {
 		this.mainWindow.pack();
 		this.mainWindow.setMinimumSize(new Dimension(600, 800));
 		this.mainWindow.setVisible(true);
+	}
+
+	private void setupFileChooser(){
+		this.pathToOldGrepInputFileChooserButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JFileChooser pathToOldGrepInputFileChooser = new JFileChooser();
+				pathToOldGrepInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+				int result = pathToOldGrepInputFileChooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedFile = pathToOldGrepInputFileChooser.getSelectedFile();
+				    pathToOldGrepInput.setText(selectedFile.getAbsolutePath());
+				}
+			}
+		});
+		this.pathToNewGrepInputFileChooserButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JFileChooser pathToNewGrepInputFileChooser = new JFileChooser();
+				pathToNewGrepInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+				int result = pathToNewGrepInputFileChooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedFile = pathToNewGrepInputFileChooser.getSelectedFile();
+				    pathToNewGrepInput.setText(selectedFile.getAbsolutePath());
+				}
+			}
+		});
+		this.pathToTextFileInputFileChooserButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JFileChooser pathToTextFileInputFileChooser = new JFileChooser();
+				pathToTextFileInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+				int result = pathToTextFileInputFileChooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedFile = pathToTextFileInputFileChooser.getSelectedFile();
+				    pathToTextFileInput.setText(selectedFile.getAbsolutePath());
+				}
+			}
+		});
 	}
 
 	private void setupData(){
@@ -224,6 +282,9 @@ public class GUIWindow {
 		this.artRunCheckbox.setText("Run ART");
 		this.rtRunCheckbox.setText("Run RT");
 		this.outputTextAreaLabel.setText("Output: ");
+		this.pathToOldGrepInputFileChooserButton.setText("Open");
+		this.pathToNewGrepInputFileChooserButton.setText("Open");
+		this.pathToTextFileInputFileChooserButton.setText("Open");
 		this.runTestButton.setText("Run Test");
 	}
 
