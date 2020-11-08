@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GUIWindow implements ActionListener {
@@ -34,6 +36,14 @@ public class GUIWindow implements ActionListener {
 	JPanel grepV2NamePanel = new JPanel();
 	JPanel filePathPanel = new JPanel();
 	JPanel maxRunsPanel = new JPanel();
+
+	JLabel outputLabel = new JLabel("Testing output:");
+	JTextArea outputTextArea = new JTextArea(15, 15);
+	JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
+
+	JPanel leftPanel = new JPanel();
+	JPanel rightPanel = new JPanel();
+	JPanel centrePanel = new JPanel();
 
 	JFrame window = new JFrame();
 	JPanel mainPanel = new JPanel();
@@ -74,13 +84,24 @@ public class GUIWindow implements ActionListener {
 		maxRunsPanel.add(maxRunsTextBoxLabel);
 		maxRunsPanel.add(maxRunsTextBox);
 
-		mainPanel.add(titleLabel);
-		mainPanel.add(candidatesCountPanel);
-		mainPanel.add(grepV1NamePanel);
-		mainPanel.add(grepV2NamePanel);
-		mainPanel.add(filePathPanel);
-		mainPanel.add(maxRunsPanel);
+		leftPanel.add(candidatesCountPanel);
+		leftPanel.add(grepV1NamePanel);
+		leftPanel.add(grepV2NamePanel);
+		leftPanel.add(filePathPanel);
+		leftPanel.add(maxRunsPanel);
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
 
+		outputLabel.setFont(appLableFont);
+		outputTextArea.setFont(appLableFont);
+		rightPanel.add(outputLabel);
+		rightPanel.add(outputScrollPane);
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+
+		centrePanel.add(leftPanel);
+		centrePanel.add(rightPanel);
+
+		mainPanel.add(titleLabel);
+		mainPanel.add(centrePanel);
 		mainPanel.add(button);
 		button.addActionListener(this);
 
