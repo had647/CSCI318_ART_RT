@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 
 public class GUIWindow implements ActionListener {
 
+	ART art = new ART();
+
 	Font appLableFont = new Font("Helvetica Neue", Font.PLAIN, 20);
 	Font appTitleFont = new Font("Helvetica Neue", Font.PLAIN, 30);
 
@@ -38,7 +40,7 @@ public class GUIWindow implements ActionListener {
 	JPanel maxRunsPanel = new JPanel();
 
 	JLabel outputLabel = newLabel("Testing output:");
-	JTextArea outputTextArea = new JTextArea(15, 15);
+	JTextArea outputTextArea = new JTextArea(20, 40);
 	JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
 
 	JPanel leftPanel = new JPanel();
@@ -52,11 +54,20 @@ public class GUIWindow implements ActionListener {
 	JLabel titleLabel = new JLabel("ART/RT GREP TESTING TOOL");
 	int count = 0;
 
+	public void setDefaultInputs() {
+		candidatesCountTextBox.setText(Integer.toString(art.candidatesCount));
+		grepV1NameTextBox.setText(art.grepV1);
+		grepV2NameTextBox.setText(art.grepV2);
+		filePathTextBox.setText(art.filePath);
+		maxRunsTextBox.setText(Integer.toString(art.max_runs));
+	}
+
 	public GUIWindow() {
 		titleLabel.setFont(appTitleFont);
 
 		buildLeftInputPanel();
 		buildOutputPanel();
+		setDefaultInputs();
 
 		centrePanel.add(leftPanel);
 		centrePanel.add(rightPanel);
@@ -87,6 +98,7 @@ public class GUIWindow implements ActionListener {
 
 	public void buildOutputPanel() {
 		outputTextArea.setFont(appLableFont);
+		outputTextArea.setEditable(false);
 		rightPanel.add(outputLabel);
 		rightPanel.add(outputScrollPane);
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));

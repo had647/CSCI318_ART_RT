@@ -1,24 +1,18 @@
-//Tasks that need to be done
-//GUI
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Properties;
-import java.lang.Integer;
 import java.util.Random;
 
-
 class ART {
-	//these need to be user defined in the GUI...
-	private static int categoriesChoices = 28;   //...except this. DONT CHANGE THIS VALUE
-	private static int candidatesCount = 10;
-	private static String grepV1 = "grep_bad";
-	private static String grepV2 = "grep_oracle";
-	private static String filePath = "/home/isaac/Desktop/ARTv2/SlyFox.txt";
-	private static ArrayList<String> candidates;
-	private static ArrayList<String> grepPool;
-	private static int max_runs = 1000;
+	// these need to be user defined in the GUI...
+	private int categoriesChoices = 28; // ...except this. DONT CHANGE THIS VALUE
+	public int candidatesCount = 10;
+	public String grepV1 = "grep_bad";
+	public String grepV2 = "grep_oracle";
+	public String filePath = "/home/isaac/Desktop/ARTv2/SlyFox.txt";
+	private ArrayList<String> candidates;
+	private ArrayList<String> grepPool;
+	public int max_runs = 1000;
 
     /*
 	public ART() {
@@ -45,7 +39,7 @@ class ART {
 	}*/
 
 
-    private static String feedInputGrepv1(String test_case) throws IOException{
+    private String feedInputGrepv1(String test_case) throws IOException{
         Process process = Runtime.getRuntime().exec("./" + grepV1 + " " + test_case + " " + filePath);
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -56,7 +50,7 @@ class ART {
         return output;
     }
 
-    private static String feedInputGrepv2(String test_case) throws IOException{
+    private String feedInputGrepv2(String test_case) throws IOException{
         Process process = Runtime.getRuntime().exec("./" + grepV2 + " " + test_case + " " + filePath);
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -66,42 +60,43 @@ class ART {
         reader.close();
         return output;
     }
-    
-    private static ArrayList<String> generatePool() {
-		 //category -> choices -> expression
-		 String[] normalChar = {"","z","?"}; // literal chars    i
-		 String[] wordSymbol = {"","\\w","\\W"}; // \w \W        i
-		 String[] spaceSymbol = {"","\\s","\\S"}; // \s \S     i
-		 String[] namedSymbol = {"","[[:alpha:]]","[[:upper:]]","[[:lower:]]","[[:digit:]]","[[:xdigit:]]","[[:space:]]","[[:punct:]]","[[:alnum:]]","[[:print:]]","[[:graph:]]","[[:cntrl:]]","[[:blank:]]"}; //   i
-		 String[] anyChar = {"", "."}; // "."      i
-		 String[] range = {"", "[0-9]","[A-P]","[a-p]"}; // [0-9] [A-Z] [a-z]    i
 
-		//categories
-		String[][] independentCategories = {normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range}; 
-		ArrayList<String> grepInputPool = new ArrayList<>();
+	public void generatePool() {
+		// category -> choices -> expression
+		String[] normalChar = { "", "z", "?" }; // literal chars i
+		String[] wordSymbol = { "", "\\w", "\\W" }; // \w \W i
+		String[] spaceSymbol = { "", "\\s", "\\S" }; // \s \S i
+		String[] namedSymbol = { "", "[[:alpha:]]", "[[:upper:]]", "[[:lower:]]", "[[:digit:]]", "[[:xdigit:]]", "[[:space:]]", "[[:punct:]]",
+				"[[:alnum:]]", "[[:print:]]", "[[:graph:]]", "[[:cntrl:]]", "[[:blank:]]" }; // i
+		String[] anyChar = { "", "." }; // "." i
+		String[] range = { "", "[0-9]", "[A-P]", "[a-p]" }; // [0-9] [A-Z] [a-z] i
 
-		int cnt = 0;
+		// categories
+		String[][] independentCategories = { normalChar, wordSymbol, spaceSymbol, namedSymbol, anyChar, range };
+		ArrayList<String> grepInputPool = new ArrayList<String>();
 
-		 for (int i = 0 ; i != independentCategories[0].length ; i++) {
-			for (int j = 0 ; j != independentCategories[1].length ; j++) {
-				for (int k = 0 ; k != independentCategories[2].length ; k++) {
-					for (int l = 0 ; l != independentCategories[3].length ; l++) {
-						for (int m = 0 ; m != independentCategories[4].length ; m++) {
-							for (int n = 0 ; n != independentCategories[5].length ; n++) {
-								grepInputPool.add(independentCategories[0][i]+independentCategories[1][j]+independentCategories[2][k]+independentCategories[3][l]+independentCategories[4][m]+independentCategories[5][n]);
-								cnt++;
+		// int cnt = 0;
+
+		for (int i = 0; i != independentCategories[0].length; i++) {
+			for (int j = 0; j != independentCategories[1].length; j++) {
+				for (int k = 0; k != independentCategories[2].length; k++) {
+					for (int l = 0; l != independentCategories[3].length; l++) {
+						for (int m = 0; m != independentCategories[4].length; m++) {
+							for (int n = 0; n != independentCategories[5].length; n++) {
+								grepInputPool.add(independentCategories[0][i] + independentCategories[1][j] + independentCategories[2][k]
+										+ independentCategories[3][l] + independentCategories[4][m] + independentCategories[5][n]);
+								// cnt++;
 							}
 						}
 					}
 				}
 			}
 		}
-	
-		return grepInputPool;
-	}
- 
+		grepPool = grepInputPool;
+		// return grepInputPool;
+	} 
 
-	private static int[] returnS(String test_case){
+	private int[] returnS(String test_case){
         int S[] = new int[categoriesChoices];
         Arrays.fill(S, 0);
 
@@ -142,7 +137,7 @@ class ART {
         return S;
     }
 
-	private static int calculate_sum_distance(int numTestCases, int S_array[], int candidate_S[]) {
+	private int calculate_sum_distance(int numTestCases, int S_array[], int candidate_S[]) {
         int sum = 0;
         for(int i = 0; i < categoriesChoices; i++) {
             if (candidate_S[i] == 1) sum += (numTestCases - S_array[i]);
@@ -150,17 +145,17 @@ class ART {
         return sum;
     }
 	
-	private static String getRandomTestCase(){
+	private String getRandomTestCase(){
 		return grepPool.get(new Random().nextInt(grepPool.size()));
 	}
 
-	private static ArrayList<String> generateCandiates(){
+	private ArrayList<String> generateCandiates(){
 		ArrayList<String> candidates = new ArrayList<>();
 		for(int i = 0; i < candidatesCount; i++) candidates.add(getRandomTestCase());
 		return candidates;
 	}
 
-	private static void runART() {
+	private void runART() {
 		int[] S = new int[categoriesChoices];
 		Arrays.fill(S, 0);
 
@@ -222,7 +217,7 @@ class ART {
 
 	}
 	
-	public static void runRT(){
+	public void runRT(){
 		String test_case = "";
 		String grepv1output = "";
 		String grepv2output = "";
