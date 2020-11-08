@@ -19,17 +19,17 @@ public class GUIWindow implements ActionListener {
 	Font appLableFont = new Font("Helvetica Neue", Font.PLAIN, 20);
 	Font appTitleFont = new Font("Helvetica Neue", Font.PLAIN, 30);
 
-	JTextField candidatesCountTextBox = new JTextField();
-	JTextField grepV1NameTextBox = new JTextField();
-	JTextField grepV2NameTextBox = new JTextField();
-	JTextField filePathTextBox = new JTextField();
-	JTextField maxRunsTextBox = new JTextField();
+	JTextField candidatesCountTextBox = newInputField();
+	JTextField grepV1NameTextBox = newInputField();
+	JTextField grepV2NameTextBox = newInputField();
+	JTextField filePathTextBox = newInputField();
+	JTextField maxRunsTextBox = newInputField();
 
-	JLabel candidatesCountTextBoxLabel = new JLabel("Number of candidates:");
-	JLabel grepV1NameTextBoxLabel = new JLabel("File name of older grep version:");
-	JLabel grepV2NameTextBoxLabel = new JLabel("File name of newer grep version:");
-	JLabel filePathTextBoxLabel = new JLabel("File path to grep executables:");
-	JLabel maxRunsTextBoxLabel = new JLabel("Maximum number of runs:");
+	JLabel candidatesCountTextBoxLabel = newLabel("Number of candidates:");
+	JLabel grepV1NameTextBoxLabel = newLabel("File name of older grep version:");
+	JLabel grepV2NameTextBoxLabel = newLabel("File name of newer grep version:");
+	JLabel filePathTextBoxLabel = newLabel("File path to grep executables:");
+	JLabel maxRunsTextBoxLabel = newLabel("Maximum number of runs:");
 
 	JPanel candidatesCountPanel = new JPanel();
 	JPanel grepV1NamePanel = new JPanel();
@@ -37,7 +37,7 @@ public class GUIWindow implements ActionListener {
 	JPanel filePathPanel = new JPanel();
 	JPanel maxRunsPanel = new JPanel();
 
-	JLabel outputLabel = new JLabel("Testing output:");
+	JLabel outputLabel = newLabel("Testing output:");
 	JTextArea outputTextArea = new JTextArea(15, 15);
 	JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
 
@@ -55,47 +55,8 @@ public class GUIWindow implements ActionListener {
 	public GUIWindow() {
 		titleLabel.setFont(appTitleFont);
 
-		candidatesCountTextBox.setFont(appLableFont);
-		grepV1NameTextBox.setFont(appLableFont);
-		grepV2NameTextBox.setFont(appLableFont);
-		filePathTextBox.setFont(appLableFont);
-		maxRunsTextBox.setFont(appLableFont);
-
-		candidatesCountTextBoxLabel.setFont(appLableFont);
-		grepV1NameTextBoxLabel.setFont(appLableFont);
-		grepV2NameTextBoxLabel.setFont(appLableFont);
-		filePathTextBoxLabel.setFont(appLableFont);
-		maxRunsTextBoxLabel.setFont(appLableFont);
-
-		candidatesCountTextBox.setColumns(30);
-		grepV1NameTextBox.setColumns(30);
-		grepV2NameTextBox.setColumns(30);
-		filePathTextBox.setColumns(30);
-		maxRunsTextBox.setColumns(30);
-
-		candidatesCountPanel.add(candidatesCountTextBoxLabel);
-		candidatesCountPanel.add(candidatesCountTextBox);
-		grepV1NamePanel.add(grepV1NameTextBoxLabel);
-		grepV1NamePanel.add(grepV1NameTextBox);
-		grepV2NamePanel.add(grepV2NameTextBoxLabel);
-		grepV2NamePanel.add(grepV2NameTextBox);
-		filePathPanel.add(filePathTextBoxLabel);
-		filePathPanel.add(filePathTextBox);
-		maxRunsPanel.add(maxRunsTextBoxLabel);
-		maxRunsPanel.add(maxRunsTextBox);
-
-		leftPanel.add(candidatesCountPanel);
-		leftPanel.add(grepV1NamePanel);
-		leftPanel.add(grepV2NamePanel);
-		leftPanel.add(filePathPanel);
-		leftPanel.add(maxRunsPanel);
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
-
-		outputLabel.setFont(appLableFont);
-		outputTextArea.setFont(appLableFont);
-		rightPanel.add(outputLabel);
-		rightPanel.add(outputScrollPane);
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+		buildLeftInputPanel();
+		buildOutputPanel();
 
 		centrePanel.add(leftPanel);
 		centrePanel.add(rightPanel);
@@ -122,6 +83,46 @@ public class GUIWindow implements ActionListener {
 		// bla bla bla does nothing useful here
 		count++;
 		titleLabel.setText("lol: " + count);
+	}
+
+	public void buildOutputPanel() {
+		outputTextArea.setFont(appLableFont);
+		rightPanel.add(outputLabel);
+		rightPanel.add(outputScrollPane);
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+	}
+
+	public void buildLeftInputPanel() {
+		candidatesCountPanel.add(candidatesCountTextBoxLabel);
+		candidatesCountPanel.add(candidatesCountTextBox);
+		grepV1NamePanel.add(grepV1NameTextBoxLabel);
+		grepV1NamePanel.add(grepV1NameTextBox);
+		grepV2NamePanel.add(grepV2NameTextBoxLabel);
+		grepV2NamePanel.add(grepV2NameTextBox);
+		filePathPanel.add(filePathTextBoxLabel);
+		filePathPanel.add(filePathTextBox);
+		maxRunsPanel.add(maxRunsTextBoxLabel);
+		maxRunsPanel.add(maxRunsTextBox);
+
+		leftPanel.add(candidatesCountPanel);
+		leftPanel.add(grepV1NamePanel);
+		leftPanel.add(grepV2NamePanel);
+		leftPanel.add(filePathPanel);
+		leftPanel.add(maxRunsPanel);
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+	}
+
+	public JTextField newInputField() {
+		JTextField field = new JTextField();
+		field.setFont(appLableFont);
+		field.setColumns(30);
+		return field;
+	}
+
+	public JLabel newLabel(String text) {
+		JLabel label = new JLabel(text);
+		label.setFont(appLableFont);
+		return label;
 	}
 
 }
