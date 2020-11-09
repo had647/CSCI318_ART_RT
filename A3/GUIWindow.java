@@ -206,21 +206,17 @@ public class GUIWindow {
 		art.max_runs = (Integer) numberOfRunsInput.getValue();
 		outputTextArea.append("Done\n");
 
-		ArrayList<String> output;
+		String output;
 		if (artRunCheckbox.isSelected()) {
 			outputTextArea.append("Running ART...\n");
 			output = art.runART();
-			for (int i = 0; i < output.size(); i++) {
-				outputTextArea.append(output.get(i) + "\n");
-			}
+			outputTextArea.append(output + "\n");
 			outputTextArea.append("Done.\n");
 		}
 		if (rtRunCheckbox.isSelected()) {
 			outputTextArea.append("Running RT...\n");
 			output = art.runRT();
-			for (int i = 0; i < output.size(); i++) {
-				outputTextArea.append(output.get(i) + "\n");
-			}
+			outputTextArea.append(output + "\n");
 			outputTextArea.append("Done.\n");
 		}
 	}

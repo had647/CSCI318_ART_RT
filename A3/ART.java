@@ -200,8 +200,8 @@ class ART {
 		return candidates;
 	}
 
-	public ArrayList<String> runART() {
-		ArrayList<String> outputs = new ArrayList<String>();
+	public String runART() {
+		String outputs="";
 		int[] S = new int[categoriesChoices];
 		Arrays.fill(S, 0);
 
@@ -247,7 +247,7 @@ class ART {
 				}
 
 				if (!grepv1output.equals(grepv2output)) {
-					outputs.add("outputs do not match. Bug found.\n" + test_case + "\n" + j);
+					outputs="outputs do not match. Bug found.\n" + test_case + "\n" + j;
 					System.out.println("outputs do not match. Bug found.");
 					System.out.println(test_case);
 					System.out.println(j);
@@ -266,8 +266,8 @@ class ART {
 		return outputs;
 	}
 
-	public ArrayList<String> runRT() {
-		ArrayList<String> outputs = new ArrayList<String>();
+	public String runRT() {
+		String outputs = "";
 		String test_case = "";
 		String grepv1output = "";
 		String grepv2output = "";
@@ -282,7 +282,7 @@ class ART {
 				break;
 			}
 			if (!grepv1output.equals(grepv2output)) {
-				outputs.add("outputs do not match. Bug found.\n" + test_case + "\n" + i);
+				outputs="outputs do not match. Bug found.\n" + test_case + "\n" + i;
 				System.out.println("outputs do not match. Bug found.");
 				System.out.println(test_case);
 				System.out.println(i);
