@@ -73,7 +73,6 @@ class ART {
 							for (int n = 0; n != independentCategories[5].length; n++) {
 								grepInputPool.add(independentCategories[0][i] + independentCategories[1][j] + independentCategories[2][k]
 										+ independentCategories[3][l] + independentCategories[4][m] + independentCategories[5][n]);
-								// cnt++;
 							}
 						}
 					}
