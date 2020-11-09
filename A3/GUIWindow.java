@@ -25,7 +25,7 @@ public class GUIWindow {
 	private JLabel pathToOldGrepInputLabel = newLabel("Path to Older GREP executable: ");
 	private JTextField pathToOldGrepInput = newInputField();
 	private JButton pathToOldGrepInputFileChooserButton = newButton("Open File");
-	private JLabel pathToNewGrepInputLabel = newLabel("Path to New GREP executable: ");
+	private JLabel pathToNewGrepInputLabel = newLabel("Path to GREP Oracle executable: ");
 	private JTextField pathToNewGrepInput = newInputField();
 	private JButton pathToNewGrepInputFileChooserButton = newButton("Open File");
 	private JLabel pathToTextFileInputLabel = newLabel("Path to text file for testing: ");
@@ -61,9 +61,9 @@ public class GUIWindow {
 		((JSpinner.DefaultEditor) numberOfCandidatesInput.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
 
 		outputTextArea.setText("Testing output will appear here.");
-		pathToOldGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_bad");
-		pathToNewGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_oracle");
-		pathToTextFileInput.setText(systemHomeDir + "/Desktop/grep/SlyFox.txt");
+		pathToOldGrepInput.setText("./grep_bad");
+		pathToNewGrepInput.setText("./grep_oracle");
+		pathToTextFileInput.setText("./SlyFox.txt");
 	}
 
 	// Gets user home directory
