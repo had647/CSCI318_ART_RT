@@ -5,320 +5,262 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
-import java.awt.Color;
 import java.io.*;
-import java.lang.*;
-public class GUIWindow {
-	private JFrame mainWindow;
-	private JPanel mainPanel;
-	private JLabel applicationLabel;
-	private JLabel numberOfCandidatesInputLabel;
-	private JSpinner numberOfCandidatesInput;
-	private JLabel pathToOldGrepInputLabel;
-	private JTextField pathToOldGrepInput;
-	private JButton pathToOldGrepInputFileChooserButton;
-	private JLabel pathToNewGrepInputLabel;
-	private JTextField pathToNewGrepInput;
-	private JButton pathToNewGrepInputFileChooserButton;
-	private JLabel pathToTextFileInputLabel;
-	private JTextField pathToTextFileInput;
-	private JButton pathToTextFileInputFileChooserButton;
-	private JLabel numberOfRunsInputLabel;
-	private JSpinner numberOfRunsInput;
-	private JLabel runOptionLabel;
-	private JCheckBox artRunCheckbox;
-	private JCheckBox rtRunCheckbox;
-	private JLabel outputTextAreaLabel;
-	private JScrollPane outputTextAreaScrollPane;
-	private JTextArea outputTextArea;
-	private JButton runTestButton;
+import java.util.ArrayList;
 
-	public GUIWindow(){
-		this.mainWindow = new JFrame();
-		this.mainPanel = new JPanel();
+public class GUIWindow {
+	ART art = new ART();
+	Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+	Font buttonFont = new Font(Font.SANS_SERIF, Font.BOLD, 13);
+	Font inputFont = new Font(Font.MONOSPACED, Font.PLAIN, 14);
+	Font outputFont = new Font(Font.MONOSPACED, Font.PLAIN, 15);
+	Font headerFont = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+
+	// GUI components
+	private JFrame mainWindow = new JFrame();
+	private JPanel mainPanel = new JPanel();
+	private JLabel applicationLabel = newLabel("GREP(A)RT - A tool to test GREP with ART and RT");
+	private JLabel numberOfCandidatesInputLabel = newLabel("Number of Candidates: ");
+	private JSpinner numberOfCandidatesInput = newSpinner();
+	private JLabel pathToOldGrepInputLabel = newLabel("Path to Older GREP executable: ");
+	private JTextField pathToOldGrepInput = newInputField();
+	private JButton pathToOldGrepInputFileChooserButton = newButton("Open File");
+	private JLabel pathToNewGrepInputLabel = newLabel("Path to New GREP executable: ");
+	private JTextField pathToNewGrepInput = newInputField();
+	private JButton pathToNewGrepInputFileChooserButton = newButton("Open File");
+	private JLabel pathToTextFileInputLabel = newLabel("Path to text file for testing: ");
+	private JTextField pathToTextFileInput = newInputField();
+	private JButton pathToTextFileInputFileChooserButton = newButton("Open File");
+	private JLabel numberOfRunsInputLabel = newLabel("Maximum number of runs: ");
+	private JSpinner numberOfRunsInput = newSpinner();
+
+	// Checkboxes for select ART or RT
+	private JLabel runOptionLabel = newLabel("Run options: ");
+	private JCheckBox artRunCheckbox = newCheckBox("Run ART");
+	private JCheckBox rtRunCheckbox = newCheckBox("Run RT");
+
+	private JLabel outputTextAreaLabel = newLabel("Output: ");
+	private JTextArea outputTextArea = newTextArea();
+	private JScrollPane outputTextAreaScrollPane = new JScrollPane(this.outputTextArea);
+
+	// Button to run test
+	private JButton runTestButton = newButton("Run Test");
+
+	// Create GridBagConstraints for the gridbaglayout inside of the input panel
+	GridBagConstraints constraints = new GridBagConstraints();
+
+	// User home directory
+	private String systemHomeDir = getHomeDir();
+
+	// pre-populate inputs with default values
+	public void setDefaultInputs() {
+		numberOfCandidatesInput.setModel(new SpinnerNumberModel(art.candidatesCount, 5, 50, 1));
+		numberOfRunsInput.setModel(new SpinnerNumberModel(art.max_runs, 1, 1000, 1));
+		// Set spinner fields left align text
+		((JSpinner.DefaultEditor) numberOfRunsInput.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
+		((JSpinner.DefaultEditor) numberOfCandidatesInput.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEFT);
+
+		outputTextArea.setText("Testing output will appear here.");
+		pathToOldGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_bad");
+		pathToNewGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_good");
+		pathToTextFileInput.setText(systemHomeDir + "/Desktop/grep/SlyFox.txt");
+	}
+
+	// Gets user home directory
+	private String getHomeDir() {
+		String home = System.getProperty("user.home");
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			home = home.replaceFirst("C:", "/mnt/c");
+			home = home.replace("\\", "/");
+		}
+		return home;
+	}
+
+	// Utility functions for making UI elements
+	private JTextArea newTextArea() {
+		JTextArea area = new JTextArea();
+		area.setFont(outputFont);
+		return area;
+	}
+
+	private JCheckBox newCheckBox(String text) {
+		JCheckBox checkbox = new JCheckBox(text);
+		checkbox.setFont(labelFont);
+		return checkbox;
+	}
+
+	private JSpinner newSpinner() {
+		JSpinner spinner = new JSpinner();
+		spinner.setFont(inputFont);
+		return spinner;
+	}
+
+	private JButton newButton(String text) {
+		JButton button = new JButton(text);
+		button.setFont(buttonFont);
+		return button;
+	}
+
+	private JTextField newInputField() {
+		JTextField field = new JTextField();
+		field.setFont(inputFont);
+		return field;
+	}
+
+	private JLabel newLabel(String text) {
+		JLabel label = new JLabel(text);
+		label.setFont(labelFont);
+		return label;
+	}
+
+	private void addConstraintSet(JComponent comp, int gridx, int gridy, int weightx, int weighty, int fill, int gridwidth, int gridheight) {
+		constraints.gridx = gridx;
+		constraints.gridy = gridy;
+		constraints.weightx = weightx;
+		constraints.weighty = weighty;
+		constraints.fill = fill;
+		constraints.gridwidth = gridwidth;
+		constraints.gridheight = gridheight;
+		this.mainPanel.add(comp, constraints);
+	}
+
+	public GUIWindow() {
 		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 		this.mainWindow.setContentPane(this.mainPanel);
-		this.applicationLabel = new JLabel();
+		this.mainWindow.setTitle("GREP(A)RT");
 
-		// Number of Candidates
-		this.numberOfCandidatesInputLabel = new JLabel();
-		this.numberOfCandidatesInput = new JSpinner();
+		// Linking the labels to their components
 		this.numberOfCandidatesInputLabel.setLabelFor(this.numberOfCandidatesInput);
-		
-		// Path to old GREP
-		this.pathToOldGrepInputLabel = new JLabel();
-		this.pathToOldGrepInput = new JTextField();
-		this.pathToOldGrepInputFileChooserButton = new JButton();
 		this.pathToOldGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
-
-		// Path to new GREP
-		this.pathToNewGrepInputLabel = new JLabel();
-		this.pathToNewGrepInput = new JTextField();
-		this.pathToNewGrepInputFileChooserButton = new JButton();
 		this.pathToNewGrepInputLabel.setLabelFor(this.pathToOldGrepInput);
-
-		// Path to text file
-		this.pathToTextFileInputLabel = new JLabel();
-		this.pathToTextFileInput = new JTextField();
-		this.pathToTextFileInputFileChooserButton = new JButton();
 		this.pathToTextFileInputLabel.setLabelFor(this.pathToTextFileInput);
-
-		// Number of Runs
-		this.numberOfRunsInputLabel = new JLabel();
-		this.numberOfRunsInput = new JSpinner();
 		this.numberOfRunsInputLabel.setLabelFor(this.numberOfRunsInput);
-
-		// Checkboxes for select ART or RT
-		this.runOptionLabel = new JLabel();
-		this.artRunCheckbox = new JCheckBox();
-		this.rtRunCheckbox = new JCheckBox();
-
-		// Output
-		this.outputTextAreaLabel = new JLabel();
-		this.outputTextArea = new JTextArea();
-		this.outputTextAreaScrollPane = new JScrollPane(this.outputTextArea);
 		this.outputTextAreaLabel.setLabelFor(this.outputTextAreaScrollPane);
 
-
-		// Button to run test
-		this.runTestButton = new JButton();
-		
-
-		// Set the default options when closing to exit_on_close
-		this.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.mainWindow.setResizable(true);
-
-
-		// Get the current content pane which is running with the borderlayout by default
+		// Get the current content pane which is running with the borderlayout by
+		// default
 		this.mainPanel.setLayout(new GridBagLayout());
-		// Create GridBagConstraints for the gridbaglayout inside of the input panel
-		GridBagConstraints constraints = new GridBagConstraints();
 
 		constraints.anchor = GridBagConstraints.BASELINE_LEADING;
 		constraints.ipady = 14;
 
 		// Application Label
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.applicationLabel, constraints);
-
+		addConstraintSet(applicationLabel, 0, 0, 1, 0, GridBagConstraints.HORIZONTAL, GridBagConstraints.REMAINDER, 1);
 
 		// Number of Candidates
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.numberOfCandidatesInputLabel, constraints);
-		constraints.gridx = 1;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = 3;
-		this.mainPanel.add(this.numberOfCandidatesInput, constraints);
+		addConstraintSet(numberOfCandidatesInputLabel, 0, 1, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(numberOfCandidatesInput, 1, 1, 1, 0, GridBagConstraints.HORIZONTAL, 3, 1);
 
 		// Path to Older GREP Executable
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.pathToOldGrepInputLabel, constraints);
-		constraints.gridx = 1;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = 2;
-		this.mainPanel.add(this.pathToOldGrepInput, constraints);
-		constraints.gridx = 3;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.pathToOldGrepInputFileChooserButton, constraints);
+		addConstraintSet(pathToOldGrepInputLabel, 0, 2, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(pathToOldGrepInput, 1, 2, 1, 0, GridBagConstraints.HORIZONTAL, 2, 1);
+		addConstraintSet(pathToOldGrepInputFileChooserButton, 3, 2, 0, 0, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 1);
 
 		// Path to Older GREP Executable
-		constraints.gridx = 0;
-		constraints.gridy = 3;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.pathToNewGrepInputLabel, constraints);
-		constraints.gridx = 1;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = 2;
-		this.mainPanel.add(this.pathToNewGrepInput, constraints);
-		constraints.gridx = 3;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.pathToNewGrepInputFileChooserButton, constraints);
+		addConstraintSet(pathToNewGrepInputLabel, 0, 3, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(pathToNewGrepInput, 1, 3, 1, 0, GridBagConstraints.HORIZONTAL, 2, 1);
+		addConstraintSet(pathToNewGrepInputFileChooserButton, 3, 3, 0, 0, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 1);
 
 		// Path to Text file for testing
-		constraints.gridx = 0;
-		constraints.gridy = 4;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.pathToTextFileInputLabel, constraints);
-		constraints.gridx = 1;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = 2;
-		this.mainPanel.add(this.pathToTextFileInput, constraints);
-		constraints.gridx = 3;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.pathToTextFileInputFileChooserButton, constraints);
+		addConstraintSet(pathToTextFileInputLabel, 0, 4, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(pathToTextFileInput, 1, 4, 1, 0, GridBagConstraints.HORIZONTAL, 2, 1);
+		addConstraintSet(pathToTextFileInputFileChooserButton, 3, 4, 0, 0, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 1);
 
 		// Number of Runs
-		constraints.gridx = 0;
-		constraints.gridy = 5;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.numberOfRunsInputLabel, constraints);
-		constraints.gridx = 1;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.numberOfRunsInput, constraints);
+		addConstraintSet(numberOfRunsInputLabel, 0, 5, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(numberOfRunsInput, 1, 5, 1, 0, GridBagConstraints.HORIZONTAL, GridBagConstraints.REMAINDER, 1);
 
 		// Checkboxes and button to run
-		constraints.gridx = 0;
-		constraints.gridy = 6;
-		constraints.weightx = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridwidth = 1;
-		this.mainPanel.add(this.runOptionLabel, constraints);
-		constraints.gridx = 1;
-		this.mainPanel.add(this.artRunCheckbox, constraints);
-		constraints.gridx = 2;
-		this.mainPanel.add(this.rtRunCheckbox, constraints);
-		constraints.gridx = 3;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.runTestButton, constraints);
+		addConstraintSet(runOptionLabel, 0, 6, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(artRunCheckbox, 1, 6, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(rtRunCheckbox, 2, 6, 0, 0, GridBagConstraints.NONE, 1, 1);
+		addConstraintSet(runTestButton, 3, 6, 0, 0, GridBagConstraints.HORIZONTAL, GridBagConstraints.REMAINDER, 1);
 
 		// Output area
-		constraints.gridx = 0;
-		constraints.gridy = 7;
-		constraints.weightx = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.outputTextAreaLabel, constraints);
-		constraints.gridx = 0;
-		constraints.gridy = 8;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.gridheight = GridBagConstraints.REMAINDER;
-		this.mainPanel.add(this.outputTextAreaScrollPane, constraints);
+		addConstraintSet(outputTextAreaLabel, 0, 7, 1, 0, GridBagConstraints.HORIZONTAL, GridBagConstraints.REMAINDER, 1);
+		addConstraintSet(outputTextAreaScrollPane, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.REMAINDER, GridBagConstraints.REMAINDER);
 
-		this.setupFileChooser();
-		this.setupData();
-		this.retranslateUI();
-		this.styleUI();
-		
+		setupFileChooser();
+		this.applicationLabel.setFont(headerFont);
+
+		// Set output text area to false for editable
+		this.outputTextArea.setEditable(false);
+		setDefaultInputs();
+
+		// Set the default options when closing to exit_on_close
+		this.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.mainWindow.setResizable(false);
 		this.mainWindow.pack();
 		this.mainWindow.setMinimumSize(new Dimension(600, 800));
 		this.mainWindow.setVisible(true);
 	}
 
-	private void setupFileChooser(){
-		this.pathToOldGrepInputFileChooserButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				JFileChooser pathToOldGrepInputFileChooser = new JFileChooser();
-				pathToOldGrepInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-				int result = pathToOldGrepInputFileChooser.showOpenDialog(null);
-				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedFile = pathToOldGrepInputFileChooser.getSelectedFile();
-				    pathToOldGrepInput.setText(selectedFile.getAbsolutePath());
-				}
+	// initialize and run ART and RT according to ticked checkboxes
+	public void initPoolAndRunTests() {
+		outputTextArea.setText("Initializing...");
+		art.generatePool();
+		art.candidatesCount = (Integer) numberOfCandidatesInput.getValue();
+		art.grepV1 = pathToOldGrepInput.getText();
+		art.grepV2 = pathToNewGrepInput.getText();
+		art.filePath = pathToTextFileInput.getText();
+		art.max_runs = (Integer) numberOfRunsInput.getValue();
+		outputTextArea.append("Done\n");
+
+		ArrayList<String> output;
+		if (artRunCheckbox.isSelected()) {
+			outputTextArea.append("Running ART...\n");
+			output = art.runART();
+			for (int i = 0; i < output.size(); i++) {
+				outputTextArea.append(output.get(i) + "\n");
+			}
+			outputTextArea.append("Done.\n");
+		}
+		if (rtRunCheckbox.isSelected()) {
+			outputTextArea.append("Running RT...\n");
+			output = art.runRT();
+			for (int i = 0; i < output.size(); i++) {
+				outputTextArea.append(output.get(i) + "\n");
+			}
+			outputTextArea.append("Done.\n");
+		}
+	}
+
+	// Handles file select popup
+	public void getPath(JTextField field) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		int result = chooser.showOpenDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			String path = chooser.getSelectedFile().getAbsolutePath();
+			if (System.getProperty("os.name").toLowerCase().contains("win")) {
+				path = path.replaceFirst("C:", "/mnt/c");
+				path = path.replace("\\", "/");
+			}
+			field.setText(path);
+		}
+	}
+
+	// Event listeners for GUI
+	private void setupFileChooser() {
+		this.runTestButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				initPoolAndRunTests();
 			}
 		});
-		this.pathToNewGrepInputFileChooserButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				JFileChooser pathToNewGrepInputFileChooser = new JFileChooser();
-				pathToNewGrepInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-				int result = pathToNewGrepInputFileChooser.showOpenDialog(null);
-				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedFile = pathToNewGrepInputFileChooser.getSelectedFile();
-				    pathToNewGrepInput.setText(selectedFile.getAbsolutePath());
-				}
+		this.pathToOldGrepInputFileChooserButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getPath(pathToOldGrepInput);
 			}
 		});
-		this.pathToTextFileInputFileChooserButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				JFileChooser pathToTextFileInputFileChooser = new JFileChooser();
-				pathToTextFileInputFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-				int result = pathToTextFileInputFileChooser.showOpenDialog(null);
-				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedFile = pathToTextFileInputFileChooser.getSelectedFile();
-				    pathToTextFileInput.setText(selectedFile.getAbsolutePath());
-				}
+		this.pathToNewGrepInputFileChooserButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getPath(pathToNewGrepInput);
+			}
+		});
+		this.pathToTextFileInputFileChooserButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getPath(pathToTextFileInput);
 			}
 		});
 	}
-
-	private void setupData(){
-		this.numberOfCandidatesInput.setModel(new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1));
-		this.numberOfRunsInput.setModel(new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1));
-		this.outputTextArea.setText("Test");
-	}
-
-	private void retranslateUI(){
-		this.mainWindow.setTitle("GREP(A)RT");
-		this.applicationLabel.setText("GREP(A)RT - A tool to test GREP with ART and RT");
-		this.numberOfCandidatesInputLabel.setText("Number of Candidates: ");
-		this.pathToOldGrepInputLabel.setText("Path to Older GREP executable: ");
-		this.pathToNewGrepInputLabel.setText("Path to New GREP executable: ");
-		this.pathToTextFileInputLabel.setText("Path to text file for testing: ");
-		this.numberOfRunsInputLabel.setText("Maximum number of runs: ");
-		this.runOptionLabel.setText("Run options: ");
-		this.artRunCheckbox.setText("Run ART");
-		this.rtRunCheckbox.setText("Run RT");
-		this.outputTextAreaLabel.setText("Output: ");
-		this.pathToOldGrepInputFileChooserButton.setText("Open File");
-		this.pathToNewGrepInputFileChooserButton.setText("Open File");
-		this.pathToTextFileInputFileChooserButton.setText("Open File");
-		this.runTestButton.setText("Run Test");
-	}
-
-	private void styleUI(){
-		Font inputOutputLabelFont = new Font(Font.SANS_SERIF, Font.BOLD, 14);
-		Font inputOutputFieldFont = new Font(Font.MONOSPACED, Font.PLAIN, 14);
-		this.applicationLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		
-		// Set input labels and output labels font
-		this.numberOfCandidatesInputLabel.setFont(inputOutputLabelFont);
-		this.pathToOldGrepInputLabel.setFont(inputOutputLabelFont);
-		this.pathToNewGrepInputLabel.setFont(inputOutputLabelFont);
-		this.pathToTextFileInputLabel.setFont(inputOutputLabelFont);
-		this.numberOfRunsInputLabel.setFont(inputOutputLabelFont);
-		this.runOptionLabel.setFont(inputOutputLabelFont);
-		this.artRunCheckbox.setFont(inputOutputLabelFont);
-		this.rtRunCheckbox.setFont(inputOutputLabelFont);
-		this.outputTextAreaLabel.setFont(inputOutputLabelFont);
-
-		// Set input fields and output field font
-		this.numberOfCandidatesInput.setFont(inputOutputFieldFont);
-		this.pathToOldGrepInput.setFont(inputOutputFieldFont);
-		this.pathToNewGrepInput.setFont(inputOutputFieldFont);
-		this.pathToTextFileInput.setFont(inputOutputFieldFont);
-		this.numberOfRunsInput.setFont(inputOutputFieldFont);
-
-		// Set spinner fields left align text
-		JSpinner.DefaultEditor numberOfCandidatesInputEditor = (JSpinner.DefaultEditor)this.numberOfCandidatesInput.getEditor();
-		JSpinner.DefaultEditor numberOfRunsInputEditor = (JSpinner.DefaultEditor)this.numberOfRunsInput.getEditor();
-		numberOfCandidatesInputEditor.getTextField().setHorizontalAlignment(JTextField.LEFT);
-		numberOfRunsInputEditor.getTextField().setHorizontalAlignment(JTextField.LEFT);
-
-		// Set output text area to false for editable
-		this.outputTextArea.setEditable(false);
-	}
-
 }
