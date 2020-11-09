@@ -49,6 +49,9 @@ public class GUIWindow {
 	// Create GridBagConstraints for the gridbaglayout inside of the input panel
 	GridBagConstraints constraints = new GridBagConstraints();
 
+	// User home directory
+	private String systemHomeDir = getHomeDir();
+
 	// pre-populate inputs with default values
 	public void setDefaultInputs() {
 		numberOfCandidatesInput.setModel(new SpinnerNumberModel(art.candidatesCount, 5, 50, 1));
@@ -62,6 +65,17 @@ public class GUIWindow {
 		pathToNewGrepInput.setText("./grep_oracle");
 		pathToTextFileInput.setText("./SlyFox.txt");
 	}
+
+	// Gets user home directory
+	private String getHomeDir() {
+		String home = System.getProperty("user.home");
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			home = home.replaceFirst("C:", "/mnt/c");
+			home = home.replace("\\", "/");
+		}
+		return home;
+	}
+
 	// Utility functions for making UI elements
 	private JTextArea newTextArea() {
 		JTextArea area = new JTextArea();
@@ -198,12 +212,13 @@ public class GUIWindow {
 			output = art.runART();
 			outputTextArea.append(output + "\n");
 			outputTextArea.append("Done.\n");
+			outputTextArea.append("------------------------------------------------------------------\n");
 		}
 		if (rtRunCheckbox.isSelected()) {
-			outputTextArea.append("Running RT...\n");
+			outputTextArea.append("\nRunning RT...\n");
 			output = art.runRT();
 			outputTextArea.append(output + "\n");
-			outputTextArea.append("Done.\n");
+			outputTextArea.append("Done.\n\n");
 		}
 	}
 
