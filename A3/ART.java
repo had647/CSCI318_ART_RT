@@ -9,7 +9,7 @@ class ART {
 	public int candidatesCount = 10;
 	public String grepV1 = "grep_bad";
 	public String grepV2 = "grep_oracle";
-	public String filePath = "/home/isaac/Desktop/ARTv2/SlyFox.txt";
+	public String filePath = "SlyFox.txt";
 	private ArrayList<String> candidates;
 	private ArrayList<String> grepPool;
 	public int max_runs = 1000;
@@ -40,7 +40,7 @@ class ART {
 
 	private String feedInputGrepv1(String test_case) throws IOException {
 		// generate commands based on OS
-		String prefix = ".";
+		String prefix = "";
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			prefix = "wsl ";
 		}
@@ -58,7 +58,7 @@ class ART {
 
 	private String feedInputGrepv2(String test_case) throws IOException {
 		// generate commands based on OS
-		String prefix = ".";
+		String prefix = "";
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			prefix = "wsl ";
 		}
