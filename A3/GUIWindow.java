@@ -62,7 +62,7 @@ public class GUIWindow {
 
 		outputTextArea.setText("Testing output will appear here.");
 		pathToOldGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_bad");
-		pathToNewGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_good");
+		pathToNewGrepInput.setText(systemHomeDir + "/Desktop/grep/grep_oracle");
 		pathToTextFileInput.setText(systemHomeDir + "/Desktop/grep/SlyFox.txt");
 	}
 

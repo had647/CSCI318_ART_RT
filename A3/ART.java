@@ -106,6 +106,8 @@ class ART {
 			}
 		}
 		grepPool = grepInputPool;
+		//generatePool currently produces an empty string as input which grep doesnt like.. so manually removing it here.
+		grepPool.remove(0);
 		// return grepInputPool;
 	}
 
@@ -249,6 +251,8 @@ class ART {
 					System.out.println("outputs do not match. Bug found.");
 					System.out.println(test_case);
 					System.out.println(j);
+					System.out.println("grepv1output: "+grepv1output);
+					System.out.println("grepv2output: "+grepv2output);
 					break;
 				}
 			}
