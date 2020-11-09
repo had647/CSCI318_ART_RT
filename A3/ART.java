@@ -40,7 +40,7 @@ class ART {
 
 	private String feedInputGrepv1(String test_case) throws IOException {
 		// generate commands based on OS
-		String prefix = "";
+		String prefix = ".";
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			prefix = "wsl ";
 		}
@@ -58,7 +58,7 @@ class ART {
 
 	private String feedInputGrepv2(String test_case) throws IOException {
 		// generate commands based on OS
-		String prefix = "";
+		String prefix = ".";
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			prefix = "wsl ";
 		}
