@@ -247,10 +247,10 @@ class ART {
 				}
 
 				if (!grepv1output.equals(grepv2output)) {
-					outputs="outputs do not match. Bug found.\n" + test_case + "\n" + j;
+					outputs="outputs do not match. Bug found.\n" + test_case + "\n" + (j+1);
 					System.out.println("outputs do not match. Bug found.");
 					System.out.println(test_case);
-					System.out.println(j);
+					System.out.println((j+1));
 					System.out.println("grepv1output: "+grepv1output);
 					System.out.println("grepv2output: "+grepv2output);
 					break;
@@ -282,10 +282,10 @@ class ART {
 				break;
 			}
 			if (!grepv1output.equals(grepv2output)) {
-				outputs="outputs do not match. Bug found.\n" + test_case + "\n" + i;
+				outputs="outputs do not match. Bug found.\n" + test_case + "\n" + (i+1);
 				System.out.println("outputs do not match. Bug found.");
 				System.out.println(test_case);
-				System.out.println(i);
+				System.out.println((i+1));
 				break;
 			}
 		}
